@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Colinas Engenharia — lançamentos e obras em Campina Grande (PB). Explore cada empreendimento." 
+    />
+    <title>Colinas Engenharia — Lançamentos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar transparent">
+      <a class="brand" href="#inicio" aria-label="Colinas Engenharia">
+        <div class="brand-pill">
+          <img src="logo.svg" alt="Colinas Engenharia" class="brand-logo" />
+        </div>
+      </a>
+      <nav class="nav" aria-label="Navegação principal">
+        <a href="#empreendimentos">Empreendimentos</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#contato">Contato</a>
+      </nav>
+    </header>
+
+    <main id="inicio">
+      <!-- Hero premium: gradiente escuro, formas abstratas, glassmorphism, parallax e partículas -->
+      <section class="hero hero-premium" aria-label="Apresentação Colinas">
+        <div class="hero-bg">
+          <div class="hero-shapes" aria-hidden="true">
+            <svg class="shape shape-1" viewBox="0 0 600 400" preserveAspectRatio="none"><defs><linearGradient id="s1" x1="0" x2="1"><stop offset="0" stop-color="#0b1220"/><stop offset="1" stop-color="#07263c"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#s1)" opacity="0.95"/></svg>
+            <svg class="shape shape-2" viewBox="0 0 600 400" preserveAspectRatio="none"><circle cx="420" cy="120" r="200" fill="rgba(47,125,224,0.07)"/></svg>
+          </div>
+          <div class="hero-particles" id="hero-particles" aria-hidden="true"></div>
+          <div class="hero-glass">
+            <div class="glass-content">
+               <h1><span class="blue-word">Construindo</span> <span class="highlight-word">confiança</span></h1>
+                <p class="hero-sub">Desenvolvemos empreendimentos com qualidade, inovação e compromisso.</p>
+                <div class="hero-actions">
+                  <a class="btn btn-primary hero-btn" href="#empreendimentos">Conheça nossos empreendimentos</a>
+                  <a class="btn btn-secondary hero-btn" href="#contato">Fale com um especialista</a>
+                </div>
+              </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Diferenciais + imagem de obra em construção -->
+    <section id="diferenciais" class="section diferentials reveal">
+        <div class="container">
+          <div class="diferentials-grid">
+           <div class="dif-item reveal">
+              <h3>Gestão Transparente</h3>
+              <p class="muted">Acompanhamento desde o planejamento até a entrega com relatórios claros.</p>
+            </div>
+           <div class="dif-item reveal">
+              <h3>Entrega no Prazo</h3>
+              <p class="muted">Cronograma realista e controle de etapa para cumprir datas combinadas.</p>
+            </div>
+          <div class="dif-item reveal">
+              <h3>Acabamento Premium</h3>
+              <p class="muted">Materiais selecionados e fiscalização técnica em cada etapa.</p>
+            </div>
+        <div class="dif-item reveal">
+              <h3>Responsabilidade Técnica</h3>
+              <p class="muted">Engenharia qualificada e documentação completa.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+  <section class="section obra-construcao reveal"></section>
+        <div class="obra-inner">
+          <img src="assets/buildings/hero-bg.png" alt="Obra em construção">
+          <div class="obra-caption"><h3>Obra em execução</h3><p class="muted">Acompanhamento e qualidade em todas as etapas.</p></div>
+        </div>
+      </section>
+
+      <section id="empreendimentos" class="section intro-cards reveal">
+        <div class="intro-heading">
+          <p class="eyebrow">Empreendimentos</p>
+          <h2>Conheça nossos lançamentos</h2>
+          <p class="muted">Clique em qualquer projeto para uma página dedicada com fotos e informações técnicas.</p>
+        </div>
+
+        <div class="grid-cards">
+         <a class="card" href="vista-campina.html"><a class="card reveal" href="vista-campina.html"></a> 
+            <img src="assets/buildings/thumb1.svg" alt="Vista Campina" />
+            <div class="card-body"><h3>Vista Campina</h3><p>2 e 3 quartos, varanda gourmet</p></div>
+          </a>
+          <a class="card" href="vista-catole.html">
+            <img src="assets/buildings/thumb2.svg" alt="Vista Catolé" />
+            <div class="card-body"><h3>Vista Catolé</h3><p>Localização estratégica e lazer completo</p></div>
+          </a>
+          <a class="card" href="mirante-do-vale.html">
+            <img src="assets/buildings/thumb3.svg" alt="Mirante do Vale" />
+            <div class="card-body"><h3>Mirante do Vale</h3><p>Acabamento premium e plantas inteligentes</p></div>
+          </a>
+          <a class="card" href="jardins-dos-alecrins.html">
+            <img src="assets/buildings/thumb4.svg" alt="Jardins dos Alecrins" />
+            <div class="card-body"><h3>Jardins dos Alecrins</h3><p>Condomínio planejado com infraestrutura</p></div>
+          </a>
+        </div>
+      </section>
+
+<section id="sobre" class="section reveal">
+    <div class="container">
+        <div class="about-bg"></div>
+    </div>
+</section>
+    <section id="contato" class="section cta reveal">
+        <h2>Quer saber mais?</h2>
+        <p class="muted">Ligue para nossa central para mais informações sobre disponibilidade e condições.</p>
+        <a class="btn btn-primary" href="tel:+558321579038">Ligar para +55 (83) 2157-9038</a>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>© <span id="year"></span> Colinas Engenharia. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
