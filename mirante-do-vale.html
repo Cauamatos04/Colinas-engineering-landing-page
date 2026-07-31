@@ -1,38 +1,233 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mirante do Vale — Colinas Engenharia</title>
-  <link rel="stylesheet" href="styles.css">
+
+  <link rel="icon" href="logo.svg" type="image/svg+xml" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
-  <header class="topbar"><a class="brand" href="index.html"><div class="brand-pill"><img src="logo.svg" class="brand-logo" alt="Colinas"></div></a></header>
-  <main class="project-page">
-    <section class="project-hero">
-      <img src="assets/buildings/building3.svg" alt="Mirante do Vale">
-      <div class="project-hero-overlay"><h1>Mirante do Vale</h1><p>Plantas modernas e acabamentos de alto padrão.</p></div>
-    </section>
-    <section class="gallery">
-      <h2>Galeria</h2>
-      <div class="gallery-grid">
-        <img src="assets/buildings/thumb3.svg" alt="Mirante do Vale 1">
-        <img src="assets/buildings/thumb3.svg" alt="Mirante do Vale 2">
-        <img src="assets/buildings/thumb3.svg" alt="Mirante do Vale 3">
-        <img src="assets/buildings/thumb3.svg" alt="Mirante do Vale 4">
+
+<header class="topbar scrolled">
+  <a class="brand" href="index.html" aria-label="Colinas Engenharia">
+    <div class="brand-pill">
+      <img src="logo.svg" alt="Colinas Engenharia" class="brand-logo">
+    </div>
+  </a>
+
+  <nav id="primary-nav" class="nav">
+    <a href="index.html#empreendimentos">Empreendimentos</a>
+    <a href="index.html#sobre">Sobre</a>
+    <a href="index.html#contato">Contato</a>
+  </nav>
+
+  <button
+    id="menu-toggle"
+    class="menu-toggle"
+    type="button"
+    aria-label="Abrir menu"
+    aria-expanded="false">
+
+    <span class="menu-icon">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
+
+  </button>
+
+  <div id="nav-backdrop" class="nav-backdrop" hidden></div>
+
+</header>
+
+<main class="empreendimento-page">
+
+  <!-- HERO -->
+
+  <section class="emp-hero">
+    <div class="emp-hero-frame" id="emp-hero-frame">
+      <img
+        src="assets/buildings/mirante-do-vale-hero.jpg"
+        alt="Mirante do Vale">
+    </div>
+    <div class="emp-hero-curtain" aria-hidden="true"></div>
+  </section>
+
+  <!-- INTRO / SOBRE O EMPREENDIMENTO -->
+
+  <section class="section emp-intro reveal">
+
+    <div class="emp-intro-inner">
+
+      <p class="eyebrow">
+        Centro · Campina Grande, PB
+      </p>
+
+      <h1 class="split-title">
+        Mirante do Vale
+      </h1>
+
+      <p class="emp-intro-text">
+        Um empreendimento pensado para quem busca conforto e sofisticação no coração da cidade.
+        Plantas inteligentes de 2 e 3 quartos, varanda gourmet e área de lazer completa,
+        com acabamento de alto padrão em cada detalhe.
+      </p>
+
+    </div>
+
+  </section>
+
+  <!-- EXPERIÊNCIA: quatro blocos alternados, imagem/texto -->
+
+  <section class="section emp-experience" aria-label="A experiência de morar no Vista Campina">
+
+    <div class="emp-experience-inner">
+
+      <!-- Bloco 1: texto à esquerda, imagem à direita -->
+      <article class="emp-exp-block">
+        <div class="emp-exp-media reveal-right">
+          <img
+            src="assets/buildings/mirante-do-vale.jpg"
+            alt="Hall de entrada do Vista Campina"
+            loading="lazy">
+        </div>
+        <div class="emp-exp-text reveal-left">
+          <p class="eyebrow">Chegada</p>
+          <h2>Elegância desde a chegada</h2>
+          <p>
+            Cada detalhe do Vista Campina foi pensado para proporcionar uma experiência
+            sofisticada desde o primeiro momento. Um hall contemporâneo, materiais nobres
+            e iluminação cuidadosamente projetada criam uma recepção que transmite conforto
+            e exclusividade.
+          </p>
+        </div>
+      </article>
+
+      <!-- Bloco 2: imagem à esquerda, texto à direita -->
+      <article class="emp-exp-block is-reversed">
+        <div class="emp-exp-media reveal-left">
+          <img
+            src="assets/buildings/mirante-do-vale-piscina.jpg"
+            alt="Piscina do Mirante do Vale"
+            loading="lazy">
+        </div>
+        <div class="emp-exp-text reveal-right">
+          <p class="eyebrow">Lazer</p>
+          <h2>Lazer para todos os momentos</h2>
+          <p>
+            Uma área de lazer completa, ideal para relaxar, reunir a família ou aproveitar
+            os dias ensolarados com total conforto e segurança.
+          </p>
+        </div>
+      </article>
+
+      <!-- Bloco 3: texto à esquerda, imagem à direita -->
+      <article class="emp-exp-block">
+        <div class="emp-exp-media reveal-right">
+          <img
+            src="assets/buildings/mirante-do-vale-academiga.jpg"
+            alt="Academia do Mirante do Vale"
+            loading="lazy">
+        </div>
+        <div class="emp-exp-text reveal-left">
+          <p class="eyebrow">Bem-estar</p>
+          <h2>Bem-estar sem sair de casa</h2>
+          <p>
+            Academia equipada para oferecer praticidade à rotina, incentivando qualidade
+            de vida em um ambiente moderno e integrado ao empreendimento.
+          </p>
+        </div>
+      </article>
+
+      <!-- Bloco 4: imagem à esquerda, texto à direita -->
+      <article class="emp-exp-block is-reversed">
+        <div class="emp-exp-media reveal-left">
+          <img
+            src="assets/buildings/vista-campina-varanda-gourmet.jpg"
+            alt="Varanda gourmet do Vista Campina"
+            loading="lazy">
+        </div>
+        <div class="emp-exp-text reveal-right">
+          <p class="eyebrow">Convivência</p>
+          <h2>Espaços pensados para viver melhor</h2>
+          <p>
+            Ambientes amplos, iluminados naturalmente e conectados à varanda gourmet,
+            valorizando momentos em família e proporcionando uma experiência única de morar.
+          </p>
+        </div>
+      </article>
+
+    </div>
+
+  </section>
+
+  <!-- GALERIA -->
+
+  <section class="section emp-gallery reveal">
+
+    <div class="emp-gallery-inner">
+
+      <div class="emp-gallery-main">
+
+        <img
+          id="gallery-main-img"
+          src="assets/buildings/vista-campina-hero.jpg"
+          alt="Vista Campina">
+
       </div>
-    </section>
-    <section class="details">
-      <h2>Detalhes</h2>
-      <ul>
-        <li>Área: 70–110 m²</li>
-        <li>Quartos: 3 com suíte</li>
-        <li>Opções de acabamento premium</li>
-      </ul>
-      <p class="muted">Para informações e comercialização, ligue: +55 (83) 2157-9038</p>
-    </section>
-  </main>
-  <footer class="footer">© <span id="year"></span> Colinas Engenharia</footer>
-  <script src="script.js"></script>
+
+      <div
+        id="gallery-thumbs"
+        class="emp-gallery-thumbs">
+      </div>
+
+    </div>
+
+  </section>
+
+  <!--
+    RODAPÉ: aqui entra exatamente o mesmo bloco (contact-bar + footer-expanded)
+    que existe na Home (index.html), copiado tal como está lá — mesmas classes,
+    mesmo HTML, sem duplicar CSS. Ainda não tenho o HTML real da Home para colar
+    aqui sem inventar telefone/links/textos, então por enquanto deixei este
+    comentário no lugar certo. Assim que você me mandar o trecho do rodapé do
+    index.html, eu colo aqui igualzinho.
+  -->
+
+</main>
+
+<a
+class="whatsapp-float"
+href="https://wa.me/558321579038"
+target="_blank">
+
+<svg viewBox="0 0 24 24" fill="currentColor">
+<path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm5.6 14.3c-.2.6-1.2 1.2-1.7 1.3-.4.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.6-2.7-1.2-4.4-3.9-4.6-4.1-.1-.2-1.1-1.4-1.1-2.7s.7-1.9 1-2.2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.4.2.5.7 1.7.8 1.8.1.2.1.4 0 .6-.1.2-.1.3-.3.5-.1.2-.3.4-.4.5-.1.2-.3.3-.1.6.2.3.8 1.3 1.8 2.1 1.2 1 2.2 1.3 2.5 1.5.3.1.5.1.6-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.6-.1.2.1 1.5.7 1.8.8.3.1.5.2.5.3.1.2.1.5-.1 1.1z"/>
+</svg>
+
+</a>
+
+<script>
+window.EMP_GALLERY = [
+    "assets/buildings/vista-campina-hero.jpg",
+    "assets/buildings/vista-campina-foto1.jpg",
+    "assets/buildings/vista-campina-varanda-gourmet.jpg",
+    "assets/buildings/vista-campina-piscina.jpg",
+    "assets/buildings/vista-campina-hall.jpg"
+];
+</script>
+
+<script src="script.js" defer></script>
+<script src="vista-campina.js" defer></script>
+
 </body>
 </html>
