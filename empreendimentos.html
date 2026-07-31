@@ -3,28 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Colinas Engenharia — Lançamentos em Campina Grande (PB)</title>
+    <title>Todos os Empreendimentos — Colinas Engenharia | Campina Grande (PB)</title>
     <meta
       name="description"
-      content="Colinas Engenharia — lançamentos e obras em Campina Grande (PB). Explore cada empreendimento."
+      content="Conheça todos os empreendimentos da Colinas Engenharia em Campina Grande (PB): lançamentos, obras em andamento e unidades prontas para morar."
     />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#0f4c81" />
 
-    <!-- TODO: substituir pela URL real do domínio quando publicado -->
-    <link rel="canonical" href="https://www.colinasengenharia.com.br/" />
+    <link rel="canonical" href="https://www.colinasengenharia.com.br/empreendimentos.html" />
 
-    <!-- Open Graph / redes sociais -->
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
     <meta property="og:site_name" content="Colinas Engenharia" />
-    <meta property="og:title" content="Colinas Engenharia — Lançamentos em Campina Grande (PB)" />
+    <meta property="og:title" content="Todos os Empreendimentos — Colinas Engenharia" />
     <meta
       property="og:description"
-      content="Conheça os empreendimentos da Colinas Engenharia em Campina Grande (PB): gestão transparente, entrega no prazo e acabamento premium."
+      content="Explore o portfólio completo de empreendimentos da Colinas Engenharia em Campina Grande (PB)."
     />
     <meta property="og:image" content="assets/buildings/predio.jpg" />
-    <meta property="og:url" content="https://www.colinasengenharia.com.br/" />
+    <meta property="og:url" content="https://www.colinasengenharia.com.br/empreendimentos.html" />
 
     <link rel="icon" href="logo.svg" type="image/svg+xml" />
 
@@ -36,44 +34,17 @@
     />
     <link rel="stylesheet" href="styles.css" />
 
-    <!-- Dados estruturados para SEO local -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "LocalBusiness",
-        "name": "Colinas Engenharia",
-        "image": "assets/buildings/predio.jpg",
-        "telephone": "+55-83-2157-9038",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Campina Grande",
-          "addressRegion": "PB",
-          "addressCountry": "BR"
-        },
-        "url": "https://www.colinasengenharia.com.br/"
-      }
-    </script>
-
-    <!-- Bibliotecas de animação (via CDN), carregadas sem bloquear o parser.
-         O Lenis (smooth-scroll via JS) foi removido: era a causa raiz do
-         scroll "atrasado" em relação ao mouse/trackpad no desktop. Sem ele,
-         a rolagem passa a ser 100% nativa do navegador, composta pela GPU,
-         sem nenhum JavaScript no caminho do gesto do usuário. -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js" defer></script>
   </head>
   <body>
-    <a class="skip-link" href="#inicio">Pular para o conteúdo</a>
+    <a class="skip-link" href="#todos-inicio">Pular para o conteúdo</a>
 
-    <!-- Barra de progresso de leitura -->
     <div class="progress-bar" id="progress-bar" aria-hidden="true"></div>
-
-    <!-- Cursor personalizado (desativado automaticamente em telas de toque via CSS/JS) -->
     <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
     <div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
 
-    <!-- Tela de abertura premium -->
     <div class="preloader" id="preloader" aria-hidden="true">
       <div class="preloader-inner">
         <img src="logo.svg" alt="" class="preloader-logo" />
@@ -81,17 +52,17 @@
       </div>
     </div>
 
-    <header class="topbar transparent">
-      <a class="brand" href="#inicio" aria-label="Colinas Engenharia — página inicial">
+    <header class="topbar scrolled">
+      <a class="brand" href="index.html" aria-label="Colinas Engenharia — página inicial">
         <div class="brand-pill">
           <img src="logo.svg" alt="Colinas Engenharia" class="brand-logo" />
         </div>
       </a>
 
       <nav id="primary-nav" class="nav" aria-label="Navegação principal">
-        <a href="#empreendimentos">Empreendimentos</a>
-        <a href="#sobre">Sobre</a>
-        <a href="#contato">Contato</a>
+        <a href="index.html#empreendimentos">Empreendimentos</a>
+        <a href="index.html#sobre">Sobre</a>
+        <a href="index.html#contato">Contato</a>
       </nav>
 
       <button
@@ -110,50 +81,21 @@
       <div id="nav-backdrop" class="nav-backdrop" hidden></div>
     </header>
 
-    <main id="inicio">
-      <!-- Hero premium: imagem de fundo + efeitos (formas com parallax + partículas) -->
-      <section class="hero hero-premium" aria-label="Colinas Engenharia — construindo confiança em Campina Grande">
-        <div class="hero-bg" id="hero-bg">
-          <div class="hero-shapes" aria-hidden="true">
-            <svg class="shape shape-2" viewBox="0 0 600 400" preserveAspectRatio="none">
-              <circle cx="420" cy="120" r="200" fill="rgba(111,182,255,0.16)" />
-            </svg>
-            <svg class="shape shape-3" viewBox="0 0 600 400" preserveAspectRatio="none">
-              <circle cx="120" cy="300" r="150" fill="rgba(47,125,224,0.14)" />
-            </svg>
-          </div>
-          <div class="hero-particles" id="hero-particles" aria-hidden="true"></div>
-          <div class="hero-glass">
-            <div class="glass-content">
-              <p class="hero-eyebrow reveal">Campina Grande · PB</p>
-
-              <p class="hero-sub reveal">
-                Empreendimentos planejados do início ao fim, com transparência em cada etapa da obra.
-              </p>
-              <div class="hero-actions">
-                <a class="btn btn-primary hero-btn" href="#empreendimentos">Conheça nossos empreendimentos</a>
-                <a class="btn btn-secondary hero-btn" href="#contato">Fale com um especialista</a>
-              </div>
-            </div>
-          </div>
-          <div class="hero-scroll-cue" aria-hidden="true"><span></span></div>
+    <main id="todos-inicio" class="empreendimento-page">
+      <!-- Hero institucional -->
+      <section class="all-projects-hero">
+        <div class="all-projects-hero-inner">
+          <p class="eyebrow reveal">Portfólio completo</p>
+          <h1 class="split-title reveal">Todos os nossos empreendimentos</h1>
+          <p class="reveal">
+            Do lançamento à entrega das chaves: conheça cada projeto da Colinas Engenharia em Campina Grande, PB.
+          </p>
         </div>
       </section>
 
-      <!-- Empreendimentos -->
-      <section id="empreendimentos" class="section intro-cards reveal">
-        <div class="intro-heading">
-          <p class="eyebrow">Empreendimentos</p>
-          <h2 class="split-title">Conheça nossos lançamentos</h2>
-          <p class="muted">Clique em qualquer projeto para uma página dedicada com fotos e informações técnicas.</p>
-        </div>
-
-        <div class="cards-carousel">
-          <button type="button" class="carousel-nav prev" id="carousel-prev" aria-label="Empreendimento anterior">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
-          </button>
-
-          <div class="grid-cards" id="cards-track">
+      <!-- Grade completa -->
+      <section class="section all-projects-grid-section">
+        <div class="all-projects-grid">
 
           <a class="card reveal tilt-card" href="vista-campina.html">
             <div class="card-media">
@@ -185,7 +127,7 @@
 
           <a class="card reveal tilt-card" href="vista-catole.html">
             <div class="card-media">
-              <img src="assets/buildings/vista-catole-hero.jpg" loading="lazy" width="800" height="640" />
+              <img src="assets/buildings/vista-catole-hero.jpg" alt="Vista Catolé" loading="lazy" width="800" height="640" />
               <span class="card-badge">Em construção</span>
             </div>
             <div class="card-body">
@@ -267,100 +209,10 @@
             </div>
           </a>
 
-          </div>
-
-          <button type="button" class="carousel-nav next" id="carousel-next" aria-label="Próximo empreendimento">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-          </button>
-        </div>
-
-        <div class="cards-dots" id="cards-dots" aria-hidden="true"></div>
-
-        <div class="intro-cards-footer">
-          <a class="btn btn-secondary btn-view-all" href="empreendimentos.html">
-            Ver todos os empreendimentos
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
         </div>
       </section>
 
-      <!-- Obra em construção ("Bastidores") -->
-      <section class="section obra-construcao" aria-label="Bastidores da obra">
-        <div class="obra-inner">
-          <div class="obra-media" id="obra-media">
-            <img src="assets/buildings/hero-bg.jpg" alt="Vista aérea da obra em construção" loading="lazy" width="1200" height="800" />
-          </div>
-          <div class="obra-caption" id="obra-caption">
-            <p class="eyebrow">Bastidores</p>
-            <h2 class="split-title">A obra está ganhando forma.</h2>
-            <p class="muted">Cada etapa da construção é conduzida com planejamento, tecnologia e atenção aos detalhes, garantindo qualidade, segurança e transparência em todo o processo.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Sobre -->
-      <section id="sobre" class="section about-elegant reveal" aria-label="Sobre a Colinas Engenharia">
-        <div class="about-bg">
-          <div class="overlay"></div>
-          <div class="about-content">
-            <div class="about-intro reveal">
-              <p class="eyebrow about-eyebrow">Sobre nós</p>
-              <h2 class="about-heading split-title">O que guia cada decisão da Colinas</h2>
-              <p class="about-subtitle muted">
-                Mais do que construir edifícios, erguemos empreendimentos sobre princípios que sustentam
-                cada etapa da obra em Campina Grande.
-              </p>
-            </div>
-
-            <div class="about-pillars">
-              <div class="pillar reveal">
-                <span class="pillar-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 3l7 3v5c0 4.6-3 8.2-7 10-4-1.8-7-5.4-7-10V6l7-3z" />
-                    <path d="M9 12l2 2 4-4" />
-                  </svg>
-                </span>
-                <h3>Qualidade sem concessões</h3>
-                <p class="muted">Materiais selecionados e fiscalização técnica constante em cada fase da obra.</p>
-              </div>
-
-              <div class="pillar reveal">
-                <span class="pillar-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
-                    <circle cx="10" cy="7" r="4" />
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                  </svg>
-                </span>
-                <h3>Transparência com o cliente</h3>
-                <p class="muted">Comunicação clara do planejamento à entrega das chaves.</p>
-              </div>
-
-              <div class="pillar reveal">
-                <span class="pillar-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="9" />
-                    <path d="M12 7v5l3 2" />
-                  </svg>
-                </span>
-                <h3>Compromisso de longo prazo</h3>
-                <p class="muted">Projetos pensados para valorizar o investimento muito além da entrega.</p>
-              </div>
-            </div>
-
-            <div class="about-quote reveal">
-              <blockquote>
-                Cada obra que entregamos carrega mais do que estrutura e acabamento — carrega o começo
-                de uma nova história para quem passa a chamar aquele endereço de lar.
-              </blockquote>
-              <p class="about-quote-attr">Direção da Colinas Engenharia</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Contato: barra de endereço/horário sobreposta entre "Sobre" e o rodapé -->
+      <!-- Contato: barra de endereço/horário, igual à página inicial -->
       <section id="contato" class="section contact-bar reveal">
         <div class="contact-bar-inner">
           <div class="contact-bar-item">
@@ -378,7 +230,6 @@
             </span>
             <div>
               <h3>Nosso endereço</h3>
-              <!-- TODO: substituir pelo endereço real da Colinas Engenharia -->
               <p><a href="https://www.google.com/maps" target="_blank" rel="noopener">Rua Exemplo, 123, Centro, Campina Grande-PB</a></p>
             </div>
           </div>
@@ -401,7 +252,6 @@
       </section>
     </main>
 
-    <!-- Rodapé -->
     <footer class="footer footer-expanded">
       <div class="footer-top">
         <div class="footer-brand">
@@ -411,23 +261,21 @@
 
         <nav class="footer-links" aria-label="Links do rodapé">
           <h4>Navegação</h4>
-          <a href="#inicio">Home</a>
-          <a href="#empreendimentos">Empreendimentos</a>
-          <a href="#sobre">Sobre</a>
-          <a href="#contato">Contato</a>
+          <a href="index.html#inicio">Home</a>
+          <a href="empreendimentos.html">Empreendimentos</a>
+          <a href="index.html#sobre">Sobre</a>
+          <a href="index.html#contato">Contato</a>
         </nav>
 
         <div class="footer-contacts">
           <h4>Contatos</h4>
           <a href="tel:+558321579038" class="footer-phone">+55 (83) 2157-9038</a>
-          <!-- TODO: substituir pelo e-mail real -->
           <a href="mailto:contato@colinasengenharia.com.br">contato@colinasengenharia.com.br</a>
         </div>
 
         <div class="footer-social">
           <h4>Redes Sociais</h4>
           <div class="social-icons">
-            <!-- TODO: substituir "#" pelos links reais das redes sociais -->
             <a href="#" target="_blank" rel="noopener" aria-label="Instagram">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <rect x="3" y="3" width="18" height="18" rx="5" />
@@ -455,7 +303,6 @@
       </div>
     </footer>
 
-    <!-- TODO: substituir o número pelo WhatsApp real -->
     <a class="whatsapp-float" href="https://wa.me/558321579038" target="_blank" rel="noopener" aria-label="Fale conosco pelo WhatsApp">
       <svg viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm5.6 14.3c-.2.6-1.2 1.2-1.7 1.3-.4.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.6-2.7-1.2-4.4-3.9-4.6-4.1-.1-.2-1.1-1.4-1.1-2.7s.7-1.9 1-2.2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.4.2.5.7 1.7.8 1.8.1.2.1.4 0 .6-.1.2-.1.3-.3.5-.1.2-.3.4-.4.5-.1.2-.3.3-.1.6.2.3.8 1.3 1.8 2.1 1.2 1 2.2 1.3 2.5 1.5.3.1.5.1.6-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.6-.1.2.1 1.5.7 1.8.8.3.1.5.2.5.3.1.2.1.5-.1 1.1z" />

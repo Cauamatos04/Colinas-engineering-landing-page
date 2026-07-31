@@ -1,4 +1,82 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vista Campina — Colinas Engenharia</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Cabeçalho idêntico ao da home — não alterar -->
+  <header class="topbar scrolled">
+    <a class="brand" href="index.html" aria-label="Colinas Engenharia — página inicial">
+      <div class="brand-pill"><img src="logo.svg" alt="Colinas Engenharia" class="brand-logo" /></div>
+    </a>
+    <nav id="primary-nav" class="nav" aria-label="Navegação principal">
+      <a href="index.html#empreendimentos">Empreendimentos</a>
+      <a href="index.html#sobre">Sobre</a>
+      <a href="index.html#contato">Contato</a>
+    </nav>
+    <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="primary-nav">
+      <span class="menu-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
+    <div id="nav-backdrop" class="nav-backdrop" hidden></div>
+  </header>
+
+  <main class="empreendimento-page">
+
+    <!-- HERO -->
+    <section class="emp-hero">
+      <img src="assets/buildings/vista-campina/hero.jpg" alt="Vista Campina" />
+    </section>
+
+    <!-- INSTITUCIONAL -->
+    <section class="section emp-intro reveal">
+      <div class="emp-intro-inner">
+        <p class="eyebrow">Centro · Campina Grande, PB</p>
+        <h1 class="split-title">Vista Campina</h1>
+        <p class="emp-intro-text">
+          Um empreendimento pensado para quem busca conforto e sofisticação no coração
+          da cidade. Plantas inteligentes de 2 e 3 quartos, varanda gourmet e área de
+          lazer completa, com acabamento de alto padrão em cada detalhe.
+        </p>
+      </div>
+    </section>
+
+    <!-- GALERIA -->
+    <section class="section emp-gallery reveal">
+      <div class="emp-gallery-inner">
+        <div class="emp-gallery-main">
+          <img id="gallery-main-img" src="" alt="Vista Campina" />
+        </div>
+        <div class="emp-gallery-thumbs" id="gallery-thumbs"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <a class="whatsapp-float" href="https://wa.me/558321579038" target="_blank" rel="noopener" aria-label="Fale conosco pelo WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm5.6 14.3c-.2.6-1.2 1.2-1.7 1.3-.4.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.6-2.7-1.2-4.4-3.9-4.6-4.1-.1-.2-1.1-1.4-1.1-2.7s.7-1.9 1-2.2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.4.2.5.7 1.7.8 1.8.1.2.1.4 0 .6-.1.2-.1.3-.3.5-.1.2-.3.4-.4.5-.1.2-.3.3-.1.6.2.3.8 1.3 1.8 2.1 1.2 1 2.2 1.3 2.5 1.5.3.1.5.1.6-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.6-.1.2.1 1.5.7 1.8.8.3.1.5.2.5.3.1.2.1.5-.1 1.1z" /></svg>
+  </a>
+
+  <!-- LISTA DE IMAGENS DESTE EMPREENDIMENTO — para adicionar fotos, só acrescente linhas aqui -->
+  <script>
+    window.EMP_GALLERY = [
+      "assets/buildings/vista-campina/foto1.jpg",
+      "assets/buildings/vista-campina/foto2.jpg",
+      "assets/buildings/vista-campina/foto3.jpg",
+      "assets/buildings/vista-campina/foto4.jpg"
+    ];
+  </script>
+  <script src="script.js" defer></script>
+  <script src="empreendimento.js" defer></script>
+</body>
+</html><!doctype html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
@@ -36,3 +114,27 @@
   <script src="script.js"></script>
 </body>
 </html>
+
+
+  <!-- Rodapé idêntico ao da home — não alterar -->
+  <footer class="footer footer-expanded">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="logo.svg" alt="Colinas Engenharia" class="footer-logo" />
+        <p>Qualidade, transparência e excelência em cada empreendimento.</p>
+      </div>
+      <nav class="footer-links">
+        <h4>Navegação</h4>
+        <a href="index.html">Home</a>
+        <a href="index.html#empreendimentos">Empreendimentos</a>
+        <a href="index.html#sobre">Sobre</a>
+        <a href="index.html#contato">Contato</a>
+      </nav>
+      <div class="footer-contacts">
+        <h4>Contatos</h4>
+        <a href="tel:+558321579038" class="footer-phone">+55 (83) 2157-9038</a>
+        <a href="mailto:contato@colinasengenharia.com.br">contato@colinasengenharia.com.br</a>
+      </div>
+    </div>
+    <div class="footer-bottom"><p>© <span id="year"></span> Colinas Engenharia. Todos os direitos reservados.</p></div>
+  </footer>

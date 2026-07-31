@@ -11,7 +11,6 @@
   --secondary: #2f7de0;
   --accent: #dfefff;
   --border: #dfe8f4;
-  --shadow: 0 28px 60px rgba(15, 76, 129, 0.12);
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -241,11 +240,14 @@ p, li, a {
   transition: opacity 0.35s var(--ease);
 }
 
+/* Sólido em vez de backdrop-filter: blur(). O header fica com a classe
+   "scrolled" durante praticamente toda a navegação — se usasse blur, o
+   navegador recalcularia o desfoque a cada frame de rolagem, do início ao
+   fim da página. Uma cor sólida mais opaca entrega a mesma leitura visual
+   sem esse custo contínuo. */
 .topbar.scrolled {
   padding: 0.85rem 2.5rem;
-  background: rgba(13, 27, 42, 0.72);
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  background: rgba(10, 21, 34, 0.92);
   box-shadow: 0 12px 30px rgba(9, 20, 33, 0.18);
 }
 
@@ -618,108 +620,368 @@ p, li, a {
 }
 
 /* ==========================================================================
-   7. OBRA EM CONSTRUÇÃO
+   7. OBRA EM CONSTRUÇÃO (seção "Bastidores")
+   Editorial, silencioso e premium: fotografia grande à esquerda como
+   protagonista (nunca como background — mantém credibilidade documental),
+   texto institucional curto centralizado com a foto à direita. Sem listas,
+   cards ou botão — só respiro, tipografia e uma imagem que fala por si.
    ========================================================================== */
 .obra-construcao {
-  padding: 4rem 0;
-  background: var(--surface-2);
+  padding: 7rem 0;
+  background: linear-gradient(160deg, #f8fafd 0%, #eef5fc 100%);
 }
 
 .obra-inner {
-  display: flex;
-  gap: 2.4rem;
+  display: grid;
+  grid-template-columns: minmax(0, 62%) minmax(0, 1fr);
+  gap: 4rem;
   align-items: center;
-  justify-content: center;
-  max-width: 1100px;
+  max-width: 1180px;
   margin: 0 auto;
   padding: 0 1rem;
 }
 
 .obra-media {
-  width: 52%;
-  border-radius: 16px;
+  position: relative;
+  border-radius: 22px;
   overflow: hidden;
-  box-shadow: 0 24px 50px rgba(2, 8, 23, 0.22);
+  box-shadow: 0 30px 70px -24px rgba(13, 45, 84, 0.28);
 }
 
 .obra-media img {
   width: 100%;
   height: auto;
-  transition: transform 0.6s var(--ease);
+  display: block;
+  transition: transform 0.5s var(--ease);
 }
 
 .obra-media:hover img {
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .obra-caption {
-  max-width: 460px;
+  max-width: 380px;
+}
+
+.obra-caption .eyebrow {
+  background: rgba(15, 76, 129, 0.08);
 }
 
 .obra-caption h2 {
-  margin: 0 0 0.6rem;
-  font-size: 1.7rem;
+  margin: 0 0 1.1rem;
+  font-size: clamp(1.7rem, 2.6vw, 2.3rem);
+  line-height: 1.28;
+  color: var(--text);
+}
+
+.obra-caption p.muted {
+  font-size: 1rem;
+  line-height: 1.85;
+  max-width: 34ch;
 }
 
 /* ==========================================================================
-   8. EMPREENDIMENTOS (CARDS)
+   8. EMPREENDIMENTOS (CARDS) — versão premium
    ========================================================================== */
 .intro-cards {
-  padding: 5rem 0;
+  padding: 5.5rem 0 6rem;
+}
+
+.intro-cards-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 2.8rem;
+}
+
+.btn-view-all {
+  gap: 0.6rem;
+}
+
+.btn-view-all svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.3s var(--ease);
+}
+
+.btn-view-all:hover svg {
+  transform: translateX(4px);
 }
 
 .grid-cards {
   width: min(1200px, calc(100% - 2rem));
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.4rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.4rem;
 }
 
 .card {
-  display: block;
-  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 22px;
   overflow: hidden;
   background: var(--surface);
-  box-shadow: 0 14px 30px rgba(15, 76, 129, 0.08);
+  box-shadow: 0 16px 40px -20px rgba(15, 76, 129, 0.22);
   border: 1px solid var(--border);
-  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
 }
 
 .card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 26px 50px rgba(15, 76, 129, 0.18);
+  box-shadow: 0 26px 54px -20px rgba(15, 76, 129, 0.3);
 }
 
 .card-media {
+  position: relative;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
-  height: 180px;
 }
 
 .card-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s var(--ease);
+  transform: scale(1.02);
+  transition: transform 0.6s var(--ease);
 }
 
 .card:hover .card-media img {
   transform: scale(1.08);
 }
 
+.card-media::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 40%;
+  background: linear-gradient(180deg, transparent, rgba(6, 14, 26, 0.35));
+  pointer-events: none;
+}
+
+/* Sem backdrop-filter: um fundo branco quase opaco entrega a mesma
+   leitura de "etiqueta de vidro" sem custo de blur contínuo. */
+.card-badge {
+  position: absolute;
+  top: 1.1rem;
+  left: 1.1rem;
+  z-index: 2;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--primary);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
 .card-body {
-  padding: 1.2rem 1.3rem 1.4rem;
+  padding: 1.8rem 1.8rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  flex: 1;
 }
 
-.card-body h3 {
-  margin: 0 0 0.4rem;
-  font-size: 1.15rem;
+.card-heading h3 {
+  margin: 0 0 0.3rem;
+  font-size: 1.35rem;
+  letter-spacing: -0.01em;
 }
 
-.card-body p {
+.card-location {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
   margin: 0;
   color: var(--muted);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
+}
+
+.card-location svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  color: var(--secondary);
+}
+
+.card-desc {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.card-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.1rem;
+  margin: 0;
+  padding: 0.9rem 0 0;
+  list-style: none;
+  border-top: 1px solid var(--border);
+}
+
+.card-info li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.card-info svg {
+  width: 17px;
+  height: 17px;
+  color: var(--secondary);
+  flex-shrink: 0;
+}
+
+.card-cta {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: flex-start;
+  padding: 0.85rem 1.4rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: background 0.3s var(--ease), gap 0.3s var(--ease), color 0.3s var(--ease);
+}
+
+.card-cta svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s var(--ease);
+}
+
+.card:hover .card-cta {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff;
+  gap: 0.75rem;
+}
+
+.card:hover .card-cta svg {
+  transform: translateX(2px);
+}
+
+.cards-dots {
+  display: none;
+}
+
+/* --------------------------------------------------------------------
+   8b. Carrossel horizontal (desktop) — mesmos cards, novo comportamento
+   -------------------------------------------------------------------- */
+.cards-carousel {
+  position: relative;
+}
+
+.carousel-nav {
+  display: none;
+}
+
+@media (min-width: 901px) {
+  .intro-cards .intro-heading {
+    max-width: 640px;
+    margin-left: 0;
+    margin-right: auto;
+    text-align: left;
+  }
+
+  .cards-carousel {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .grid-cards {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(340px, 30%);
+    grid-template-columns: none;
+    gap: 1.8rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    padding: 0.4rem 0.2rem 1.4rem;
+    margin: 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .grid-cards::-webkit-scrollbar {
+    display: none;
+  }
+
+  .card {
+    scroll-snap-align: start;
+  }
+
+  .carousel-nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--primary);
+    box-shadow: 0 12px 26px -12px rgba(15, 76, 129, 0.3);
+    cursor: pointer;
+    transition: background 0.3s var(--ease), color 0.3s var(--ease), transform 0.25s var(--ease), opacity 0.25s var(--ease);
+  }
+
+  .carousel-nav svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .carousel-nav:hover {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  .carousel-nav:disabled {
+    opacity: 0.35;
+    cursor: default;
+    transform: none;
+    background: var(--surface);
+    color: var(--primary);
+  }
+
+  .cards-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.6rem;
+  }
+
+  .cards-dots span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.25s var(--ease), transform 0.25s var(--ease);
+  }
+
+  .cards-dots span.is-active {
+    background: var(--primary);
+    transform: scale(1.35);
+  }
+}
+
+@media (min-width: 1300px) {
+  .grid-cards {
+    grid-auto-columns: minmax(360px, 31%);
+  }
 }
 
 /* ==========================================================================
@@ -925,7 +1187,6 @@ p, li, a {
   color: var(--secondary);
 }
 
-/* Horário de Atendimento em azul */
 .contact-bar-item:nth-child(3) p {
   color: var(--primary);
   font-weight: 600;
@@ -948,8 +1209,9 @@ p, li, a {
   color: rgba(255, 255, 255, 0.75);
 }
 .footer {
-    margin-top: -40px;
-    padding-top: 170px;
+  margin-top: -40px;
+  padding: 2.5rem 1rem;
+  color: var(--muted);
 }
 
 .footer-top {
@@ -1046,12 +1308,6 @@ p, li, a {
   margin: 0;
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.55);
-}
-
-.footer {
-  text-align: center;
-  padding: 2.5rem 1rem;
-  color: var(--muted);
 }
 
 /* Botão flutuante de WhatsApp */
@@ -1229,10 +1485,11 @@ p, li, a {
     display: block;
   }
 
-    .hero {
+  .hero {
     width: 100%;
-    height: 88vh;
-    min-height: 480px;
+    height: 62vh;
+    min-height: 380px;
+    max-height: 560px;
     overflow: hidden;
   }
 
@@ -1275,28 +1532,31 @@ p, li, a {
 
   .hero-eyebrow {
     font-size: 0.7rem;
+    margin-bottom: 0.6rem;
   }
 
   .glass-content h1 {
-    font-size: clamp(1.7rem, 7vw, 2.2rem);
-    margin-bottom: 0.8rem;
+    font-size: clamp(1.6rem, 7vw, 2rem);
+    margin-bottom: 0.6rem;
   }
 
   .hero-sub {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     max-width: 300px;
+    margin-bottom: 0.2rem;
   }
 
   .hero-actions {
     flex-direction: column;
     width: 100%;
-    gap: 0.8rem;
+    gap: 0.7rem;
+    margin-top: 1.1rem;
   }
 
   .hero-actions .btn {
     width: 100%;
-    padding: 0.9rem 1.2rem;
-    font-size: 0.95rem;
+    padding: 0.85rem 1.1rem;
+    font-size: 0.9rem;
   }
 
   .hero-scroll-cue {
@@ -1307,59 +1567,159 @@ p, li, a {
     padding: 3.2rem 0;
   }
 
+  .intro-cards {
+    padding: 2.6rem 0 3rem;
+  }
+
+  .intro-heading {
+    padding: 0 1.2rem;
+    margin-bottom: 1.6rem;
+  }
+
+  .intro-cards-footer {
+    padding: 0 1.2rem;
+    margin-top: 2rem;
+  }
+
+  .grid-cards {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 82%;
+    grid-template-columns: none;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    padding: 0.3rem 1.2rem 0.6rem;
+    margin: 0;
+    width: 100%;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .grid-cards::-webkit-scrollbar {
+    display: none;
+  }
+
+  .card {
+    scroll-snap-align: center;
+  }
+
+  .card:active {
+    transform: scale(0.98);
+  }
+
+  .card-media {
+    aspect-ratio: 4 / 3.2;
+  }
+
+  .card-body {
+    padding: 1.4rem 1.3rem 1.6rem;
+    gap: 0.9rem;
+  }
+
+  .card-heading h3 {
+    font-size: 1.15rem;
+  }
+
+  .card-info {
+    gap: 0.5rem 0.9rem;
+  }
+
+  .cards-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.2rem;
+  }
+
+  .cards-dots span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.25s var(--ease), transform 0.25s var(--ease);
+  }
+
+  .cards-dots span.is-active {
+    background: var(--primary);
+    transform: scale(1.35);
+  }
+
   .indicators {
-    padding: 3.4rem 0;
+    padding: 2.8rem 0;
   }
 
   .indicators-header {
-    margin-bottom: 2.4rem;
+    margin-bottom: 2rem;
+    padding: 0 1.2rem;
   }
 
   .indicators-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.9rem;
+    padding: 0 1.2rem;
   }
 
   .indicator-item {
     border-left: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.16);
-    padding: 2rem 1rem 0;
+    border-top: none;
+    padding: 1.4rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
   }
 
   .indicator-item:first-child {
-    border-top: none;
-    padding-top: 0;
+    border-left: none;
+  }
+
+  .indicator-icon {
+    width: 38px;
+    height: 38px;
+    margin-bottom: 0.7rem;
+  }
+
+  .indicator-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .indicator-number {
+    font-size: clamp(1.7rem, 7vw, 2.1rem);
+    margin-bottom: 0.3rem;
+  }
+
+  .indicator-item p {
+    font-size: 0.82rem;
+  }
+
+  .obra-construcao {
+    padding: 3rem 0;
   }
 
   .obra-inner {
-    flex-direction: column;
-    gap: 1.4rem;
+    grid-template-columns: 1fr;
+    gap: 1.8rem;
     text-align: center;
+    padding: 0 1.4rem;
   }
 
   .obra-media {
+    border-radius: 16px;
     width: 100%;
   }
 
   .obra-caption {
     max-width: 100%;
+    margin: 0 auto;
   }
 
-  .intro-cards {
-    padding: 3.2rem 0;
-  }
-
-  .grid-cards {
-    grid-template-columns: 1fr;
-    gap: 1.1rem;
-  }
-
-  .card-media {
-    height: 200px;
-  }
-
-  .card:active {
-    transform: scale(0.98);
+  .obra-caption p.muted {
+    max-width: 40ch;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .about-bg {
@@ -1368,29 +1728,56 @@ p, li, a {
   }
 
   .about-content {
-    padding: 3.2rem 1.4rem;
+    padding: 2.6rem 1.3rem;
   }
 
   .about-intro {
-    margin-bottom: 2.6rem;
+    margin-bottom: 1.8rem;
   }
 
   .about-heading {
-    font-size: 1.7rem;
+    font-size: 1.55rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .about-subtitle {
+    font-size: 0.92rem;
+    line-height: 1.6;
   }
 
   .about-pillars {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    margin-bottom: 2.8rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.4rem 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .pillar-icon {
+    width: 36px;
+    height: 36px;
+    margin-bottom: 0.7rem;
+  }
+
+  .pillar-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .pillar h3 {
+    font-size: 0.98rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .pillar p {
+    font-size: 0.82rem;
+    line-height: 1.5;
   }
 
   .about-quote {
-    padding-top: 2rem;
+    padding-top: 1.4rem;
   }
 
   .about-quote blockquote {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   .contact-bar-inner {
@@ -1432,11 +1819,15 @@ p, li, a {
 
 @media (max-width: 380px) {
   .glass-content h1 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
 
   .brand-logo {
     width: 84px;
+  }
+
+  .grid-cards {
+    grid-auto-columns: 88%;
   }
 }
 @media (max-width: 768px) {
@@ -1445,4 +1836,727 @@ p, li, a {
       display: none;
   }
 
+}
+
+/* ==========================================================================
+   15. CAMADA DE MOVIMENTO PREMIUM (preloader, cursor, GSAP reveals, microinterações)
+   ========================================================================== */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--secondary), #bfe0ff);
+  z-index: 300;
+  will-change: width;
+  box-shadow: 0 0 12px rgba(47, 125, 224, 0.6);
+}
+
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #071427 0%, #0f2f52 100%);
+}
+
+.preloader-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4rem;
+}
+
+.preloader-logo {
+  width: 120px;
+  height: auto;
+  filter: brightness(0) invert(1);
+  opacity: 0;
+  transform: scale(0.85);
+  filter: brightness(0) invert(1) blur(6px);
+}
+
+.preloader-bar {
+  width: 160px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.preloader-bar span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--secondary), #ffffff);
+  border-radius: 999px;
+}
+
+.preloader.is-done {
+  pointer-events: none;
+}
+
+body.is-loading {
+  overflow: hidden;
+}
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 400;
+  border-radius: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  will-change: transform;
+  mix-blend-mode: difference;
+}
+
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background: #ffffff;
+  opacity: 0;
+  transition: opacity 0.25s ease, width 0.25s var(--ease), height 0.25s var(--ease);
+}
+
+.cursor-ring {
+  width: 38px;
+  height: 38px;
+  border: 1.5px solid #ffffff;
+  opacity: 0;
+  transition: opacity 0.25s ease, width 0.3s var(--ease), height 0.3s var(--ease), border-color 0.3s ease;
+}
+
+body.cursor-ready .cursor-dot,
+body.cursor-ready .cursor-ring {
+  opacity: 1;
+}
+
+body.cursor-grow .cursor-ring {
+  width: 62px;
+  height: 62px;
+  border-color: var(--secondary);
+}
+
+body.cursor-grow .cursor-dot {
+  width: 4px;
+  height: 4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body.cursor-ready,
+  body.cursor-ready a,
+  body.cursor-ready button {
+    cursor: none;
+  }
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-60px);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+}
+.reveal-left.active { opacity: 1; transform: translateX(0); }
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(60px);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+}
+.reveal-right.active { opacity: 1; transform: translateX(0); }
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.88);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+}
+.reveal-scale.active { opacity: 1; transform: scale(1); }
+
+.reveal-blur {
+  opacity: 0;
+  filter: blur(14px);
+  transform: translateY(24px);
+  transition: opacity 1s var(--ease), transform 1s var(--ease), filter 1s var(--ease);
+}
+.reveal-blur.active { opacity: 1; filter: blur(0); transform: translateY(0); }
+
+.reveal-mask {
+  position: relative;
+  overflow: hidden;
+}
+.reveal-mask::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--primary);
+  transform-origin: right;
+  transform: scaleX(1);
+  transition: transform 0.9s var(--ease);
+  z-index: 5;
+}
+.reveal-mask.active::after {
+  transform: scaleX(0);
+}
+
+.reveal-rotate {
+  opacity: 0;
+  transform: rotate(-3deg) translateY(30px);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+}
+.reveal-rotate.active { opacity: 1; transform: rotate(0) translateY(0); }
+
+.split-title .word,
+.split-title .char {
+  will-change: transform, opacity;
+}
+
+.btn {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  transform: scale(0);
+  animation: rippleAnim 0.6s ease-out;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@keyframes rippleAnim {
+  to {
+    transform: scale(3.2);
+    opacity: 0;
+  }
+}
+
+.tilt-card {
+  transform-style: preserve-3d;
+  perspective: 900px;
+}
+
+.tilt-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.35), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.tilt-card:hover::before {
+  opacity: 1;
+}
+
+.ambient-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.55;
+  will-change: transform;
+}
+
+.section {
+  isolation: isolate;
+}
+
+.topbar.scrolled .brand-pill {
+  box-shadow: 0 8px 20px rgba(15, 76, 129, 0.4);
+}
+
+.breathe {
+  animation: breathe 10s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-dot,
+  .cursor-ring,
+  .progress-bar,
+  .preloader-logo,
+  .breathe {
+    display: none !important;
+  }
+  .reveal,
+  .reveal-left,
+  .reveal-right,
+  .reveal-scale,
+  .reveal-blur,
+  .reveal-rotate,
+  .reveal-mask::after {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .cursor-dot,
+  .cursor-ring {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   16. OTIMIZAÇÃO DE PERFORMANCE MOBILE
+   ========================================================================== */
+@media (max-width: 900px), (hover: none), (pointer: coarse) {
+
+  html, body {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* O header já usa cor sólida (sem backdrop-filter) em todas as telas
+     desde a seção 4 — nada extra a fazer aqui no mobile. */
+
+  .reveal-blur {
+    filter: none;
+    transform: translateY(24px);
+    transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  }
+  .reveal-blur.active {
+    filter: none;
+    transform: translateY(0);
+  }
+
+  .reveal-rotate {
+    transform: translateY(24px);
+  }
+  .reveal-rotate.active {
+    transform: translateY(0);
+  }
+
+  .tilt-card::before {
+    display: none;
+  }
+
+  .card:hover,
+  .card {
+    box-shadow: 0 10px 22px rgba(15, 76, 129, 0.1);
+  }
+
+  .breathe {
+    animation-duration: 14s;
+  }
+}
+
+/* ==========================================================================
+   17. PÁGINA DO EMPREENDIMENTO
+   ========================================================================== */
+.empreendimento-page {
+  width: 100%;
+}
+
+.emp-hero {
+  width: 100%;
+  height: 78vh;
+  min-height: 480px;
+  max-height: 820px;
+  overflow: hidden;
+}
+
+.emp-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.emp-intro {
+  padding: 5rem 0 3rem;
+}
+
+.emp-intro-inner {
+  width: min(760px, calc(100% - 2.4rem));
+  margin: 0 auto;
+  text-align: left;
+}
+
+.emp-intro-inner h1 {
+  font-size: clamp(2.1rem, 4vw, 3rem);
+  margin: 0.4rem 0 1.4rem;
+  color: var(--text);
+}
+
+.emp-intro-text {
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: var(--muted);
+  max-width: 65ch;
+}
+
+.emp-gallery {
+  padding: 2rem 0 6rem;
+}
+
+.emp-gallery-inner {
+  width: min(1100px, calc(100% - 2.4rem));
+  margin: 0 auto;
+}
+
+.emp-gallery-main {
+  border-radius: 20px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  box-shadow: 0 24px 60px -20px rgba(15, 76, 129, 0.25);
+  margin-bottom: 1.2rem;
+}
+
+.emp-gallery-main img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.02);
+  transition: opacity 0.5s var(--ease), transform 0.6s var(--ease);
+}
+
+.emp-gallery-main img.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.emp-gallery-thumbs {
+  display: flex;
+  gap: 0.8rem;
+  overflow-x: auto;
+  padding-bottom: 0.3rem;
+  scrollbar-width: thin;
+}
+
+.emp-gallery-thumbs button {
+  flex: 0 0 auto;
+  width: 120px;
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0.65;
+  transition: opacity 0.3s var(--ease), border-color 0.3s var(--ease), transform 0.3s var(--ease);
+}
+
+.emp-gallery-thumbs button img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.emp-gallery-thumbs button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.emp-gallery-thumbs button.is-active {
+  opacity: 1;
+  border-color: var(--secondary);
+}
+
+@media (max-width: 900px) {
+  .emp-hero {
+    height: 46vh;
+    min-height: 320px;
+  }
+  .emp-intro {
+    padding: 3rem 0 2rem;
+  }
+  .emp-gallery-main {
+    aspect-ratio: 4 / 3;
+    border-radius: 14px;
+  }
+  .emp-gallery-thumbs button {
+    width: 92px;
+  }
+}
+
+/* ==========================================================================
+   18. SEÇÃO "EXPERIÊNCIA" — página do empreendimento
+   Blocos alternados imagem/texto, no mesmo espírito editorial da seção
+   Sobre (nº 9): imagens grandes, tipografia elegante, muito respiro.
+   Só usa transform + opacity nas animações (nada de blur contínuo).
+   ========================================================================== */
+.emp-experience {
+  padding: 2rem 0 5rem;
+}
+
+.emp-experience-inner {
+  width: min(1100px, calc(100% - 2.4rem));
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6rem;
+}
+
+.emp-exp-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3.2rem;
+  align-items: center;
+}
+
+/* Blocos pares (2º, 4º...) invertem a ordem visual: imagem à esquerda. */
+.emp-exp-block.is-reversed .emp-exp-media {
+  order: -1;
+}
+
+.emp-exp-media {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  box-shadow: 0 24px 50px -18px rgba(15, 76, 129, 0.28);
+}
+
+.emp-exp-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.03);
+  transition: transform 0.7s var(--ease);
+}
+
+.emp-exp-block:hover .emp-exp-media img {
+  transform: scale(1.08);
+}
+
+.emp-exp-text {
+  max-width: 440px;
+}
+
+.emp-exp-text .eyebrow {
+  margin-bottom: 1rem;
+}
+
+.emp-exp-text h2 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  color: var(--text);
+  line-height: 1.25;
+}
+
+.emp-exp-text p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+@media (max-width: 900px) {
+  .emp-experience {
+    padding: 1rem 0 3rem;
+  }
+
+  .emp-experience-inner {
+    gap: 2.8rem;
+  }
+
+  .emp-exp-block {
+    grid-template-columns: 1fr;
+    gap: 1.4rem;
+  }
+
+  .emp-exp-block.is-reversed .emp-exp-media {
+    order: 0;
+  }
+
+  .emp-exp-media {
+    aspect-ratio: 4 / 3.2;
+  }
+
+  .emp-exp-text {
+    max-width: 100%;
+  }
+
+  .emp-exp-text h2 {
+    font-size: 1.4rem;
+  }
+
+  .emp-exp-text p {
+    font-size: 0.92rem;
+  }
+}
+
+/* ==========================================================================
+   19. HERO CINEMATOGRÁFICO — página do empreendimento
+   Cortina institucional que desliza para revelar a imagem (curtain reveal),
+   Ken Burns (zoom lento) no próprio frame da imagem, e um wrapper interno
+   (.emp-hero-frame) maior que o recorte visível para permitir o parallax
+   leve controlado via JS. Só usa transform + opacity — nada de blur/filter
+   contínuo, então o custo de repaint é mínimo mesmo em scroll.
+   ========================================================================== */
+.emp-hero {
+  position: relative;
+}
+
+/* Wrapper maior que a área visível (116% de altura, -8% de topo) para que
+   o parallax em JS tenha "folga" para deslocar sem revelar bordas vazias,
+   já que o .emp-hero pai mantém overflow: hidden. */
+.emp-hero-frame {
+  position: absolute;
+  inset: -8% 0;
+  width: 100%;
+  height: 116%;
+  will-change: transform;
+}
+
+.emp-hero-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.14);
+  transform-origin: center;
+  will-change: transform, opacity;
+  animation:
+    empHeroFadeIn 1.4s var(--ease) forwards,
+    empHeroKenBurns 9s var(--ease) forwards;
+  animation-delay: 0.15s;
+}
+
+@keyframes empHeroFadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes empHeroKenBurns {
+  to { transform: scale(1.02); }
+}
+
+/* Cortina de revelação: mesma cor institucional do header/rodapé,
+   deslizando para fora no carregamento — efeito de abertura elegante,
+   sem depender de bibliotecas externas. */
+.emp-hero-curtain {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(160deg, #0a2c50 0%, #123f74 100%);
+  transform-origin: right;
+  animation: empHeroCurtain 1s var(--ease) forwards;
+  animation-delay: 0.05s;
+  pointer-events: none;
+}
+
+@keyframes empHeroCurtain {
+  0% { transform: scaleX(1); }
+  100% { transform: scaleX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .emp-hero-frame,
+  .emp-hero-frame img,
+  .emp-hero-curtain {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .emp-hero-frame img {
+    transform: scale(1.08);
+    animation-duration: 1.2s, 7s;
+  }
+}
+
+/* ==========================================================================
+   20. PÁGINA "TODOS OS EMPREENDIMENTOS"
+   Mesma identidade visual do site: hero institucional + grade de cards
+   reaproveitando .card / .card-media / .card-body já existentes.
+   ========================================================================== */
+.all-projects-hero {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  margin-left: -50vw;
+  padding: 9.5rem 0 4.5rem;
+  background: linear-gradient(160deg, #0a2c50 0%, #123f74 100%);
+  overflow: hidden;
+  text-align: center;
+}
+
+.all-projects-hero::before {
+  content: "";
+  position: absolute;
+  top: -30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 70%;
+  background: radial-gradient(circle, rgba(111, 182, 255, 0.16), transparent 70%);
+  pointer-events: none;
+}
+
+.all-projects-hero-inner {
+  position: relative;
+  z-index: 1;
+  width: min(760px, calc(100% - 2.4rem));
+  margin: 0 auto;
+}
+
+.all-projects-hero .eyebrow {
+  background: rgba(255, 255, 255, 0.1);
+  color: #cfe6ff;
+}
+
+.all-projects-hero h1 {
+  margin: 0 0 1rem;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: clamp(2.1rem, 4vw, 3rem);
+  line-height: 1.2;
+}
+
+.all-projects-hero p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 1.02rem;
+  line-height: 1.75;
+}
+
+.all-projects-grid-section {
+  padding: 5rem 0 6.5rem;
+}
+
+.all-projects-grid {
+  width: min(1200px, calc(100% - 2rem));
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.2rem;
+}
+
+@media (max-width: 900px) {
+  .all-projects-hero {
+    padding: 7rem 0 3rem;
+  }
+  .all-projects-grid-section {
+    padding: 3rem 0 4rem;
+  }
+  .all-projects-grid {
+    grid-template-columns: 1fr;
+    width: min(560px, calc(100% - 2.4rem));
+    gap: 1.4rem;
+  }
+}
+
+@media (min-width: 901px) and (max-width: 1200px) {
+  .all-projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
