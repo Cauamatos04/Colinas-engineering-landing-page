@@ -10,7 +10,7 @@
   --primary: #0f4c81;
   --secondary: #2f7de0;
   --accent: #dfefff;
-  --border: #dfe8f4;
+  --border: #f4f4f4;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -247,7 +247,7 @@ p, li, a {
    sem esse custo contínuo. */
 .topbar.scrolled {
   padding: 0.85rem 2.5rem;
-  background: rgba(10, 21, 34, 0.92);
+  background: rgba(5, 5, 6, 0.32);
   box-shadow: 0 12px 30px rgba(9, 20, 33, 0.18);
 }
 
@@ -258,10 +258,10 @@ p, li, a {
 }
 
 .brand-pill {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  background: transparent(135deg, var(--primary), var(--secondary));
   padding: 10px;
   border-radius: 10px;
-  box-shadow: 0 10px 26px rgba(15, 76, 129, 0.28);
+  box-shadow: transparent ;
   transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
 }
 
