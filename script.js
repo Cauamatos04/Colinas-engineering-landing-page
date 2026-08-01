@@ -1,19 +1,19 @@
 /* ==========================================================================
-   Colinas Engenharia — Camada de animação premium (versão otimizada)
+   Colinas Engenharia — Camada de animação premium
    Organização:
    1. Utilitários / feature-detection
    2. Preloader
    3. Scroll: 100% nativo (sem Lenis) + refresh do ScrollTrigger
-   4. Cursor personalizado (com pausa automática quando parado)
+   4. Cursor personalizado
    5. Barra de progresso de leitura
    6. Navbar (estado "scrolled") + menu mobile
-   7. Partículas do hero + parallax por mouse + intro (sem repaint no scroll)
+   7. Hero: slider minimalista (nome + botão + troca suave de imagem)
    8. Títulos letra por letra (SplitType) + reveals de seção
    9. Botões: ripple ao clicar
-   10. Cards: tilt 3D sincronizado ao rAF (desktop) / carrossel (desktop + mobile)
+   10. Cards: tilt 3D (desktop) / carrossel (desktop + mobile)
    11. Contadores animados
    12. Ano do rodapé
-   13. Seção "Bastidores" (obra): animação de entrada repetível
+   13. Seção "Obras em Construção": animação de entrada repetível
    ========================================================================== */
 (function () {
   'use strict';
@@ -93,12 +93,11 @@
    * 3. Scroll — 100% nativo, em qualquer tela
    * ------------------------------------------------------------------ *
    * O Lenis rodava em desktop e reinterpretava o gesto de wheel/trackpad
-   * via JS antes de mover a página — isso é, por definição, um atraso
-   * entre o gesto do usuário e o conteúdo na tela. O scroll nativo do
-   * navegador é composto direto pela GPU, sem depender de JavaScript, e é
-   * sempre mais fluido do que qualquer smooth-scroll customizado.
-   * O ScrollTrigger do GSAP funciona perfeitamente sobre scroll nativo —
-   * só precisamos avisá-lo quando o layout muda de tamanho. */
+   * via JS antes de mover a página — um atraso perceptível entre o gesto
+   * do usuário e a rolagem na tela. O scroll nativo é composto pela GPU,
+   * sem depender de JavaScript, e é sempre mais fluido. O ScrollTrigger
+   * do GSAP funciona perfeitamente sobre scroll nativo — só precisa ser
+   * avisado quando o layout muda de tamanho. */
   function initScrollTriggerRefresh() {
     if (!hasGSAP || !hasScrollTrigger) return;
     window.addEventListener('load', function () {
@@ -154,7 +153,7 @@
       { passive: true }
     );
 
-    var growTargets = 'a, button, .card, .btn, input, textarea';
+    var growTargets = 'a, button, .card, .btn, .btn-line, .btn-obra, .hero-cta, input, textarea';
     document.addEventListener('mouseover', function (e) {
       if (e.target.closest(growTargets)) {
         document.body.classList.add('cursor-grow');
@@ -287,83 +286,105 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * 7. Partículas do hero + parallax por mouse + intro
+   * 7. Hero — slider minimalista
+   * ------------------------------------------------------------------ *
+   * Cada slide carrega o nome e o link do empreendimento em data-attrs.
+   * Trocar de slide altera apenas: imagem ativa (crossfade via CSS),
+   * texto do nome e href do botão "Saiba mais". Sem parallax, sem
+   * partículas, sem zoom — só a troca suave definida no CSS
+   * (.hero-slide { transition: opacity } ). Avança automaticamente a
+   * cada 7s e para de avançar quando o usuário interage com os dots.
    * ------------------------------------------------------------------ */
-  function createParticles(count) {
-    var particlesRoot = document.getElementById('hero-particles');
-    if (!particlesRoot) return;
-    count = count || (isDesktopExperience() ? 22 : 8);
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < count; i++) {
-      var p = document.createElement('div');
-      p.className = 'hero-particle';
-      var size = 3 + Math.random() * 5;
-      p.style.width = p.style.height = size + 'px';
-      p.style.left = Math.random() * 100 + '%';
-      p.style.top = 40 + Math.random() * 60 + '%';
-      p.style.animationDuration = 6 + Math.random() * 8 + 's';
-      p.style.animationDelay = Math.random() * 8 + 's';
-      fragment.appendChild(p);
-    }
-    particlesRoot.appendChild(fragment);
-  }
+  function initHeroSlider() {
+    var root = document.getElementById('hero-slider');
+    var dotsRoot = document.getElementById('hero-dots');
+    var nameEl = document.getElementById('hero-name');
+    var ctaEl = document.getElementById('hero-cta');
+    if (!root || !nameEl || !ctaEl) return;
 
-  function initHeroMouseParallax() {
-    var hero = document.querySelector('.hero-premium');
-    var shapes = document.querySelectorAll('.hero-premium .hero-shapes .shape');
-    if (!hero || !shapes.length || prefersReducedMotion) return;
+    var slides = Array.prototype.slice.call(root.querySelectorAll('.hero-slide'));
+    if (!slides.length) return;
 
-    var rafId = null;
-    var pendingX = 0;
-    var pendingY = 0;
+    var currentIndex = slides.findIndex(function (slide) {
+      return slide.classList.contains('is-active');
+    });
+    if (currentIndex < 0) currentIndex = 0;
 
-    function apply() {
-      shapes.forEach(function (s, i) {
-        var depth = (i + 1) * 14;
-        s.style.transform = 'translate3d(' + pendingX * depth + 'px,' + pendingY * depth + 'px,0)';
+    var dots = [];
+    if (dotsRoot && slides.length > 1) {
+      var fragment = document.createDocumentFragment();
+      slides.forEach(function (slide, i) {
+        var dot = document.createElement('button');
+        dot.type = 'button';
+        dot.setAttribute('role', 'tab');
+        dot.setAttribute('aria-label', 'Ver ' + (slide.dataset.name || 'empreendimento ' + (i + 1)));
+        if (i === currentIndex) {
+          dot.classList.add('is-active');
+          dot.setAttribute('aria-selected', 'true');
+        } else {
+          dot.setAttribute('aria-selected', 'false');
+        }
+        dot.addEventListener('click', function () {
+          goTo(i);
+          resetAutoplay();
+        });
+        fragment.appendChild(dot);
+        dots.push(dot);
       });
-      rafId = null;
+      dotsRoot.appendChild(fragment);
     }
 
-    function onMove(e) {
-      var rect = hero.getBoundingClientRect();
-      pendingX = (e.clientX - rect.left) / rect.width - 0.5;
-      pendingY = (e.clientY - rect.top) / rect.height - 0.5;
-      if (!rafId) rafId = requestAnimationFrame(apply);
-    }
-    function onLeave() {
-      pendingX = 0;
-      pendingY = 0;
-      if (!rafId) rafId = requestAnimationFrame(apply);
+    function applyContent(slide) {
+      var name = slide.dataset.name || '';
+      var href = slide.dataset.href || '#';
+      nameEl.textContent = name;
+      ctaEl.setAttribute('href', href);
     }
 
-    if (hasGSAP && typeof gsap.matchMedia === 'function') {
-      var mm = gsap.matchMedia();
-      mm.add('(hover: hover) and (pointer: fine) and (min-width: 901px)', function () {
-        hero.addEventListener('mousemove', onMove, { passive: true });
-        hero.addEventListener('mouseleave', onLeave);
-        return function () {
-          hero.removeEventListener('mousemove', onMove);
-          hero.removeEventListener('mouseleave', onLeave);
-          onLeave();
-        };
+    function goTo(index) {
+      if (index === currentIndex) return;
+      slides[currentIndex].classList.remove('is-active');
+      currentIndex = index;
+      slides[currentIndex].classList.add('is-active');
+      applyContent(slides[currentIndex]);
+
+      dots.forEach(function (dot, i) {
+        dot.classList.toggle('is-active', i === currentIndex);
+        dot.setAttribute('aria-selected', i === currentIndex ? 'true' : 'false');
       });
-    } else if (isDesktopExperience()) {
-      hero.addEventListener('mousemove', onMove, { passive: true });
-      hero.addEventListener('mouseleave', onLeave);
-    }
-  }
-
-  function initHeroIntro() {
-    var heroBg = document.getElementById('hero-bg');
-    if (!heroBg) return;
-
-    if (prefersReducedMotion || !hasGSAP) {
-      heroBg.classList.add('breathe');
-      return;
     }
 
-    gsap.fromTo(heroBg, { scale: 1.08 }, { scale: 1, ease: 'power2.out', duration: 1.6 });
+    var autoplayId = null;
+
+    function startAutoplay() {
+      if (slides.length < 2 || prefersReducedMotion) return;
+      autoplayId = window.setInterval(function () {
+        goTo((currentIndex + 1) % slides.length);
+      }, 7000);
+    }
+
+    function stopAutoplay() {
+      if (autoplayId) {
+        window.clearInterval(autoplayId);
+        autoplayId = null;
+      }
+    }
+
+    function resetAutoplay() {
+      stopAutoplay();
+      startAutoplay();
+    }
+
+    applyContent(slides[currentIndex]);
+    startAutoplay();
+
+    root.addEventListener('mouseenter', stopAutoplay);
+    root.addEventListener('mouseleave', startAutoplay);
+
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) stopAutoplay();
+      else startAutoplay();
+    });
   }
 
   /* ------------------------------------------------------------------ *
@@ -377,7 +398,7 @@
     var counter = 0;
 
     elements.forEach(function (el) {
-      if (el.closest('.hero-premium')) return;
+      if (el.closest('.hero-minimal')) return;
 
       if (el.classList.contains('card')) {
         el.classList.add('reveal-scale');
@@ -453,10 +474,11 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * 9. Botões: ripple ao clicar
+   * 9. Botões: ripple ao clicar (pílulas .btn, retangulares .btn-line,
+   * botão da Obra .btn-obra e botão da Hero .hero-cta)
    * ------------------------------------------------------------------ */
   function initButtonRipple() {
-    var buttons = document.querySelectorAll('.btn');
+    var buttons = document.querySelectorAll('.btn, .btn-line, .btn-obra, .hero-cta');
     buttons.forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         var rect = btn.getBoundingClientRect();
@@ -466,6 +488,8 @@
         ripple.style.width = ripple.style.height = size + 'px';
         ripple.style.left = e.clientX - rect.left - size / 2 + 'px';
         ripple.style.top = e.clientY - rect.top - size / 2 + 'px';
+        btn.style.position = btn.style.position || 'relative';
+        btn.style.overflow = 'hidden';
         btn.appendChild(ripple);
         window.setTimeout(function () {
           ripple.remove();
@@ -566,7 +590,6 @@
       return Array.prototype.slice.call(track.querySelectorAll('.card'));
     }
 
-    /* --- Dots: reconstruídos e observados sempre que houver cards --- */
     function setupDots() {
       if (dotsObserver || !dotsRoot) return;
       var cards = getCards();
@@ -615,7 +638,6 @@
       else teardownDots();
     }
 
-    /* --- Setas (desktop): scroll por um card + estado disabled --- */
     function cardStep() {
       var cards = getCards();
       if (!cards.length) return track.clientWidth;
@@ -668,7 +690,7 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * 11. Contadores animados
+   * 11. Contadores animados (páginas internas que usem .indicator-number)
    * ------------------------------------------------------------------ */
   function initCounters() {
     var counters = document.querySelectorAll('.indicator-number');
@@ -723,71 +745,68 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * 13. Seção "Bastidores" — animação de entrada repetível
+   * 13. Seção "Obras em Construção" — animação de entrada repetível
    * ------------------------------------------------------------------ *
    * Diferente do sistema genérico de .reveal (que roda uma única vez por
    * elemento e depois se desliga), esta seção precisa reencenar a entrada
    * toda vez que o usuário sai e volta a ela — por isso tem sua própria
-   * ScrollTrigger com toggleActions, em vez de usar a classe ".reveal".
-   * Com GSAP: cada "play"/"reset" reanima do estado inicial. Sem GSAP (ou
-   * com prefers-reduced-motion), cai para um IntersectionObserver simples
-   * que também alterna a classe a cada entrada/saída, sem instâncias
-   * fantasmas do intervalo entre from/to.
+   * ScrollTrigger com onEnter/onLeave/onEnterBack/onLeaveBack, em vez de
+   * usar a classe ".reveal". Fade-up + translateY(30px), 800ms. Sem GSAP
+   * (ou com prefers-reduced-motion), cai para um IntersectionObserver
+   * simples com o mesmo comportamento.
    * ------------------------------------------------------------------ */
   function initObraReveal() {
     var media = document.getElementById('obra-media');
-    var caption = document.getElementById('obra-caption');
-    if (!media || !caption) return;
+    var card = document.getElementById('obra-card');
+    if (!media || !card) return;
 
     if (prefersReducedMotion) {
       media.style.opacity = '1';
-      caption.style.opacity = '1';
+      card.style.opacity = '1';
       return;
     }
 
     if (hasGSAP && hasScrollTrigger) {
-      gsap.set(media, { opacity: 0, scale: 0.95, y: 30 });
-      gsap.set(caption, { opacity: 0, x: 40 });
+      gsap.set(media, { opacity: 0, y: 30 });
+      gsap.set(card, { opacity: 0, y: 30 });
 
       ScrollTrigger.create({
         trigger: '.obra-construcao',
         start: 'top 78%',
         onEnter: function () {
-          gsap.to(media, { opacity: 1, scale: 1, y: 0, duration: 0.9, ease: 'power2.out' });
-          gsap.to(caption, { opacity: 1, x: 0, duration: 0.8, delay: 0.25, ease: 'power2.out' });
+          gsap.to(media, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' });
+          gsap.to(card, { opacity: 1, y: 0, duration: 0.8, delay: 0.15, ease: 'power2.out' });
         },
         onLeave: function () {
-          gsap.set(media, { opacity: 0, scale: 0.95, y: 30 });
-          gsap.set(caption, { opacity: 0, x: 40 });
+          gsap.set(media, { opacity: 0, y: 30 });
+          gsap.set(card, { opacity: 0, y: 30 });
         },
         onEnterBack: function () {
-          gsap.to(media, { opacity: 1, scale: 1, y: 0, duration: 0.9, ease: 'power2.out' });
-          gsap.to(caption, { opacity: 1, x: 0, duration: 0.8, delay: 0.25, ease: 'power2.out' });
+          gsap.to(media, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' });
+          gsap.to(card, { opacity: 1, y: 0, duration: 0.8, delay: 0.15, ease: 'power2.out' });
         },
         onLeaveBack: function () {
-          gsap.set(media, { opacity: 0, scale: 0.95, y: 30 });
-          gsap.set(caption, { opacity: 0, x: 40 });
+          gsap.set(media, { opacity: 0, y: 30 });
+          gsap.set(card, { opacity: 0, y: 30 });
         },
       });
       return;
     }
 
-    // Sem GSAP/ScrollTrigger: alterna via CSS transitions, reencenando a
-    // cada entrada na viewport (o observer nunca se desliga).
-    media.style.transition = 'opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1)';
-    caption.style.transition = 'opacity 0.8s cubic-bezier(0.22,1,0.36,1) 0.25s, transform 0.8s cubic-bezier(0.22,1,0.36,1) 0.25s';
+    media.style.transition = 'opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1)';
+    card.style.transition = 'opacity 0.8s cubic-bezier(0.22,1,0.36,1) 0.15s, transform 0.8s cubic-bezier(0.22,1,0.36,1) 0.15s';
 
     function setHidden() {
       media.style.opacity = '0';
-      media.style.transform = 'scale(0.95) translateY(30px)';
-      caption.style.opacity = '0';
-      caption.style.transform = 'translateX(40px)';
+      media.style.transform = 'translateY(30px)';
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(30px)';
     }
     function setVisible() {
       media.style.opacity = '1';
-      media.style.transform = 'scale(1) translateY(0)';
-      caption.style.opacity = '1';
-      caption.style.transform = 'translateX(0)';
+      media.style.transform = 'translateY(0)';
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
     }
     setHidden();
 
@@ -808,11 +827,9 @@
    * ------------------------------------------------------------------ */
   function init() {
     setFooterYear();
-    createParticles();
     initHeader();
     initMobileMenu();
-    initHeroMouseParallax();
-    initHeroIntro();
+    initHeroSlider();
     initProgressBar();
     initCustomCursor();
     initButtonRipple();

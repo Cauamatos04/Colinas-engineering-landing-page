@@ -14,7 +14,9 @@
     <!-- TODO: substituir pela URL real do domínio quando publicado -->
     <link rel="canonical" href="https://www.colinasengenharia.com.br/" />
 
-    <!-- Open Graph / redes sociais -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Canela:wght@400;500;600;700&display=swap" rel="stylesheet">
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
     <meta property="og:site_name" content="Colinas Engenharia" />
@@ -23,20 +25,30 @@
       property="og:description"
       content="Conheça os empreendimentos da Colinas Engenharia em Campina Grande (PB): gestão transparente, entrega no prazo e acabamento premium."
     />
+    <!-- TODO: usar URL absoluta quando publicar -->
     <meta property="og:image" content="assets/buildings/predio.jpg" />
     <meta property="og:url" content="https://www.colinasengenharia.com.br/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Colinas Engenharia — Lançamentos em Campina Grande (PB)" />
+    <meta name="twitter:description" content="Empreendimentos planejados do início ao fim, com transparência em cada etapa da obra." />
+    <meta name="twitter:image" content="assets/buildings/predio.jpg" />
 
     <link rel="icon" href="logo.svg" type="image/svg+xml" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+    <!-- Fraunces (serifada, para títulos — quebra o "look" genérico de
+         sans-serif única) + Poppins (texto/UI, já usada no site). -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,400..600&family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
+    <link rel="preload" as="image" href="assets/buildings/vista-campina-hero.jpg" fetchpriority="high" />
+
     <link rel="stylesheet" href="styles.css" />
 
-    <!-- Dados estruturados para SEO local -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -54,11 +66,7 @@
       }
     </script>
 
-    <!-- Bibliotecas de animação (via CDN), carregadas sem bloquear o parser.
-         O Lenis (smooth-scroll via JS) foi removido: era a causa raiz do
-         scroll "atrasado" em relação ao mouse/trackpad no desktop. Sem ele,
-         a rolagem passa a ser 100% nativa do navegador, composta pela GPU,
-         sem nenhum JavaScript no caminho do gesto do usuário. -->
+    <!-- Scroll 100% nativo (sem Lenis) — ver comentário no script.js. -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js" defer></script>
@@ -66,14 +74,10 @@
   <body>
     <a class="skip-link" href="#inicio">Pular para o conteúdo</a>
 
-    <!-- Barra de progresso de leitura -->
     <div class="progress-bar" id="progress-bar" aria-hidden="true"></div>
-
-    <!-- Cursor personalizado (desativado automaticamente em telas de toque via CSS/JS) -->
     <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
     <div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
 
-    <!-- Tela de abertura premium -->
     <div class="preloader" id="preloader" aria-hidden="true">
       <div class="preloader-inner">
         <img src="logo.svg" alt="" class="preloader-logo" />
@@ -81,7 +85,7 @@
       </div>
     </div>
 
-    <header class="topbar transparent">
+    <header class="topbar transparent header-intro">
       <a class="brand" href="#inicio" aria-label="Colinas Engenharia — página inicial">
         <div class="brand-pill">
           <img src="logo.svg" alt="Colinas Engenharia" class="brand-logo" />
@@ -111,34 +115,56 @@
     </header>
 
     <main id="inicio">
-      <!-- Hero premium: imagem de fundo + efeitos (formas com parallax + partículas) -->
-      <section class="hero hero-premium" aria-label="Colinas Engenharia — construindo confiança em Campina Grande">
-        <div class="hero-bg" id="hero-bg">
-          <div class="hero-shapes" aria-hidden="true">
-            <svg class="shape shape-2" viewBox="0 0 600 400" preserveAspectRatio="none">
-              <circle cx="420" cy="120" r="200" fill="rgba(111,182,255,0.16)" />
-            </svg>
-            <svg class="shape shape-3" viewBox="0 0 600 400" preserveAspectRatio="none">
-              <circle cx="120" cy="300" r="150" fill="rgba(47,125,224,0.14)" />
-            </svg>
+      <!-- HERO — composição minimalista inspirada na Setai Grupo GP:
+           fotografia em tela cheia, apenas nome do empreendimento +
+           botão "Saiba mais", sem textos institucionais nem efeitos
+           decorativos. Slider troca apenas imagem, nome e link do botão. -->
+      <section class="hero hero-minimal" aria-label="Colinas Engenharia — empreendimentos em Campina Grande">
+        <div class="hero-slider" id="hero-slider">
+          <div class="hero-slide is-active" data-slide="0" data-name="Vista Campina" data-href="vista-campina.html">
+            <img
+              src="assets/buildings/vista-campina-hero.jpg"
+              alt="Vista Campina — empreendimento Colinas Engenharia"
+              class="hero-slide-img"
+              loading="eager"
+              fetchpriority="high"
+            />
           </div>
-          <div class="hero-particles" id="hero-particles" aria-hidden="true"></div>
-          <div class="hero-glass">
-            <div class="glass-content">
-              <p class="hero-eyebrow reveal">Campina Grande · PB</p>
-
-              <p class="hero-sub reveal">
-                Empreendimentos planejados do início ao fim, com transparência em cada etapa da obra.
-              </p>
-              <div class="hero-actions">
-                <a class="btn btn-primary hero-btn" href="#empreendimentos">Conheça nossos empreendimentos</a>
-                <a class="btn btn-secondary hero-btn" href="#contato">Fale com um especialista</a>
-              </div>
-            </div>
+          <div class="hero-slide" data-slide="1" data-name="Vista Catolé" data-href="vista-catole.html">
+            <img
+              src="assets/buildings/vista-catole-hero.jpg"
+              alt="Vista Catolé — empreendimento Colinas Engenharia"
+              class="hero-slide-img"
+              loading="lazy"
+            />
           </div>
-          <div class="hero-scroll-cue" aria-hidden="true"><span></span></div>
+          <div class="hero-slide" data-slide="2" data-name="Mirante do Vale" data-href="mirante-do-vale.html">
+            <img
+              src="assets/buildings/mirante-do-vale-hero.jpg"
+              alt="Mirante do Vale — empreendimento Colinas Engenharia"
+              class="hero-slide-img"
+              loading="lazy"
+            />
+          </div>
         </div>
+
+        <div class="hero-overlay" aria-hidden="true"></div>
+
+        <div class="hero-content">
+          <h1 class="hero-name" id="hero-name">Vista Campina</h1>
+          <a class="hero-cta" id="hero-cta" href="vista-campina.html">Saiba mais</a>
+        </div>
+
+        <div class="hero-dots" id="hero-dots" role="tablist" aria-label="Selecionar empreendimento"></div>
       </section>
+
+      <div class="section-divider" aria-hidden="true">
+        <svg viewBox="0 0 1200 40" preserveAspectRatio="none">
+          <line x1="0" y1="20" x2="540" y2="20" />
+          <path d="M540 20 L600 6 L660 20" />
+          <line x1="660" y1="20" x2="1200" y2="20" />
+        </svg>
+      </div>
 
       <!-- Empreendimentos -->
       <section id="empreendimentos" class="section intro-cards reveal">
@@ -185,7 +211,7 @@
 
           <a class="card reveal tilt-card" href="vista-catole.html">
             <div class="card-media">
-              <img src="assets/buildings/vista-catole-hero.jpg" loading="lazy" width="800" height="640" />
+              <img src="assets/buildings/vista-catole-hero.jpg" alt="Vista Catolé" loading="lazy" width="800" height="640" />
               <span class="card-badge">Em construção</span>
             </div>
             <div class="card-body">
@@ -284,20 +310,134 @@
         </div>
       </section>
 
-      <!-- Obra em construção ("Bastidores") -->
-      <section class="section obra-construcao" aria-label="Bastidores da obra">
+      <!-- Obra em construção — layout inspirado na Cury: fundo sólido,
+           card branco "flutuando" com o texto e a foto grande avançando
+           sobre o card para criar profundidade. -->
+     <!-- Obra em construção — layout inspirado na Cury: fundo sólido,
+           card branco "flutuando" com o texto e a foto grande avançando
+           sobre o card para criar profundidade.
+
+           MOBILE (até 768px): estrutura reorganizada para reproduzir a
+           referência enviada pelo cliente — cabeçalho centralizado sobre
+           fundo em degradê azul, imagem full-bleed com cantos superiores
+           arredondados, card branco premium com lista de itens ligados
+           por uma linha vertical e botão de largura total com seta.
+           O DESKTOP permanece 100% inalterado: os elementos .obra-mobile-header,
+           .btn-obra-text-mobile e .btn-obra-arrow ficam ocultos fora do
+           breakpoint mobile, e .obra-card-intro (eyebrow + título + texto
+           originais) só é ocultado dentro do media query ≤768px. -->
+    <!-- Obra em construção — layout inspirado na Cury: fundo sólido,
+           card branco "flutuando" com o texto e a foto grande avançando
+           sobre o card para criar profundidade.
+
+           MOBILE (até 768px): estrutura reorganizada para reproduzir a
+           referência enviada pelo cliente — cabeçalho centralizado sobre
+           fundo em degradê azul, imagem full-bleed com cantos superiores
+           arredondados, card branco premium com lista de itens ligados
+           por uma linha vertical e botão de largura total com seta.
+           O DESKTOP permanece 100% inalterado: os elementos .obra-mobile-header,
+           .btn-obra-text-mobile e .btn-obra-arrow ficam ocultos fora do
+           breakpoint mobile, e .obra-card-intro (eyebrow + título + texto
+           originais) só é ocultado dentro do media query ≤768px. -->
+      <section class="section obra-construcao" aria-label="Obras em construção">
+
+        <!-- Cabeçalho exclusivo do mobile (oculto no desktop) -->
+        <div class="obra-mobile-header">
+          <p class="eyebrow-mobile">Em Construção</p>
+          <h2 class="obra-title-mobile">Obras em Construção</h2>
+          <p class="obra-desc-mobile">Acompanhamos cada etapa com rigor técnico para entregar excelência em cada detalhe.</p>
+        </div>
+
         <div class="obra-inner">
           <div class="obra-media" id="obra-media">
-            <img src="assets/buildings/hero-bg.jpg" alt="Vista aérea da obra em construção" loading="lazy" width="1200" height="800" />
+            <img src="assets/buildings/hero-bg.jpg" alt="Vista aérea da obra em construção" loading="lazy" width="1200" height="1200" />
           </div>
-          <div class="obra-caption" id="obra-caption">
-            <p class="eyebrow">Bastidores</p>
-            <h2 class="split-title">A obra está ganhando forma.</h2>
-            <p class="muted">Cada etapa da construção é conduzida com planejamento, tecnologia e atenção aos detalhes, garantindo qualidade, segurança e transparência em todo o processo.</p>
+
+          <div class="obra-card" id="obra-card">
+
+            <!-- Bloco original (eyebrow + título + texto) — visível apenas no desktop -->
+            <div class="obra-card-intro">
+              <p class="eyebrow obra-eyebrow">Bastidores</p>
+              <h2 class="obra-title">Obras em Construção</h2>
+              <p class="obra-desc">Cada etapa da construção é conduzida com planejamento, tecnologia e atenção aos detalhes, garantindo qualidade, segurança e transparência em todo o processo.</p>
+            </div>
+
+            <ul class="obra-info-list">
+              <li>
+                <span class="obra-info-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </span>
+                <div>
+                  <span class="obra-info-label">Localização</span>
+                  <!-- TODO: confirmar localização real da obra em destaque -->
+                  <span class="obra-info-value">Catolé · Campina Grande, PB</span>
+                </div>
+              </li>
+              <li>
+                <span class="obra-info-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v4.9l3.2 1.9"/></svg>
+                </span>
+                <div>
+                  <span class="obra-info-label">Percentual executado</span>
+                  <!-- TODO: atualizar percentual conforme avanço real da obra -->
+                  <span class="obra-info-value">62% concluído</span>
+                </div>
+              </li>
+              <li>
+                <span class="obra-info-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+                </span>
+                <div>
+                  <span class="obra-info-label">Previsão de entrega</span>
+                  <!-- TODO: atualizar data de entrega conforme cronograma real -->
+                  <span class="obra-info-value">Dezembro de 2027</span>
+                </div>
+              </li>
+
+              <!-- Visível apenas no DESKTOP -->
+              <li class="obra-item-status">
+                <span class="obra-info-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+                </span>
+                <div>
+                  <span class="obra-info-label">Status da obra</span>
+                  <span class="obra-info-value">Em construção</span>
+                </div>
+              </li>
+
+              <!-- Visíveis apenas no MOBILE (substituem "Status da obra" na referência) -->
+              <li class="obra-item-tipologia">
+                <span class="obra-info-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 21V7l6-4 6 4v14M9 21v-6h6v6M9 11h.01M9 15h.01M15 11h.01M15 15h.01"/></svg>
+                </span>
+                <div>
+                  <span class="obra-info-label">Tipologia</span>
+                  <!-- TODO: confirmar tipologia real da obra em destaque -->
+                  <span class="obra-info-value">Apartamentos de 2 a 4 quartos</span>
+                </div>
+              </li>
+              <li class="obra-item-diferenciais">
+                <span class="obra-info-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </span>
+                <div>
+                  <span class="obra-info-label">Diferenciais</span>
+                  <!-- TODO: confirmar diferenciais reais da obra em destaque -->
+                  <span class="obra-info-value">Lazer completo, segurança e acabamento premium</span>
+                </div>
+              </li>
+            </ul>
+
+            <a class="btn-obra" href="vista-catole.html">
+              <span class="btn-obra-text-desktop">Acompanhar Obra</span>
+              <span class="btn-obra-text-mobile">Acompanhar Andamento</span>
+              <span class="btn-obra-arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </span>
+            </a>
           </div>
         </div>
       </section>
-
       <!-- Sobre -->
       <section id="sobre" class="section about-elegant reveal" aria-label="Sobre a Colinas Engenharia">
         <div class="about-bg">
@@ -360,7 +500,7 @@
         </div>
       </section>
 
-      <!-- Contato: barra de endereço/horário sobreposta entre "Sobre" e o rodapé -->
+      <!-- Contato -->
       <section id="contato" class="section contact-bar reveal">
         <div class="contact-bar-inner">
           <div class="contact-bar-item">
@@ -401,7 +541,6 @@
       </section>
     </main>
 
-    <!-- Rodapé -->
     <footer class="footer footer-expanded">
       <div class="footer-top">
         <div class="footer-brand">

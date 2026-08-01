@@ -10,8 +10,10 @@
   --primary: #0f4c81;
   --secondary: #2f7de0;
   --accent: #dfefff;
-  --border: #f4f4f4;
+  --border: #e7edf4;
 
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body: 'Poppins', Inter, "Segoe UI", Roboto, Arial, sans-serif;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -25,7 +27,7 @@ html {
 
 body {
   margin: 0;
-  font-family: 'Poppins', Inter, "Segoe UI", Roboto, Arial, sans-serif;
+  font-family: var(--font-body);
   color: var(--text);
   background:
     radial-gradient(circle at top left, rgba(255, 255, 255, 0.14), transparent 34%),
@@ -70,7 +72,7 @@ main {
   background: var(--primary);
   color: #fff;
   padding: 0.75rem 1.2rem;
-  border-radius: 8px;
+  border-radius: 4px;
   font-weight: 600;
   z-index: 200;
   transition: top 0.2s ease;
@@ -89,20 +91,26 @@ main {
    2. TIPOGRAFIA
    ========================================================================== */
 h1, h2, h3 {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-display);
+}
+
+h1 {
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 h2 {
-  font-weight: 700;
+  font-weight: 600;
   font-size: clamp(1.9rem, 3.2vw, 2.5rem);
 }
 
 h3 {
+  font-family: var(--font-body);
   font-weight: 600;
 }
 
 p, li, a {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-body);
   font-weight: 400;
   font-size: 1rem;
 }
@@ -112,16 +120,22 @@ p, li, a {
 }
 
 .eyebrow {
-  display: inline-block;
-  margin: 0 0 0.85rem;
-  padding: 0.3rem 0.8rem;
-  border-radius: 999px;
-  background: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.9rem;
   color: var(--primary);
   font-weight: 700;
-  font-size: 0.8rem;
-  letter-spacing: 0.14em;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 22px;
+  height: 1px;
+  background: currentColor;
 }
 
 .intro-heading {
@@ -189,26 +203,37 @@ p, li, a {
   border: 1px solid var(--border);
 }
 
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.9rem;
-  margin: 1.6rem 0 0;
+/* --- Botões da Hero (páginas internas que ainda usem .btn-line): retangulares,
+   borda fina, sem gradiente. Mantido para compatibilidade com outras páginas. */
+.btn-line {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.95rem 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
+  transition: background 0.3s var(--ease), border-color 0.3s var(--ease), transform 0.25s var(--ease);
 }
 
-.btn-primary.hero-btn {
+.btn-line:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.7);
+  transform: translateY(-2px);
+}
+
+.btn-line-solid {
   background: #ffffff;
   color: var(--primary);
+  border-color: #ffffff;
 }
 
-.btn-secondary.hero-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  color: #fff;
-}
-
-.btn-secondary.hero-btn:hover {
-  background: rgba(255, 255, 255, 0.16);
+.btn-line-solid:hover {
+  background: var(--accent);
+  border-color: var(--accent);
 }
 
 /* ==========================================================================
@@ -228,6 +253,19 @@ p, li, a {
   transition: background 0.35s var(--ease), padding 0.35s var(--ease), box-shadow 0.35s var(--ease);
 }
 
+/* Reveal do cabeçalho — ocorre apenas no carregamento inicial da página.
+   O header é `position: fixed`, então o transform não afeta o layout de
+   nenhum outro elemento (sem CLS). */
+.header-intro {
+  animation: headerIntro 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 0.2s;
+}
+
+@keyframes headerIntro {
+  from { opacity: 0; transform: translateY(-100%); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .topbar::after {
   content: "";
   position: absolute;
@@ -240,11 +278,8 @@ p, li, a {
   transition: opacity 0.35s var(--ease);
 }
 
-/* Sólido em vez de backdrop-filter: blur(). O header fica com a classe
-   "scrolled" durante praticamente toda a navegação — se usasse blur, o
-   navegador recalcularia o desfoque a cada frame de rolagem, do início ao
-   fim da página. Uma cor sólida mais opaca entrega a mesma leitura visual
-   sem esse custo contínuo. */
+/* Sólido em vez de backdrop-filter: blur() — evita recalcular desfoque a
+   cada frame de rolagem. */
 .topbar.scrolled {
   padding: 0.85rem 2.5rem;
   background: rgba(5, 5, 6, 0.32);
@@ -254,20 +289,18 @@ p, li, a {
 .brand {
   display: inline-flex;
   align-items: center;
-  border-radius: 10px;
+  border-radius: 6px;
 }
 
 .brand-pill {
-  background: transparent(135deg, var(--primary), var(--secondary));
+  background: transparent;
   padding: 10px;
-  border-radius: 10px;
-  box-shadow: transparent ;
-  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+  border-radius: 6px;
+  transition: transform 0.3s var(--ease);
 }
 
 .brand:hover .brand-pill {
-  transform: translateY(-2px) rotate(-2deg);
-  box-shadow: 0 16px 34px rgba(15, 76, 129, 0.36);
+  transform: translateY(-2px);
 }
 
 .brand-logo {
@@ -297,7 +330,7 @@ p, li, a {
   left: 0;
   bottom: -4px;
   width: 100%;
-  height: 2px;
+  height: 1px;
   background: var(--secondary);
   transform: scaleX(0);
   transform-origin: right;
@@ -310,216 +343,161 @@ p, li, a {
   transform-origin: left;
 }
 
-.menu-toggle {
-  display: none;
-}
-
-.nav-backdrop {
-  display: none;
-}
+.menu-toggle { display: none; }
+.nav-backdrop { display: none; }
 
 /* ==========================================================================
-   5. HERO
-   ========================================================================== */
-.hero {
+   5. HERO — composição minimalista inspirada na Setai Grupo GP
+   ========================================================================== *
+   Fotografia em tela cheia, overlay escuro extremamente leve, apenas nome
+   do empreendimento e um único botão "Saiba mais". Sem parallax, sem
+   partículas, sem zoom, sem blur, sem elementos decorativos. A troca de
+   slide altera somente imagem + nome + link do botão, com transição suave.
+   ------------------------------------------------------------------------ */
+.hero-minimal {
   position: relative;
-  height: 100vh;
-  min-height: 620px;
-  overflow: hidden;
-}
-
-.hero-premium {
   width: 100vw;
-  position: relative;
   left: 50%;
   margin-left: -50vw;
-}
-
-.hero-bg {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  border-radius: 0;
+  height: 100vh;
+  min-height: 560px;
+  max-height: 980px;
   overflow: hidden;
-
-  background-image: url("assets/buildings/predio.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: #0b0b0c;
   isolation: isolate;
 }
 
-.hero-bg::before {
-  content: "";
+.hero-slider {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(6, 14, 26, 0.55) 0%, rgba(6, 14, 26, 0.35) 45%, rgba(6, 14, 26, 0.75) 100%);
+}
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.1s ease, visibility 1.1s ease;
+}
+
+.hero-slide.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.hero-slide-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Overlay escuro extremamente leve — apenas para leitura do texto. */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
   z-index: 1;
+  background: linear-gradient(rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.28));
+  pointer-events: none;
 }
 
-.hero-shapes {
+.hero-content {
   position: absolute;
-  inset: 0;
+  left: clamp(1.6rem, 5vw, 4rem);
+  bottom: clamp(2.6rem, 7vw, 4.6rem);
   z-index: 2;
-  pointer-events: none;
-}
-
-.hero-shapes .shape {
-  position: absolute;
-  width: 55%;
-  filter: blur(4px);
-  transition: transform 0.2s ease-out;
-}
-
-.shape-2 { top: -10%; right: -8%; width: 60%; }
-.shape-3 { bottom: -14%; left: -10%; width: 50%; }
-
-.hero-particles {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.hero-particle {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
-  filter: blur(1px);
-  animation: drift linear infinite;
-}
-
-@keyframes drift {
-  0%   { transform: translateY(0) translateX(0); opacity: 0; }
-  10%  { opacity: 1; }
-  90%  { opacity: 1; }
-  100% { transform: translateY(-120px) translateX(12px); opacity: 0; }
-}
-
-.hero-glass {
-  position: relative;
-  z-index: 6;
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.7rem;
+  max-width: min(560px, calc(100% - 3.2rem));
+}
+
+.hero-name{
+    margin:0;
+    color:#fff;
+    font-family:"Canela", serif;
+    font-weight:500;
+    font-size:clamp(3rem,4vw,4.2rem);
+    line-height:1;
+    letter-spacing:-0.03em;
+}
+
+.hero-cta {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  height: 100%;
-  padding: 0 2rem;
-}
-
-.glass-content {
-  max-width: 760px;
-  color: white;
-}
-
-.hero-eyebrow {
-  color: rgba(255, 255, 255, 0.85);
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  margin: 0 0 1rem;
-}
-
-.glass-content h1 {
-  font-size: clamp(2.6rem, 4.6vw, 4.2rem);
-  line-height: 1.1;
-  margin: 0 0 1.1rem;
-}
-
-.blue-word,
-.highlight-word {
+  height: 44px;
+  padding: 0 1.7rem;
+  background: rgba(9, 9, 10, 0.82);
   color: #ffffff;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.86rem;
+  letter-spacing: 0.03em;
+  border-radius: 2px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  transition: background 0.4s var(--ease), transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
 }
 
-.highlight-word {
-  background: linear-gradient(90deg, #ffffff, #bfe0ff, #ffffff);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: shine 5s linear infinite;
+.hero-cta:hover {
+  background: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22);
 }
 
-@keyframes shine {
-  to { background-position: 200% center; }
-}
-
-.hero-sub {
-  font-size: 1.05rem;
-  margin: 0 auto 0.5rem;
-  color: rgba(255, 255, 255, 0.9);
-  max-width: 560px;
-}
-
-.hero-actions {
-  justify-content: center;
-}
-
-.hero-scroll-cue {
+.hero-dots {
   position: absolute;
-  left: 50%;
-  bottom: 28px;
-  transform: translateX(-50%);
-  z-index: 6;
-  width: 26px;
-  height: 42px;
-  border: 2px solid rgba(255, 255, 255, 0.6);
-  border-radius: 999px;
+  right: clamp(1.6rem, 5vw, 4rem);
+  bottom: clamp(2.6rem, 7vw, 4.6rem);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
 }
 
-.hero-scroll-cue span {
-  position: absolute;
-  top: 6px;
-  left: 50%;
-  width: 4px;
-  height: 8px;
-  margin-left: -2px;
-  border-radius: 999px;
-  background: #fff;
-  animation: scrollcue 1.8s ease-in-out infinite;
+.hero-dots button {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: background 0.3s var(--ease), transform 0.3s var(--ease);
 }
 
-@keyframes scrollcue {
-  0%   { transform: translateY(0); opacity: 1; }
-  70%  { transform: translateY(14px); opacity: 0; }
-  100% { transform: translateY(14px); opacity: 0; }
+.hero-dots button:hover {
+  background: rgba(255, 255, 255, 0.7);
 }
 
-.hero-eyebrow,
-.hero-sub {
-  opacity: 0;
-  transform: translateY(16px);
-  animation: heroFade 0.8s var(--ease) forwards;
+.hero-dots button.is-active {
+  background: #ffffff;
+  transform: scale(1.3);
 }
 
-.hero-eyebrow { animation-delay: 0.15s; }
-.glass-content h1 {
-  opacity: 0;
-  transform: translateY(16px);
-  animation: heroFade 0.8s var(--ease) forwards;
-  animation-delay: 0.3s;
-}
-.hero-sub { animation-delay: 0.5s; }
-.hero-actions {
-  opacity: 0;
-  transform: translateY(16px);
-  animation: heroFade 0.8s var(--ease) forwards;
-  animation-delay: 0.65s;
+/* --------------------------------------------------------------------
+   5b. Divisor arquitetônico entre seções
+   -------------------------------------------------------------------- */
+.section-divider {
+  width: min(1200px, calc(100% - 2rem));
+  margin: 0 auto;
+  height: 32px;
+  color: var(--border);
+  pointer-events: none;
 }
 
-@keyframes heroFade {
-  to { opacity: 1; transform: translateY(0); }
+.section-divider svg { width: 100%; height: 100%; }
+
+.section-divider line,
+.section-divider path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1;
 }
 
 /* ==========================================================================
-   6. INDICADORES
+   6. INDICADORES (mantido para páginas internas que usem este bloco)
    ========================================================================== */
 .indicators {
   width: 100vw;
@@ -557,14 +535,13 @@ p, li, a {
 }
 
 .indicators-eyebrow {
-  background: rgba(255, 255, 255, 0.08);
   color: #cfe6ff;
 }
 
 .indicators-title {
   margin: 0;
   color: #ffffff;
-  font-weight: 700;
+  font-weight: 600;
   font-size: clamp(1.9rem, 3.2vw, 2.6rem);
 }
 
@@ -580,13 +557,8 @@ p, li, a {
   transition: transform 350ms var(--ease);
 }
 
-.indicator-item:first-child {
-  border-left: none;
-}
-
-.indicator-item:hover {
-  transform: translateY(-4px);
-}
+.indicator-item:first-child { border-left: none; }
+.indicator-item:hover { transform: translateY(-4px); }
 
 .indicator-icon {
   display: inline-flex;
@@ -598,15 +570,13 @@ p, li, a {
   color: #ffffff;
 }
 
-.indicator-icon svg {
-  width: 30px;
-  height: 30px;
-}
+.indicator-icon svg { width: 30px; height: 30px; }
 
 .indicator-number {
   display: block;
   color: #ffffff;
-  font-weight: 700;
+  font-weight: 600;
+  font-family: var(--font-display);
   font-size: clamp(2.2rem, 4.6vw, 3.2rem);
   line-height: 1.1;
   margin-bottom: 0.6rem;
@@ -620,72 +590,158 @@ p, li, a {
 }
 
 /* ==========================================================================
-   7. OBRA EM CONSTRUÇÃO (seção "Bastidores")
-   Editorial, silencioso e premium: fotografia grande à esquerda como
-   protagonista (nunca como background — mantém credibilidade documental),
-   texto institucional curto centralizado com a foto à direita. Sem listas,
-   cards ou botão — só respiro, tipografia e uma imagem que fala por si.
-   ========================================================================== */
+   7. OBRA EM CONSTRUÇÃO — layout inspirado na Cury
+   ========================================================================== *
+   Fundo sólido azul, card branco "flutuando" com o conteúdo textual e foto
+   grande avançando sobre o card para criar profundidade. Sem gradientes.
+   ------------------------------------------------------------------------ */
 .obra-construcao {
-  padding: 7rem 0;
-  background: linear-gradient(160deg, #f8fafd 0%, #eef5fc 100%);
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  margin-left: -50vw;
+
+  padding: 120px 0;
+  background: #6f8fa8;
+
+  overflow: hidden;
 }
 
 .obra-inner {
-  display: grid;
-  grid-template-columns: minmax(0, 62%) minmax(0, 1fr);
-  gap: 4rem;
-  align-items: center;
-  max-width: 1180px;
+  position: relative;
+
+  width: min(1180px, calc(100% - 5rem));
+
   margin: 0 auto;
-  padding: 0 1rem;
+
+  display: grid;
+  grid-template-columns: minmax(0, 42%) minmax(0, 1fr);
+
+  align-items: center;
+}
+.obra-card {
+  position: relative;
+  z-index: 2;
+  grid-column: 1;
+  grid-row: 1;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 56px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.08);
+}
+
+.obra-eyebrow {
+  color: var(--primary);
+}
+
+.obra-title {
+  margin: 0 0 1.2rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.9rem, 2.6vw, 2.4rem);
+  line-height: 1.2;
+  color: var(--text);
+}
+
+.obra-desc {
+  margin: 0 0 2.2rem;
+  color: #6f6f6f;
+  font-size: 1rem;
+  line-height: 1.85;
+  max-width: 500px;
+}
+
+.obra-info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  margin: 0 0 2.4rem;
+  padding: 1.6rem 0 0;
+  list-style: none;
+  border-top: 1px solid var(--border);
+}
+
+.obra-info-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.obra-info-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--primary);
+}
+
+.obra-info-icon svg { width: 17px; height: 17px; }
+
+.obra-info-label {
+  display: block;
+  color: #9aa5b1;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 0.15rem;
+}
+
+.obra-info-value {
+  display: block;
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.btn-obra {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 54px;
+  padding: 0 2.3rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: 0 14px 30px rgba(15, 76, 129, 0.22);
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), background 0.3s var(--ease);
+}
+
+.btn-obra:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px rgba(15, 76, 129, 0.3);
+  background: #0d3f6c;
 }
 
 .obra-media {
   position: relative;
-  border-radius: 22px;
+  z-index: 1;
+  grid-column: 2;
+  grid-row: 1;
+  margin-left: -56px;
+  aspect-ratio: 1 / 1;
+  border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 30px 70px -24px rgba(13, 45, 84, 0.28);
+  box-shadow: 0 30px 70px -20px rgba(10, 25, 45, 0.35);
 }
 
 .obra-media img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
-  transition: transform 0.5s var(--ease);
-}
-
-.obra-media:hover img {
-  transform: scale(1.02);
-}
-
-.obra-caption {
-  max-width: 380px;
-}
-
-.obra-caption .eyebrow {
-  background: rgba(15, 76, 129, 0.08);
-}
-
-.obra-caption h2 {
-  margin: 0 0 1.1rem;
-  font-size: clamp(1.7rem, 2.6vw, 2.3rem);
-  line-height: 1.28;
-  color: var(--text);
-}
-
-.obra-caption p.muted {
-  font-size: 1rem;
-  line-height: 1.85;
-  max-width: 34ch;
 }
 
 /* ==========================================================================
-   8. EMPREENDIMENTOS (CARDS) — versão premium
+   8. EMPREENDIMENTOS (CARDS) — bordas mais retas, registro arquitetônico
    ========================================================================== */
-.intro-cards {
-  padding: 5.5rem 0 6rem;
-}
+.intro-cards { padding: 5.5rem 0 6rem; }
 
 .intro-cards-footer {
   display: flex;
@@ -693,19 +749,9 @@ p, li, a {
   margin-top: 2.8rem;
 }
 
-.btn-view-all {
-  gap: 0.6rem;
-}
-
-.btn-view-all svg {
-  width: 18px;
-  height: 18px;
-  transition: transform 0.3s var(--ease);
-}
-
-.btn-view-all:hover svg {
-  transform: translateX(4px);
-}
+.btn-view-all { gap: 0.6rem; }
+.btn-view-all svg { width: 18px; height: 18px; transition: transform 0.3s var(--ease); }
+.btn-view-all:hover svg { transform: translateX(4px); }
 
 .grid-cards {
   width: min(1200px, calc(100% - 2rem));
@@ -718,24 +764,19 @@ p, li, a {
 .card {
   display: flex;
   flex-direction: column;
-  border-radius: 22px;
   overflow: hidden;
   background: var(--surface);
-  box-shadow: 0 16px 40px -20px rgba(15, 76, 129, 0.22);
-  border: 1px solid var(--border);
+  border-top: 2px solid var(--primary);
+  box-shadow: 0 16px 40px -22px rgba(15, 76, 129, 0.22);
   transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
 }
 
 .card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-6px);
   box-shadow: 0 26px 54px -20px rgba(15, 76, 129, 0.3);
 }
 
-.card-media {
-  position: relative;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-}
+.card-media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; }
 
 .card-media img {
   width: 100%;
@@ -745,9 +786,7 @@ p, li, a {
   transition: transform 0.6s var(--ease);
 }
 
-.card:hover .card-media img {
-  transform: scale(1.08);
-}
+.card:hover .card-media img { transform: scale(1.08); }
 
 .card-media::after {
   content: "";
@@ -758,20 +797,17 @@ p, li, a {
   pointer-events: none;
 }
 
-/* Sem backdrop-filter: um fundo branco quase opaco entrega a mesma
-   leitura de "etiqueta de vidro" sem custo de blur contínuo. */
 .card-badge {
   position: absolute;
   top: 1.1rem;
   left: 1.1rem;
   z-index: 2;
   padding: 0.4rem 0.9rem;
-  border-radius: 999px;
   background: rgba(255, 255, 255, 0.96);
   color: var(--primary);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
@@ -786,8 +822,9 @@ p, li, a {
 
 .card-heading h3 {
   margin: 0 0 0.3rem;
-  font-size: 1.35rem;
-  letter-spacing: -0.01em;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.4rem;
 }
 
 .card-location {
@@ -799,19 +836,9 @@ p, li, a {
   font-size: 0.88rem;
 }
 
-.card-location svg {
-  width: 15px;
-  height: 15px;
-  flex-shrink: 0;
-  color: var(--secondary);
-}
+.card-location svg { width: 15px; height: 15px; flex-shrink: 0; color: var(--secondary); }
 
-.card-desc {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
+.card-desc { margin: 0; color: var(--muted); font-size: 0.95rem; line-height: 1.6; }
 
 .card-info {
   display: flex;
@@ -832,12 +859,7 @@ p, li, a {
   color: var(--text);
 }
 
-.card-info svg {
-  width: 17px;
-  height: 17px;
-  color: var(--secondary);
-  flex-shrink: 0;
-}
+.card-info svg { width: 17px; height: 17px; color: var(--secondary); flex-shrink: 0; }
 
 .card-cta {
   margin-top: auto;
@@ -846,19 +868,14 @@ p, li, a {
   gap: 0.5rem;
   align-self: flex-start;
   padding: 0.85rem 1.4rem;
-  border-radius: 999px;
   background: var(--accent);
   color: var(--primary);
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   transition: background 0.3s var(--ease), gap 0.3s var(--ease), color 0.3s var(--ease);
 }
 
-.card-cta svg {
-  width: 16px;
-  height: 16px;
-  transition: transform 0.3s var(--ease);
-}
+.card-cta svg { width: 16px; height: 16px; transition: transform 0.3s var(--ease); }
 
 .card:hover .card-cta {
   background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -866,24 +883,12 @@ p, li, a {
   gap: 0.75rem;
 }
 
-.card:hover .card-cta svg {
-  transform: translateX(2px);
-}
+.card:hover .card-cta svg { transform: translateX(2px); }
 
-.cards-dots {
-  display: none;
-}
+.cards-dots { display: none; }
 
-/* --------------------------------------------------------------------
-   8b. Carrossel horizontal (desktop) — mesmos cards, novo comportamento
-   -------------------------------------------------------------------- */
-.cards-carousel {
-  position: relative;
-}
-
-.carousel-nav {
-  display: none;
-}
+.cards-carousel { position: relative; }
+.carousel-nav { display: none; }
 
 @media (min-width: 901px) {
   .intro-cards .intro-heading {
@@ -893,11 +898,7 @@ p, li, a {
     text-align: left;
   }
 
-  .cards-carousel {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
+  .cards-carousel { display: flex; align-items: center; gap: 1rem; }
 
   .grid-cards {
     display: grid;
@@ -914,13 +915,8 @@ p, li, a {
     -ms-overflow-style: none;
   }
 
-  .grid-cards::-webkit-scrollbar {
-    display: none;
-  }
-
-  .card {
-    scroll-snap-align: start;
-  }
+  .grid-cards::-webkit-scrollbar { display: none; }
+  .card { scroll-snap-align: start; }
 
   .carousel-nav {
     display: inline-flex;
@@ -938,10 +934,7 @@ p, li, a {
     transition: background 0.3s var(--ease), color 0.3s var(--ease), transform 0.25s var(--ease), opacity 0.25s var(--ease);
   }
 
-  .carousel-nav svg {
-    width: 20px;
-    height: 20px;
-  }
+  .carousel-nav svg { width: 20px; height: 20px; }
 
   .carousel-nav:hover {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -957,31 +950,16 @@ p, li, a {
     color: var(--primary);
   }
 
-  .cards-dots {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: 1.6rem;
-  }
-
+  .cards-dots { display: flex; justify-content: center; gap: 0.5rem; margin-top: 1.6rem; }
   .cards-dots span {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--border);
+    width: 6px; height: 6px; border-radius: 50%; background: var(--border);
     transition: background 0.25s var(--ease), transform 0.25s var(--ease);
   }
-
-  .cards-dots span.is-active {
-    background: var(--primary);
-    transform: scale(1.35);
-  }
+  .cards-dots span.is-active { background: var(--primary); transform: scale(1.35); }
 }
 
 @media (min-width: 1300px) {
-  .grid-cards {
-    grid-auto-columns: minmax(360px, 31%);
-  }
+  .grid-cards { grid-auto-columns: minmax(360px, 31%); }
 }
 
 /* ==========================================================================
@@ -992,17 +970,13 @@ p, li, a {
   width: 100vw;
   left: 50%;
   margin-left: -50vw;
-
-  background-image: url("assets/buildings/piscina.jpge.jpg");
+  background-image: url("assets/buildings/piscina.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-
   min-height: 780px;
   display: flex;
   align-items: center;
-
-  border-radius: 0;
   overflow: hidden;
 }
 
@@ -1021,20 +995,11 @@ p, li, a {
   padding: 5.5rem 2.5rem;
 }
 
-.about-intro {
-  max-width: 620px;
-  margin-bottom: 4rem;
-}
-
-.about-eyebrow {
-  background: rgba(255, 255, 255, 0.1);
-  color: #cfe6ff;
-}
+.about-intro { max-width: 620px; margin-bottom: 4rem; }
+.about-eyebrow { color: #cfe6ff; }
 
 .about-heading {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 700;
-  font-style: normal;
+  font-weight: 500;
   color: #ffffff;
   font-size: clamp(2rem, 3.6vw, 2.9rem);
   line-height: 1.25;
@@ -1065,23 +1030,9 @@ p, li, a {
   color: rgba(255, 255, 255, 0.6);
 }
 
-.pillar-icon svg {
-  width: 28px;
-  height: 28px;
-}
-
-.pillar h3 {
-  color: #ffffff;
-  font-size: 1.2rem;
-  margin: 0 0 0.7rem;
-}
-
-.pillar p {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.95rem;
-  line-height: 1.7;
-  margin: 0;
-}
+.pillar-icon svg { width: 28px; height: 28px; }
+.pillar h3 { color: #ffffff; font-size: 1.2rem; margin: 0 0 0.7rem; }
+.pillar p { color: rgba(255, 255, 255, 0.7); font-size: 0.95rem; line-height: 1.7; margin: 0; }
 
 .about-quote {
   display: flex;
@@ -1103,11 +1054,11 @@ p, li, a {
 
 .about-quote blockquote {
   margin: 0 0 1rem;
-  font-family: 'Poppins', sans-serif;
-  font-style: normal;
-  font-weight: 500;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
   color: #ffffff;
-  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
   line-height: 1.6;
 }
 
@@ -1120,14 +1071,9 @@ p, li, a {
 }
 
 /* ==========================================================================
-   10. CONTATO (barra branca, sobreposta exatamente na costura Sobre → Rodapé)
+   10. CONTATO
    ========================================================================== */
-.contact-bar {
-  position: relative;
-  height: 0;
-  margin: 0;
-  z-index: 30;
-}
+.contact-bar { position: relative; height: 0; margin: 0; z-index: 30; }
 .contact-bar-inner {
   position: absolute;
   top: -35px;
@@ -1135,9 +1081,8 @@ p, li, a {
   transform: translateX(-50%);
   width: min(1100px, calc(100% - 2rem));
   background: var(--surface);
-  border-radius: 20px;
- box-shadow: 0 18px 45px rgba(13, 45, 84, .12);
-  border: 1px solid var(--border);
+  box-shadow: 0 18px 45px rgba(13, 45, 84, .12);
+  border-top: 2px solid var(--primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1165,42 +1110,15 @@ p, li, a {
   color: var(--primary);
 }
 
-.contact-bar-icon svg {
-  width: 28px;
-  height: 28px;
-}
-
-.contact-bar-item h3 {
-  margin: 0 0 0.35rem;
-  font-size: 1.05rem;
-  color: var(--text);
-}
-
-.contact-bar-item p,
-.contact-bar-item a {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.95rem;
-}
-
-.contact-bar-item a:hover {
-  color: var(--secondary);
-}
-
-.contact-bar-item:nth-child(3) p {
-  color: var(--primary);
-  font-weight: 600;
-}
-
-.contact-bar-divider {
-  width: 1px;
-  align-self: stretch;
-  background: var(--border);
-  margin: 0 2.5rem;
-}
+.contact-bar-icon svg { width: 28px; height: 28px; }
+.contact-bar-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; color: var(--text); }
+.contact-bar-item p, .contact-bar-item a { margin: 0; color: var(--muted); font-size: 0.95rem; }
+.contact-bar-item a:hover { color: var(--secondary); }
+.contact-bar-item:nth-child(3) p { color: var(--primary); font-weight: 600; }
+.contact-bar-divider { width: 1px; align-self: stretch; background: var(--border); margin: 0 2.5rem; }
 
 /* ==========================================================================
-   11. RODAPÉ (colado direto no Sobre — sem espaço entre eles)
+   11. RODAPÉ
    ========================================================================== */
 .footer-expanded {
   margin-top: 0;
@@ -1208,11 +1126,7 @@ p, li, a {
   background: linear-gradient(160deg, #0a2c50 0%, #123f74 100%);
   color: rgba(255, 255, 255, 0.75);
 }
-.footer {
-  margin-top: -40px;
-  padding: 2.5rem 1rem;
-  color: var(--muted);
-}
+.footer { margin-top: -40px; padding: 2.5rem 1rem; color: var(--muted); }
 
 .footer-top {
   width: min(1200px, calc(100% - 2rem));
@@ -1223,35 +1137,21 @@ p, li, a {
   padding: 7rem 0 3.5rem;
 }
 
-.footer-logo {
-  width: 150px;
-  margin-bottom: 1.1rem;
-}
+.footer-logo { width: 150px; margin-bottom: 1.1rem; }
+.footer-brand p { color: rgba(255, 255, 255, 0.65); font-size: 0.92rem; line-height: 1.7; max-width: 320px; }
 
-.footer-brand p {
-  color: rgba(255, 255, 255, 0.65);
-  font-size: 0.92rem;
-  line-height: 1.7;
-  max-width: 320px;
-}
-
-.footer-links h4,
-.footer-contacts h4,
-.footer-social h4 {
+.footer-links h4, .footer-contacts h4, .footer-social h4 {
   color: #ffffff;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   margin: 0 0 1.2rem;
 }
 
-.footer-links {
-  display: flex;
-  flex-direction: column;
-}
+.footer-links { display: flex; flex-direction: column; }
 
-.footer-links a,
-.footer-contacts a {
+.footer-links a, .footer-contacts a {
   display: block;
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.95rem;
@@ -1259,21 +1159,10 @@ p, li, a {
   transition: color 0.2s ease;
 }
 
-.footer-links a:hover,
-.footer-contacts a:hover {
-  color: #ffffff;
-}
+.footer-links a:hover, .footer-contacts a:hover { color: #ffffff; }
+.footer-phone { font-weight: 700; font-size: 1.15rem !important; color: #ffffff !important; }
 
-.footer-phone {
-  font-weight: 700;
-  font-size: 1.15rem !important;
-  color: #ffffff !important;
-}
-
-.social-icons {
-  display: flex;
-  gap: 0.8rem;
-}
+.social-icons { display: flex; gap: 0.8rem; }
 
 .social-icons a {
   display: inline-flex;
@@ -1288,15 +1177,8 @@ p, li, a {
   transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.social-icons a svg {
-  width: 18px;
-  height: 18px;
-}
-
-.social-icons a:hover {
-  background: var(--secondary);
-  transform: translateY(-3px);
-}
+.social-icons a svg { width: 18px; height: 18px; }
+.social-icons a:hover { background: var(--secondary); transform: translateY(-3px); }
 
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.14);
@@ -1304,13 +1186,8 @@ p, li, a {
   padding: 1.6rem 1rem;
 }
 
-.footer-bottom p {
-  margin: 0;
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.55);
-}
+.footer-bottom p { margin: 0; font-size: 0.85rem; color: rgba(255, 255, 255, 0.55); }
 
-/* Botão flutuante de WhatsApp */
 .whatsapp-float {
   position: fixed;
   right: 1.6rem;
@@ -1327,15 +1204,8 @@ p, li, a {
   transition: transform 0.25s var(--ease);
 }
 
-.whatsapp-float svg {
-  width: 30px;
-  height: 30px;
-  color: #ffffff;
-}
-
-.whatsapp-float:hover {
-  transform: translateY(-4px) scale(1.05);
-}
+.whatsapp-float svg { width: 30px; height: 30px; color: #ffffff; }
+.whatsapp-float:hover { transform: translateY(-4px) scale(1.05); }
 
 /* ==========================================================================
    12. SCROLL REVEAL
@@ -1345,14 +1215,10 @@ p, li, a {
   transform: translateY(50px);
   transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
 }
-
-.reveal.active {
-  opacity: 1;
-  transform: translateY(0);
-}
+.reveal.active { opacity: 1; transform: translateY(0); }
 
 /* ==========================================================================
-   13. DESKTOP — refinamentos (min-width 901px)
+   13. DESKTOP — refinamentos
    ========================================================================== */
 @media (min-width: 901px) {
   .indicators-grid .indicator-item:nth-child(1) { transition-delay: 0s; }
@@ -1371,30 +1237,15 @@ p, li, a {
 }
 
 /* ==========================================================================
-   14. MOBILE — experiência redesenhada (max-width 900px)
+   14. MOBILE
    ========================================================================== */
 @media (max-width: 900px) {
 
-  .topbar {
-    padding: 1rem 1.2rem;
-  }
-
-  .topbar::after {
-    left: 1.2rem;
-    right: 1.2rem;
-  }
-
-  .topbar.scrolled {
-    padding: 0.7rem 1.2rem;
-  }
-
-  .brand-logo {
-    width: 96px;
-  }
-
-  .brand-pill {
-    padding: 7px;
-  }
+  .topbar { padding: 1rem 1.2rem; }
+  .topbar::after { left: 1.2rem; right: 1.2rem; }
+  .topbar.scrolled { padding: 0.7rem 1.2rem; }
+  .brand-logo { width: 96px; }
+  .brand-pill { padding: 7px; }
 
   .nav {
     position: fixed;
@@ -1414,9 +1265,7 @@ p, li, a {
     box-shadow: -20px 0 50px rgba(0, 0, 0, 0.3);
   }
 
-  .nav.is-open {
-    transform: translateX(0);
-  }
+  .nav.is-open { transform: translateX(0); }
 
   .nav a {
     font-size: 1.25rem;
@@ -1425,11 +1274,7 @@ p, li, a {
     transition: opacity 0.35s ease, transform 0.35s ease;
   }
 
-  .nav.is-open a {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
+  .nav.is-open a { opacity: 1; transform: translateY(0); }
   .nav.is-open a:nth-child(1) { transition-delay: 0.1s; }
   .nav.is-open a:nth-child(2) { transition-delay: 0.18s; }
   .nav.is-open a:nth-child(3) { transition-delay: 0.26s; }
@@ -1442,36 +1287,24 @@ p, li, a {
     height: 44px;
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 10px;
+    border-radius: 8px;
     z-index: 120;
     cursor: pointer;
   }
 
-  .menu-icon {
-    display: inline-flex;
-    flex-direction: column;
-    gap: 5px;
-    width: 20px;
-  }
+  .menu-icon { display: inline-flex; flex-direction: column; gap: 5px; width: 20px; }
 
   .menu-icon span {
     display: block;
     height: 2px;
     width: 100%;
     background: #fff;
-    border-radius: 2px;
     transition: transform 0.3s var(--ease), opacity 0.3s var(--ease);
   }
 
-  .menu-toggle[aria-expanded="true"] .menu-icon span:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
-  }
-  .menu-toggle[aria-expanded="true"] .menu-icon span:nth-child(2) {
-    opacity: 0;
-  }
-  .menu-toggle[aria-expanded="true"] .menu-icon span:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
-  }
+  .menu-toggle[aria-expanded="true"] .menu-icon span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .menu-toggle[aria-expanded="true"] .menu-icon span:nth-child(2) { opacity: 0; }
+  .menu-toggle[aria-expanded="true"] .menu-icon span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
   .nav-backdrop {
     position: fixed;
@@ -1480,106 +1313,35 @@ p, li, a {
     backdrop-filter: blur(3px);
     z-index: 105;
   }
+  .nav-backdrop:not([hidden]) { display: block; }
 
-  .nav-backdrop:not([hidden]) {
-    display: block;
-  }
-
-  .hero {
-    width: 100%;
-    height: 62vh;
-    min-height: 380px;
-    max-height: 560px;
-    overflow: hidden;
-  }
-
-  .hero-premium {
+  /* --- Hero minimalista no mobile: mesma composição, altura reduzida --- */
+  .hero-minimal {
     width: 100%;
     left: 0;
     margin-left: 0;
+    height: 88vh;
+    min-height: 480px;
+    max-height: 720px;
   }
 
-  .hero-bg {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    border-radius: 0;
-    overflow: hidden;
-
-    background-size: cover;
-    background-position: center;
+  .hero-content {
+    left: 1.4rem;
+    bottom: 2.2rem;
+    gap: 1.3rem;
+    max-width: calc(100% - 2.8rem);
   }
 
-  .hero-shapes .shape {
-    width: 80%;
-  }
+  .hero-name { font-size: clamp(2rem, 8vw, 2.625rem); }
+  .hero-cta { height: 42px; padding: 0 1.4rem; font-size: 0.82rem; }
+  .hero-dots { right: 1.4rem; bottom: 2.2rem; }
 
-  .hero-particles .hero-particle {
-    display: none;
-  }
+  .section-divider { display: none; }
 
-  .hero-particles .hero-particle:nth-child(-n+8) {
-    display: block;
-  }
-
-  .hero-glass {
-    padding: 0 1.4rem;
-  }
-
-  .glass-content {
-    max-width: 340px;
-  }
-
-  .hero-eyebrow {
-    font-size: 0.7rem;
-    margin-bottom: 0.6rem;
-  }
-
-  .glass-content h1 {
-    font-size: clamp(1.6rem, 7vw, 2rem);
-    margin-bottom: 0.6rem;
-  }
-
-  .hero-sub {
-    font-size: 0.85rem;
-    max-width: 300px;
-    margin-bottom: 0.2rem;
-  }
-
-  .hero-actions {
-    flex-direction: column;
-    width: 100%;
-    gap: 0.7rem;
-    margin-top: 1.1rem;
-  }
-
-  .hero-actions .btn {
-    width: 100%;
-    padding: 0.85rem 1.1rem;
-    font-size: 0.9rem;
-  }
-
-  .hero-scroll-cue {
-    display: none;
-  }
-
-  .section {
-    padding: 3.2rem 0;
-  }
-
-  .intro-cards {
-    padding: 2.6rem 0 3rem;
-  }
-
-  .intro-heading {
-    padding: 0 1.2rem;
-    margin-bottom: 1.6rem;
-  }
-
-  .intro-cards-footer {
-    padding: 0 1.2rem;
-    margin-top: 2rem;
-  }
+  .section { padding: 3.2rem 0; }
+  .intro-cards { padding: 2.6rem 0 3rem; }
+  .intro-heading { padding: 0 1.2rem; margin-bottom: 1.6rem; }
+  .intro-cards-footer { padding: 0 1.2rem; margin-top: 2rem; }
 
   .grid-cards {
     display: grid;
@@ -1598,248 +1360,96 @@ p, li, a {
     -ms-overflow-style: none;
   }
 
-  .grid-cards::-webkit-scrollbar {
-    display: none;
-  }
+  .grid-cards::-webkit-scrollbar { display: none; }
+  .card { scroll-snap-align: center; }
+  .card:active { transform: scale(0.98); }
+  .card-media { aspect-ratio: 4 / 3.2; }
+  .card-body { padding: 1.4rem 1.3rem 1.6rem; gap: 0.9rem; }
+  .card-heading h3 { font-size: 1.2rem; }
+  .card-info { gap: 0.5rem 0.9rem; }
 
-  .card {
-    scroll-snap-align: center;
-  }
-
-  .card:active {
-    transform: scale(0.98);
-  }
-
-  .card-media {
-    aspect-ratio: 4 / 3.2;
-  }
-
-  .card-body {
-    padding: 1.4rem 1.3rem 1.6rem;
-    gap: 0.9rem;
-  }
-
-  .card-heading h3 {
-    font-size: 1.15rem;
-  }
-
-  .card-info {
-    gap: 0.5rem 0.9rem;
-  }
-
-  .cards-dots {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: 1.2rem;
-  }
-
+  .cards-dots { display: flex; justify-content: center; gap: 0.5rem; margin-top: 1.2rem; }
   .cards-dots span {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--border);
+    width: 6px; height: 6px; border-radius: 50%; background: var(--border);
     transition: background 0.25s var(--ease), transform 0.25s var(--ease);
   }
+  .cards-dots span.is-active { background: var(--primary); transform: scale(1.35); }
 
-  .cards-dots span.is-active {
-    background: var(--primary);
-    transform: scale(1.35);
-  }
-
-  .indicators {
-    padding: 2.8rem 0;
-  }
-
-  .indicators-header {
-    margin-bottom: 2rem;
-    padding: 0 1.2rem;
-  }
-
-  .indicators-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.9rem;
-    padding: 0 1.2rem;
-  }
+  .indicators { padding: 2.8rem 0; }
+  .indicators-header { margin-bottom: 2rem; padding: 0 1.2rem; }
+  .indicators-grid { grid-template-columns: repeat(2, 1fr); gap: 0.9rem; padding: 0 1.2rem; }
 
   .indicator-item {
     border-left: none;
-    border-top: none;
     padding: 1.4rem 1rem;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 14px;
   }
 
-  .indicator-item:first-child {
-    border-left: none;
-  }
+  .indicator-icon { width: 38px; height: 38px; margin-bottom: 0.7rem; }
+  .indicator-icon svg { width: 24px; height: 24px; }
+  .indicator-number { font-size: clamp(1.7rem, 7vw, 2.1rem); margin-bottom: 0.3rem; }
+  .indicator-item p { font-size: 0.82rem; }
 
-  .indicator-icon {
-    width: 38px;
-    height: 38px;
-    margin-bottom: 0.7rem;
-  }
-
-  .indicator-icon svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  .indicator-number {
-    font-size: clamp(1.7rem, 7vw, 2.1rem);
-    margin-bottom: 0.3rem;
-  }
-
-  .indicator-item p {
-    font-size: 0.82rem;
-  }
-
-  .obra-construcao {
-    padding: 3rem 0;
-  }
-
+  /* --- Obras em Construção: tablet/mobile — imagem acima, card abaixo --- */
+  .obra-construcao { padding: 64px 0; }
   .obra-inner {
     grid-template-columns: 1fr;
-    gap: 1.8rem;
-    text-align: center;
+    gap: 2rem;
     padding: 0 1.4rem;
   }
+  .obra-media { grid-column: 1; grid-row: 1; margin-left: 0; aspect-ratio: 16 / 11; }
+  .obra-card { grid-column: 1; grid-row: 2; padding: 40px 32px; }
 
-  .obra-media {
-    border-radius: 16px;
-    width: 100%;
-  }
-
-  .obra-caption {
-    max-width: 100%;
-    margin: 0 auto;
-  }
-
-  .obra-caption p.muted {
-    max-width: 40ch;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .about-bg {
-    min-height: auto;
-    border-radius: 18px;
-  }
-
-  .about-content {
-    padding: 2.6rem 1.3rem;
-  }
-
-  .about-intro {
-    margin-bottom: 1.8rem;
-  }
-
-  .about-heading {
-    font-size: 1.55rem;
-    margin-bottom: 0.7rem;
-  }
-
-  .about-subtitle {
-    font-size: 0.92rem;
-    line-height: 1.6;
-  }
-
-  .about-pillars {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.4rem 1rem;
-    margin-bottom: 2rem;
-  }
-
-  .pillar-icon {
-    width: 36px;
-    height: 36px;
-    margin-bottom: 0.7rem;
-  }
-
-  .pillar-icon svg {
-    width: 22px;
-    height: 22px;
-  }
-
-  .pillar h3 {
-    font-size: 0.98rem;
-    margin-bottom: 0.35rem;
-  }
-
-  .pillar p {
-    font-size: 0.82rem;
-    line-height: 1.5;
-  }
-
-  .about-quote {
-    padding-top: 1.4rem;
-  }
-
-  .about-quote blockquote {
-    font-size: 1rem;
-  }
+  .about-bg { min-height: auto; }
+  .about-content { padding: 2.6rem 1.3rem; }
+  .about-intro { margin-bottom: 1.8rem; }
+  .about-heading { font-size: 1.55rem; margin-bottom: 0.7rem; }
+  .about-subtitle { font-size: 0.92rem; line-height: 1.6; }
+  .about-pillars { grid-template-columns: repeat(2, 1fr); gap: 1.4rem 1rem; margin-bottom: 2rem; }
+  .pillar-icon { width: 36px; height: 36px; margin-bottom: 0.7rem; }
+  .pillar-icon svg { width: 22px; height: 22px; }
+  .pillar h3 { font-size: 0.98rem; margin-bottom: 0.35rem; }
+  .pillar p { font-size: 0.82rem; line-height: 1.5; }
+  .about-quote { padding-top: 1.4rem; }
+  .about-quote blockquote { font-size: 1.05rem; }
 
   .contact-bar-inner {
     flex-direction: column;
     padding: 1.8rem 1.4rem;
-    border-radius: 16px;
     gap: 1.6rem;
     width: calc(100% - 1.6rem);
   }
+  .contact-bar-item { max-width: 100%; justify-content: flex-start; }
+  .contact-bar-divider { display: none; }
 
-  .contact-bar-item {
-    max-width: 100%;
-    justify-content: flex-start;
-  }
+  .footer-top { grid-template-columns: 1fr; gap: 2.2rem; text-align: left; padding-top: 11rem; }
 
-  .contact-bar-divider {
-    display: none;
-  }
+  .whatsapp-float { right: 1.1rem; bottom: 1.1rem; width: 52px; height: 52px; }
+  .whatsapp-float svg { width: 26px; height: 26px; }
+}
 
-  .footer-top {
-    grid-template-columns: 1fr;
-    gap: 2.2rem;
+/* --- Obras em Construção: mobile estrito — imagem 100%, card centralizado --- */
+@media (max-width: 600px) {
+  .obra-inner { text-align: center; }
+  .obra-card {
     text-align: left;
-    padding-top: 11rem;
+    padding: 32px 24px;
+    border-radius: 16px;
   }
-
-  .whatsapp-float {
-    right: 1.1rem;
-    bottom: 1.1rem;
-    width: 52px;
-    height: 52px;
-  }
-
-  .whatsapp-float svg {
-    width: 26px;
-    height: 26px;
-  }
+  .obra-media { border-radius: 16px; margin: 0 -0.2rem; aspect-ratio: 4 / 3.2; }
+  .obra-desc { max-width: 100%; }
+  .btn-obra { width: 100%; }
 }
 
 @media (max-width: 380px) {
-  .glass-content h1 {
-    font-size: 1.4rem;
-  }
-
-  .brand-logo {
-    width: 84px;
-  }
-
-  .grid-cards {
-    grid-auto-columns: 88%;
-  }
-}
-@media (max-width: 768px) {
-
-  .hero-actions .hero-btn:last-child{
-      display: none;
-  }
-
+  .hero-name { font-size: 1.85rem; }
+  .brand-logo { width: 84px; }
+  .grid-cards { grid-auto-columns: 88%; }
 }
 
 /* ==========================================================================
-   15. CAMADA DE MOVIMENTO PREMIUM (preloader, cursor, GSAP reveals, microinterações)
+   15. CAMADA DE MOVIMENTO (preloader, cursor, GSAP reveals, microinterações)
    ========================================================================== */
 .progress-bar {
   position: fixed;
@@ -1863,48 +1473,29 @@ p, li, a {
   background: linear-gradient(160deg, #071427 0%, #0f2f52 100%);
 }
 
-.preloader-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.4rem;
-}
+.preloader-inner { display: flex; flex-direction: column; align-items: center; gap: 1.4rem; }
 
 .preloader-logo {
   width: 120px;
   height: auto;
-  filter: brightness(0) invert(1);
   opacity: 0;
   transform: scale(0.85);
   filter: brightness(0) invert(1) blur(6px);
 }
 
-.preloader-bar {
-  width: 160px;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.16);
-  border-radius: 999px;
-  overflow: hidden;
-}
+.preloader-bar { width: 160px; height: 2px; background: rgba(255, 255, 255, 0.16); overflow: hidden; }
 
 .preloader-bar span {
   display: block;
   height: 100%;
   width: 0%;
   background: linear-gradient(90deg, var(--secondary), #ffffff);
-  border-radius: 999px;
 }
 
-.preloader.is-done {
-  pointer-events: none;
-}
+.preloader.is-done { pointer-events: none; }
+body.is-loading { overflow: hidden; }
 
-body.is-loading {
-  overflow: hidden;
-}
-
-.cursor-dot,
-.cursor-ring {
+.cursor-dot, .cursor-ring {
   position: fixed;
   top: 0;
   left: 0;
@@ -1932,49 +1523,21 @@ body.is-loading {
   transition: opacity 0.25s ease, width 0.3s var(--ease), height 0.3s var(--ease), border-color 0.3s ease;
 }
 
-body.cursor-ready .cursor-dot,
-body.cursor-ready .cursor-ring {
-  opacity: 1;
-}
-
-body.cursor-grow .cursor-ring {
-  width: 62px;
-  height: 62px;
-  border-color: var(--secondary);
-}
-
-body.cursor-grow .cursor-dot {
-  width: 4px;
-  height: 4px;
-}
+body.cursor-ready .cursor-dot, body.cursor-ready .cursor-ring { opacity: 1; }
+body.cursor-grow .cursor-ring { width: 62px; height: 62px; border-color: var(--secondary); }
+body.cursor-grow .cursor-dot { width: 4px; height: 4px; }
 
 @media (hover: hover) and (pointer: fine) {
-  body.cursor-ready,
-  body.cursor-ready a,
-  body.cursor-ready button {
-    cursor: none;
-  }
+  body.cursor-ready, body.cursor-ready a, body.cursor-ready button { cursor: none; }
 }
 
-.reveal-left {
-  opacity: 0;
-  transform: translateX(-60px);
-  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
-}
+.reveal-left { opacity: 0; transform: translateX(-60px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
 .reveal-left.active { opacity: 1; transform: translateX(0); }
 
-.reveal-right {
-  opacity: 0;
-  transform: translateX(60px);
-  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
-}
+.reveal-right { opacity: 0; transform: translateX(60px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
 .reveal-right.active { opacity: 1; transform: translateX(0); }
 
-.reveal-scale {
-  opacity: 0;
-  transform: scale(0.88);
-  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
-}
+.reveal-scale { opacity: 0; transform: scale(0.9); transition: opacity 0.8s var(--ease), transform 0.8s var(--ease); }
 .reveal-scale.active { opacity: 1; transform: scale(1); }
 
 .reveal-blur {
@@ -1985,39 +1548,12 @@ body.cursor-grow .cursor-dot {
 }
 .reveal-blur.active { opacity: 1; filter: blur(0); transform: translateY(0); }
 
-.reveal-mask {
-  position: relative;
-  overflow: hidden;
-}
-.reveal-mask::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--primary);
-  transform-origin: right;
-  transform: scaleX(1);
-  transition: transform 0.9s var(--ease);
-  z-index: 5;
-}
-.reveal-mask.active::after {
-  transform: scaleX(0);
-}
-
-.reveal-rotate {
-  opacity: 0;
-  transform: rotate(-3deg) translateY(30px);
-  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
-}
+.reveal-rotate { opacity: 0; transform: rotate(-2deg) translateY(30px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
 .reveal-rotate.active { opacity: 1; transform: rotate(0) translateY(0); }
 
-.split-title .word,
-.split-title .char {
-  will-change: transform, opacity;
-}
+.split-title .word, .split-title .char { will-change: transform, opacity; }
 
-.btn {
-  -webkit-tap-highlight-color: transparent;
-}
+.btn, .btn-line { -webkit-tap-highlight-color: transparent; }
 
 .btn .ripple {
   position: absolute;
@@ -2029,17 +1565,9 @@ body.cursor-grow .cursor-dot {
   z-index: 2;
 }
 
-@keyframes rippleAnim {
-  to {
-    transform: scale(3.2);
-    opacity: 0;
-  }
-}
+@keyframes rippleAnim { to { transform: scale(3.2); opacity: 0; } }
 
-.tilt-card {
-  transform-style: preserve-3d;
-  perspective: 900px;
-}
+.tilt-card { transform-style: preserve-3d; perspective: 900px; }
 
 .tilt-card::before {
   content: "";
@@ -2051,166 +1579,66 @@ body.cursor-grow .cursor-dot {
   transition: opacity 0.35s ease;
   pointer-events: none;
 }
+.tilt-card:hover::before { opacity: 1; }
 
-.tilt-card:hover::before {
-  opacity: 1;
-}
+.section { isolation: isolate; }
 
-.ambient-glow {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(60px);
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.55;
-  will-change: transform;
-}
-
-.section {
-  isolation: isolate;
-}
-
-.topbar.scrolled .brand-pill {
-  box-shadow: 0 8px 20px rgba(15, 76, 129, 0.4);
-}
-
-.breathe {
-  animation: breathe 10s ease-in-out infinite;
-  will-change: transform;
-}
-
-@keyframes breathe {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.04); }
-}
+.breathe { animation: breathe 10s ease-in-out infinite; will-change: transform; }
+@keyframes breathe { 0%, 100% { transform: scale(1.08); } 50% { transform: scale(1.12); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .cursor-dot,
-  .cursor-ring,
-  .progress-bar,
-  .preloader-logo,
-  .breathe {
-    display: none !important;
-  }
-  .reveal,
-  .reveal-left,
-  .reveal-right,
-  .reveal-scale,
-  .reveal-blur,
-  .reveal-rotate,
-  .reveal-mask::after {
+  .header-intro {
+    animation: none !important;
     opacity: 1 !important;
     transform: none !important;
-    filter: none !important;
-    transition: none !important;
+  }
+  .hero-slide { transition: none !important; }
+  .cursor-dot, .cursor-ring, .progress-bar, .preloader-logo, .breathe { display: none !important; }
+  .reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-blur, .reveal-rotate {
+    opacity: 1 !important; transform: none !important; filter: none !important; transition: none !important;
   }
 }
 
 @media (hover: none), (pointer: coarse) {
-  .cursor-dot,
-  .cursor-ring {
-    display: none !important;
-  }
+  .cursor-dot, .cursor-ring { display: none !important; }
 }
 
 /* ==========================================================================
    16. OTIMIZAÇÃO DE PERFORMANCE MOBILE
    ========================================================================== */
 @media (max-width: 900px), (hover: none), (pointer: coarse) {
-
-  html, body {
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* O header já usa cor sólida (sem backdrop-filter) em todas as telas
-     desde a seção 4 — nada extra a fazer aqui no mobile. */
+  html, body { -webkit-overflow-scrolling: touch; }
 
   .reveal-blur {
     filter: none;
     transform: translateY(24px);
     transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
   }
-  .reveal-blur.active {
-    filter: none;
-    transform: translateY(0);
-  }
-
-  .reveal-rotate {
-    transform: translateY(24px);
-  }
-  .reveal-rotate.active {
-    transform: translateY(0);
-  }
-
-  .tilt-card::before {
-    display: none;
-  }
-
-  .card:hover,
-  .card {
-    box-shadow: 0 10px 22px rgba(15, 76, 129, 0.1);
-  }
-
-  .breathe {
-    animation-duration: 14s;
-  }
+  .reveal-blur.active { filter: none; transform: translateY(0); }
+  .reveal-rotate { transform: translateY(24px); }
+  .reveal-rotate.active { transform: translateY(0); }
+  .tilt-card::before { display: none; }
+  .card:hover, .card { box-shadow: 0 10px 22px rgba(15, 76, 129, 0.1); }
+  .breathe { animation-duration: 14s; }
 }
 
 /* ==========================================================================
-   17. PÁGINA DO EMPREENDIMENTO
+   17. PÁGINA DO EMPREENDIMENTO (inalterado — usado pelas páginas internas)
    ========================================================================== */
-.empreendimento-page {
-  width: 100%;
-}
+.empreendimento-page { width: 100%; }
 
-.emp-hero {
-  width: 100%;
-  height: 78vh;
-  min-height: 480px;
-  max-height: 820px;
-  overflow: hidden;
-}
+.emp-hero { width: 100%; height: 78vh; min-height: 480px; max-height: 820px; overflow: hidden; }
+.emp-hero img { width: 100%; height: 100%; object-fit: cover; }
 
-.emp-hero img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+.emp-intro { padding: 5rem 0 3rem; }
+.emp-intro-inner { width: min(760px, calc(100% - 2.4rem)); margin: 0 auto; text-align: left; }
+.emp-intro-inner h1 { font-size: clamp(2.1rem, 4vw, 3rem); margin: 0.4rem 0 1.4rem; color: var(--text); font-weight: 500; }
+.emp-intro-text { font-size: 1.05rem; line-height: 1.85; color: var(--muted); max-width: 65ch; }
 
-.emp-intro {
-  padding: 5rem 0 3rem;
-}
-
-.emp-intro-inner {
-  width: min(760px, calc(100% - 2.4rem));
-  margin: 0 auto;
-  text-align: left;
-}
-
-.emp-intro-inner h1 {
-  font-size: clamp(2.1rem, 4vw, 3rem);
-  margin: 0.4rem 0 1.4rem;
-  color: var(--text);
-}
-
-.emp-intro-text {
-  font-size: 1.05rem;
-  line-height: 1.85;
-  color: var(--muted);
-  max-width: 65ch;
-}
-
-.emp-gallery {
-  padding: 2rem 0 6rem;
-}
-
-.emp-gallery-inner {
-  width: min(1100px, calc(100% - 2.4rem));
-  margin: 0 auto;
-}
+.emp-gallery { padding: 2rem 0 6rem; }
+.emp-gallery-inner { width: min(1100px, calc(100% - 2.4rem)); margin: 0 auto; }
 
 .emp-gallery-main {
-  border-radius: 20px;
   overflow: hidden;
   aspect-ratio: 16 / 9;
   box-shadow: 0 24px 60px -20px rgba(15, 76, 129, 0.25);
@@ -2218,32 +1646,18 @@ body.cursor-grow .cursor-dot {
 }
 
 .emp-gallery-main img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transform: scale(1.02);
+  width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; transform: scale(1.02);
   transition: opacity 0.5s var(--ease), transform 0.6s var(--ease);
 }
+.emp-gallery-main img.is-visible { opacity: 1; transform: scale(1); }
 
-.emp-gallery-main img.is-visible {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.emp-gallery-thumbs {
-  display: flex;
-  gap: 0.8rem;
-  overflow-x: auto;
-  padding-bottom: 0.3rem;
-  scrollbar-width: thin;
-}
+.emp-gallery-thumbs { display: flex; gap: 0.8rem; overflow-x: auto; padding-bottom: 0.3rem; scrollbar-width: thin; }
 
 .emp-gallery-thumbs button {
   flex: 0 0 auto;
   width: 120px;
   aspect-ratio: 4 / 3;
-  border-radius: 12px;
   overflow: hidden;
   border: 2px solid transparent;
   padding: 0;
@@ -2252,195 +1666,63 @@ body.cursor-grow .cursor-dot {
   transition: opacity 0.3s var(--ease), border-color 0.3s var(--ease), transform 0.3s var(--ease);
 }
 
-.emp-gallery-thumbs button img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.emp-gallery-thumbs button:hover {
-  opacity: 0.9;
-  transform: translateY(-2px);
-}
-
-.emp-gallery-thumbs button.is-active {
-  opacity: 1;
-  border-color: var(--secondary);
-}
+.emp-gallery-thumbs button img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.emp-gallery-thumbs button:hover { opacity: 0.9; transform: translateY(-2px); }
+.emp-gallery-thumbs button.is-active { opacity: 1; border-color: var(--secondary); }
 
 @media (max-width: 900px) {
-  .emp-hero {
-    height: 46vh;
-    min-height: 320px;
-  }
-  .emp-intro {
-    padding: 3rem 0 2rem;
-  }
-  .emp-gallery-main {
-    aspect-ratio: 4 / 3;
-    border-radius: 14px;
-  }
-  .emp-gallery-thumbs button {
-    width: 92px;
-  }
+  .emp-hero { height: 46vh; min-height: 320px; }
+  .emp-intro { padding: 3rem 0 2rem; }
+  .emp-gallery-main { aspect-ratio: 4 / 3; }
+  .emp-gallery-thumbs button { width: 92px; }
 }
 
 /* ==========================================================================
    18. SEÇÃO "EXPERIÊNCIA" — página do empreendimento
-   Blocos alternados imagem/texto, no mesmo espírito editorial da seção
-   Sobre (nº 9): imagens grandes, tipografia elegante, muito respiro.
-   Só usa transform + opacity nas animações (nada de blur contínuo).
    ========================================================================== */
-.emp-experience {
-  padding: 2rem 0 5rem;
-}
+.emp-experience { padding: 2rem 0 5rem; }
+.emp-experience-inner { width: min(1100px, calc(100% - 2.4rem)); margin: 0 auto; display: flex; flex-direction: column; gap: 6rem; }
+.emp-exp-block { display: grid; grid-template-columns: 1fr 1fr; gap: 3.2rem; align-items: center; }
+.emp-exp-block.is-reversed .emp-exp-media { order: -1; }
 
-.emp-experience-inner {
-  width: min(1100px, calc(100% - 2.4rem));
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 6rem;
-}
+.emp-exp-media { position: relative; overflow: hidden; aspect-ratio: 4 / 3; box-shadow: 0 24px 50px -18px rgba(15, 76, 129, 0.28); }
+.emp-exp-media img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.03); transition: transform 0.7s var(--ease); }
+.emp-exp-block:hover .emp-exp-media img { transform: scale(1.08); }
 
-.emp-exp-block {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3.2rem;
-  align-items: center;
-}
-
-/* Blocos pares (2º, 4º...) invertem a ordem visual: imagem à esquerda. */
-.emp-exp-block.is-reversed .emp-exp-media {
-  order: -1;
-}
-
-.emp-exp-media {
-  position: relative;
-  border-radius: 20px;
-  overflow: hidden;
-  aspect-ratio: 4 / 3;
-  box-shadow: 0 24px 50px -18px rgba(15, 76, 129, 0.28);
-}
-
-.emp-exp-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.03);
-  transition: transform 0.7s var(--ease);
-}
-
-.emp-exp-block:hover .emp-exp-media img {
-  transform: scale(1.08);
-}
-
-.emp-exp-text {
-  max-width: 440px;
-}
-
-.emp-exp-text .eyebrow {
-  margin-bottom: 1rem;
-}
-
-.emp-exp-text h2 {
-  margin: 0 0 1rem;
-  font-size: clamp(1.5rem, 2.6vw, 2rem);
-  color: var(--text);
-  line-height: 1.25;
-}
-
-.emp-exp-text p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 1rem;
-  line-height: 1.8;
-}
+.emp-exp-text { max-width: 440px; }
+.emp-exp-text .eyebrow { margin-bottom: 1rem; }
+.emp-exp-text h2 { margin: 0 0 1rem; font-size: clamp(1.5rem, 2.6vw, 2rem); color: var(--text); line-height: 1.25; font-weight: 500; }
+.emp-exp-text p { margin: 0; color: var(--muted); font-size: 1rem; line-height: 1.8; }
 
 @media (max-width: 900px) {
-  .emp-experience {
-    padding: 1rem 0 3rem;
-  }
-
-  .emp-experience-inner {
-    gap: 2.8rem;
-  }
-
-  .emp-exp-block {
-    grid-template-columns: 1fr;
-    gap: 1.4rem;
-  }
-
-  .emp-exp-block.is-reversed .emp-exp-media {
-    order: 0;
-  }
-
-  .emp-exp-media {
-    aspect-ratio: 4 / 3.2;
-  }
-
-  .emp-exp-text {
-    max-width: 100%;
-  }
-
-  .emp-exp-text h2 {
-    font-size: 1.4rem;
-  }
-
-  .emp-exp-text p {
-    font-size: 0.92rem;
-  }
+  .emp-experience { padding: 1rem 0 3rem; }
+  .emp-experience-inner { gap: 2.8rem; }
+  .emp-exp-block { grid-template-columns: 1fr; gap: 1.4rem; }
+  .emp-exp-block.is-reversed .emp-exp-media { order: 0; }
+  .emp-exp-media { aspect-ratio: 4 / 3.2; }
+  .emp-exp-text { max-width: 100%; }
+  .emp-exp-text h2 { font-size: 1.4rem; }
+  .emp-exp-text p { font-size: 0.92rem; }
 }
 
 /* ==========================================================================
    19. HERO CINEMATOGRÁFICO — página do empreendimento
-   Cortina institucional que desliza para revelar a imagem (curtain reveal),
-   Ken Burns (zoom lento) no próprio frame da imagem, e um wrapper interno
-   (.emp-hero-frame) maior que o recorte visível para permitir o parallax
-   leve controlado via JS. Só usa transform + opacity — nada de blur/filter
-   contínuo, então o custo de repaint é mínimo mesmo em scroll.
    ========================================================================== */
-.emp-hero {
-  position: relative;
-}
+.emp-hero { position: relative; }
 
-/* Wrapper maior que a área visível (116% de altura, -8% de topo) para que
-   o parallax em JS tenha "folga" para deslocar sem revelar bordas vazias,
-   já que o .emp-hero pai mantém overflow: hidden. */
-.emp-hero-frame {
-  position: absolute;
-  inset: -8% 0;
-  width: 100%;
-  height: 116%;
-  will-change: transform;
-}
+.emp-hero-frame { position: absolute; inset: -8% 0; width: 100%; height: 116%; will-change: transform; }
 
 .emp-hero-frame img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transform: scale(1.14);
-  transform-origin: center;
+  width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; transform: scale(1.14); transform-origin: center;
   will-change: transform, opacity;
-  animation:
-    empHeroFadeIn 1.4s var(--ease) forwards,
-    empHeroKenBurns 9s var(--ease) forwards;
+  animation: empHeroFadeIn 1.4s var(--ease) forwards, empHeroKenBurns 9s var(--ease) forwards;
   animation-delay: 0.15s;
 }
 
-@keyframes empHeroFadeIn {
-  to { opacity: 1; }
-}
+@keyframes empHeroFadeIn { to { opacity: 1; } }
+@keyframes empHeroKenBurns { to { transform: scale(1.02); } }
 
-@keyframes empHeroKenBurns {
-  to { transform: scale(1.02); }
-}
-
-/* Cortina de revelação: mesma cor institucional do header/rodapé,
-   deslizando para fora no carregamento — efeito de abertura elegante,
-   sem depender de bibliotecas externas. */
 .emp-hero-curtain {
   position: absolute;
   inset: 0;
@@ -2452,32 +1734,20 @@ body.cursor-grow .cursor-dot {
   pointer-events: none;
 }
 
-@keyframes empHeroCurtain {
-  0% { transform: scaleX(1); }
-  100% { transform: scaleX(0); }
-}
+@keyframes empHeroCurtain { 0% { transform: scaleX(1); } 100% { transform: scaleX(0); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .emp-hero-frame,
-  .emp-hero-frame img,
-  .emp-hero-curtain {
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
+  .emp-hero-frame, .emp-hero-frame img, .emp-hero-curtain {
+    animation: none !important; opacity: 1 !important; transform: none !important;
   }
 }
 
 @media (max-width: 900px) {
-  .emp-hero-frame img {
-    transform: scale(1.08);
-    animation-duration: 1.2s, 7s;
-  }
+  .emp-hero-frame img { transform: scale(1.08); animation-duration: 1.2s, 7s; }
 }
 
 /* ==========================================================================
    20. PÁGINA "TODOS OS EMPREENDIMENTOS"
-   Mesma identidade visual do site: hero institucional + grade de cards
-   reaproveitando .card / .card-media / .card-body já existentes.
    ========================================================================== */
 .all-projects-hero {
   width: 100vw;
@@ -2502,61 +1772,266 @@ body.cursor-grow .cursor-dot {
   pointer-events: none;
 }
 
-.all-projects-hero-inner {
-  position: relative;
-  z-index: 1;
-  width: min(760px, calc(100% - 2.4rem));
-  margin: 0 auto;
-}
+.all-projects-hero-inner { position: relative; z-index: 1; width: min(760px, calc(100% - 2.4rem)); margin: 0 auto; }
+.all-projects-hero .eyebrow { color: #cfe6ff; }
+.all-projects-hero h1 { margin: 0 0 1rem; color: #ffffff; font-weight: 500; font-size: clamp(2.1rem, 4vw, 3rem); line-height: 1.2; }
+.all-projects-hero p { margin: 0; color: rgba(255, 255, 255, 0.78); font-size: 1.02rem; line-height: 1.75; }
 
-.all-projects-hero .eyebrow {
-  background: rgba(255, 255, 255, 0.1);
-  color: #cfe6ff;
-}
-
-.all-projects-hero h1 {
-  margin: 0 0 1rem;
-  color: #ffffff;
-  font-weight: 700;
-  font-size: clamp(2.1rem, 4vw, 3rem);
-  line-height: 1.2;
-}
-
-.all-projects-hero p {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.78);
-  font-size: 1.02rem;
-  line-height: 1.75;
-}
-
-.all-projects-grid-section {
-  padding: 5rem 0 6.5rem;
-}
-
-.all-projects-grid {
-  width: min(1200px, calc(100% - 2rem));
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2.2rem;
-}
+.all-projects-grid-section { padding: 5rem 0 6.5rem; }
+.all-projects-grid { width: min(1200px, calc(100% - 2rem)); margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.2rem; }
 
 @media (max-width: 900px) {
-  .all-projects-hero {
-    padding: 7rem 0 3rem;
-  }
-  .all-projects-grid-section {
-    padding: 3rem 0 4rem;
-  }
-  .all-projects-grid {
-    grid-template-columns: 1fr;
-    width: min(560px, calc(100% - 2.4rem));
-    gap: 1.4rem;
-  }
+  .all-projects-hero { padding: 7rem 0 3rem; }
+  .all-projects-grid-section { padding: 3rem 0 4rem; }
+  .all-projects-grid { grid-template-columns: 1fr; width: min(560px, calc(100% - 2.4rem)); gap: 1.4rem; }
 }
 
 @media (min-width: 901px) and (max-width: 1200px) {
-  .all-projects-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .all-projects-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ==========================================================================
+   21. OBRAS EM CONSTRUÇÃO — versão MOBILE premium (≤768px)
+   ========================================================================== *
+   Reproduz a referência visual enviada pelo cliente: cabeçalho centralizado
+   sobre fundo em degradê azul, imagem quase full-bleed com cantos superiores
+   bem arredondados, card branco "premium" com lista de itens ligados por uma
+   linha vertical e botão de largura total com seta.
+
+   O DESKTOP (>900px, e a faixa 769–900px de tablet) NÃO é alterado: as regras
+   abaixo só entram em vigor dentro de @media (max-width: 768px). Os elementos
+   exclusivos do mobile (.obra-mobile-header, .btn-obra-text-mobile,
+   .btn-obra-arrow) ficam ocultos por padrão em qualquer largura — por isso
+   essas três regras de "display: none" ficam FORA do media query, garantindo
+   que nunca apareçam no desktop.
+
+   NOTA SOBRE A ORDEM DOS ELEMENTOS (correção de bug):
+   No mobile, ".obra-inner" vira "display: block" — e em display:block a
+   ordem VISUAL é sempre a ordem real no HTML (a propriedade "order" só
+   funciona em flex/grid, então não tem efeito aqui). Por isso a ordem
+   correta (imagem → card) é resolvida no HTML, não em CSS: o elemento
+   ".obra-media" foi movido para ANTES de ".obra-card" no documento.
+   Para o desktop continuar exatamente igual apesar dessa mudança no HTML,
+   ".obra-card" e ".obra-media" recebem "grid-column"/"grid-row" explícitos
+   (ver seção 7 e o breakpoint de 900px) — assim a posição de cada um no
+   grid não depende mais da ordem no DOM. Nenhuma das duas correções usa
+   "order", "row-reverse", "column-reverse" ou "position: absolute".
+   ------------------------------------------------------------------------ */
+
+/* Elementos exclusivos do mobile: ocultos em qualquer largura por padrão */
+.obra-mobile-header,
+.btn-obra-text-mobile,
+.btn-obra-arrow {
+  display: none;
+}
+
+@media (max-width: 768px) {
+
+  /* ---- Fundo em degradê azul elegante, com brilho suave ---- */
+  .obra-construcao {
+    padding: 4.4rem 0 3.6rem;
+    background: linear-gradient(165deg, #123a63 0%, #2f6690 45%, #7a9cb4 100%);
   }
+
+  .obra-construcao::before {
+    content: "";
+    position: absolute;
+    top: -10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 130%;
+    height: 55%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.16), transparent 68%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ---- Cabeçalho centralizado (eyebrow + título + descrição) ---- */
+  .obra-mobile-header {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.9rem;
+    padding: 0 1.6rem;
+    margin-bottom: 2.6rem;
+  }
+
+  .eyebrow-mobile {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin: 0;
+    color: #cfe6ff;
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .eyebrow-mobile::before,
+  .eyebrow-mobile::after {
+    content: "";
+    width: 34px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  .obra-title-mobile {
+    margin: 0;
+    color: #ffffff;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2rem, 8vw, 2.6rem);
+    line-height: 1.15;
+  }
+
+  .obra-desc-mobile {
+    margin: 0;
+    max-width: 320px;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.98rem;
+    line-height: 1.65;
+  }
+
+  /* ---- Layout empilhado: cabeçalho > imagem > card ---- */
+  .obra-inner {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ---- Imagem: quase full-bleed, cantos superiores bem arredondados ---- */
+  .obra-media {
+    position: relative;
+    z-index: 1;
+    width: calc(100% - 2rem);
+    max-width: 560px;
+    margin: 0 auto;
+    aspect-ratio: 4 / 3.1;
+    border-radius: 30px 30px 0 0;
+    box-shadow: none;
+  }
+
+  /* ---- Card branco premium, sobrepondo a imagem ---- */
+  .obra-card {
+    position: relative;
+    z-index: 2;
+    width: calc(100% - 2rem);
+    max-width: 560px;
+    margin: -3.2rem auto 0;
+    padding: 2.6rem 1.7rem 2.2rem;
+    border-radius: 28px;
+    box-shadow: 0 30px 60px -20px rgba(9, 25, 46, 0.28);
+  }
+
+  /* Bloco original (eyebrow + título + texto) — só aparece no desktop */
+  .obra-card-intro {
+    display: none;
+  }
+
+  /* ---- Lista de informações com linha vertical ligando os ícones ---- */
+  .obra-info-list {
+    gap: 0;
+    margin: 0 0 2.2rem;
+    padding: 0;
+    border-top: none;
+  }
+
+  .obra-info-list li {
+    position: relative;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.15rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .obra-info-list li > div {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .obra-info-list li:first-child { padding-top: 0; }
+  .obra-info-list li:last-child { border-bottom: none; padding-bottom: 0; }
+
+  /* "Status da obra" só aparece no desktop */
+  .obra-item-status { display: none; }
+
+  /* "Tipologia" e "Diferenciais" só aparecem no mobile, no lugar do "Status" */
+  .obra-item-tipologia,
+  .obra-item-diferenciais { display: flex; }
+
+  .obra-info-icon {
+    position: relative;
+    z-index: 1;
+    width: 42px;
+    height: 42px;
+  }
+
+  .obra-info-icon svg { width: 20px; height: 20px; }
+
+  /* Linha vertical: liga o centro de cada ícone ao próximo, atravessando o
+     divisor — desenhada por item, então acompanha a altura variável do
+     conteúdo automaticamente, sem depender de valores fixos por lista. */
+  .obra-info-list li:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    left: 21px;
+    top: 42px;
+    bottom: -1px;
+    width: 1px;
+    background: var(--border);
+    z-index: 0;
+  }
+
+  .obra-info-label { font-size: 0.7rem; }
+  .obra-info-value { font-size: 1.05rem; font-weight: 700; overflow-wrap: break-word; }
+
+  /* ---- Botão final: retangular, largura total, texto + seta ---- */
+  .btn-obra {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: auto;
+    padding: 1.15rem 1.5rem;
+    border-radius: 16px;
+    font-size: 0.92rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .btn-obra-text-desktop { display: none; }
+  .btn-obra-text-mobile { display: inline; }
+
+  .btn-obra-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-obra-arrow svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s var(--ease);
+  }
+
+  .btn-obra:hover .btn-obra-arrow svg,
+  .btn-obra:active .btn-obra-arrow svg {
+    transform: translateX(4px);
+  }
+
+  .btn-obra:active {
+    transform: scale(0.98);
+  }
+}
+
+@media (max-width: 380px) {
+  .obra-title-mobile { font-size: 1.85rem; }
+  .obra-card { padding: 2.2rem 1.3rem 1.9rem; }
 }
