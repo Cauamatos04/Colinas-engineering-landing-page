@@ -45,7 +45,7 @@
       rel="stylesheet"
     />
 
-    <link rel="preload" as="image" href="assets/buildings/vista-campina-hero.jpg" fetchpriority="high" />
+    <link rel="preload" as="image" href="assets/buildings/vista-catole-hero.jpg" fetchpriority="high" />
 
     <link rel="stylesheet" href="styles.css" />
 
@@ -119,40 +119,52 @@
            fotografia em tela cheia, apenas nome do empreendimento +
            botão "Saiba mais", sem textos institucionais nem efeitos
            decorativos. Slider troca apenas imagem, nome e link do botão. -->
-      <section class="hero hero-minimal" aria-label="Colinas Engenharia — empreendimentos em Campina Grande">
-        <div class="hero-slider" id="hero-slider">
-          <div class="hero-slide is-active" data-slide="0" data-name="Vista Campina" data-href="vista-campina.html">
-            <img
-              src="assets/buildings/vista-campina-hero.jpg"
-              alt="Vista Campina — empreendimento Colinas Engenharia"
-              class="hero-slide-img"
-              loading="eager"
-              fetchpriority="high"
-            />
-          </div>
-          <div class="hero-slide" data-slide="1" data-name="Vista Catolé" data-href="vista-catole.html">
-            <img
-              src="assets/buildings/vista-catole-hero.jpg"
-              alt="Vista Catolé — empreendimento Colinas Engenharia"
-              class="hero-slide-img"
-              loading="lazy"
-            />
-          </div>
-          <div class="hero-slide" data-slide="2" data-name="Mirante do Vale" data-href="mirante-do-vale.html">
-            <img
-              src="assets/buildings/mirante-do-vale-hero.jpg"
-              alt="Mirante do Vale — empreendimento Colinas Engenharia"
-              class="hero-slide-img"
-              loading="lazy"
-            />
-          </div>
-        </div>
+     <section class="hero hero-minimal" aria-label="Colinas Engenharia — empreendimentos em Campina Grande">
+
+  <div class="hero-slider" id="hero-slider">
+
+    <div class="hero-slide is-active" data-slide="0" data-name="Vista Catolé" data-href="vista-catole.html">
+
+      <picture>
+        <source 
+          media="(max-width: 900px)" 
+          srcset="assets/buildings/vista-catole-hero-mobile.jpg">
+
+        <img
+          src="assets/buildings/vista-catole-hero.jpg"
+          alt="Vista Catolé — empreendimento Colinas Engenharia"
+          class="hero-slide-img"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </picture>
+
+    </div>
+
+
+    <div class="hero-slide" data-slide="2" data-name="Mirante do Vale" data-href="mirante-do-vale.html">
+
+      <picture>
+        <source 
+          media="(max-width: 768px)" 
+          srcset="assets/buildings/mirante-do-vale-mobile.jpg">
+
+        <img
+          src="assets/buildings/mirante-do-vale-hero.jpg"
+          alt="Mirante do Vale — empreendimento Colinas Engenharia"
+          class="hero-slide-img"
+          loading="lazy"
+        />
+      </picture>
+
+    </div>
+
 
         <div class="hero-overlay" aria-hidden="true"></div>
 
         <div class="hero-content">
-          <h1 class="hero-name" id="hero-name">Vista Campina</h1>
-          <a class="hero-cta" id="hero-cta" href="vista-campina.html">Saiba mais</a>
+          <h1 class="hero-name" id="hero-name">Vista Catolé</h1>
+          <a class="hero-cta" id="hero-cta" href="vista-catole.html">Saiba mais</a>
         </div>
 
         <div class="hero-dots" id="hero-dots" role="tablist" aria-label="Selecionar empreendimento"></div>
@@ -181,38 +193,10 @@
 
           <div class="grid-cards" id="cards-track">
 
-          <a class="card reveal tilt-card" href="vista-campina.html">
-            <div class="card-media">
-              <img src="assets/buildings/vista-campina-hero.jpg" alt="Vista Campina" loading="lazy" width="800" height="640" />
-              <span class="card-badge">Lançamento</span>
-            </div>
-            <div class="card-body">
-              <div class="card-heading">
-                <h3>Vista Campina</h3>
-                <p class="card-location">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                  Centro · Campina Grande, PB
-                </p>
-              </div>
-              <p class="card-desc">Plantas inteligentes de 2 e 3 quartos, varanda gourmet e vista privilegiada da cidade.</p>
-
-              <ul class="card-info">
-                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6M3 18h18M3 18v2M21 18v2M5 10V7a2 2 0 0 1 2-2h3v5"/></svg>2–3 quartos</li>
-                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>62–88 m²</li>
-                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 17c1.5 0 1.5-1.5 3-1.5S6.5 17 8 17s1.5-1.5 3-1.5S12.5 17 14 17s1.5-1.5 3-1.5S18.5 17 20 17M4 12v-1a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v1"/></svg>Piscina e lazer</li>
-              </ul>
-
-              <span class="card-cta">
-                Conhecer empreendimento
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </span>
-            </div>
-          </a>
-
           <a class="card reveal tilt-card" href="vista-catole.html">
             <div class="card-media">
-              <img src="assets/buildings/vista-catole-hero.jpg" alt="Vista Catolé" loading="lazy" width="800" height="640" />
-              <span class="card-badge">Em construção</span>
+              <img src="assets/buildings/vista-catole-hero2.jpg" alt="Vista Catolé" loading="lazy" width="800" height="640" />
+              <span class="card-badge">Lançamento</span>
             </div>
             <div class="card-body">
               <div class="card-heading">
@@ -222,12 +206,12 @@
                   Catolé · Campina Grande, PB
                 </p>
               </div>
-              <p class="card-desc">Localização estratégica, próximo a comércio e vias principais, com lazer completo.</p>
+              <p class="card-desc">Plantas inteligentes de 2 e 3 quartos, varanda gourmet e vista privilegiada da cidade.</p>
 
               <ul class="card-info">
-                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6M3 18h18M3 18v2M21 18v2M5 10V7a2 2 0 0 1 2-2h3v5"/></svg>2–4 quartos</li>
-                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>70–110 m²</li>
-                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M7 7V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2M3 13h18"/></svg>2 vagas</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6M3 18h18M3 18v2M21 18v2M5 10V7a2 2 0 0 1 2-2h3v5"/></svg>2–3 quartos</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>62–88 m²</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 17c1.5 0 1.5-1.5 3-1.5S6.5 17 8 17s1.5-1.5 3-1.5S12.5 17 14 17s1.5-1.5 3-1.5S18.5 17 20 17M4 12v-1a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v1"/></svg>Piscina e lazer</li>
               </ul>
 
               <span class="card-cta">
