@@ -279,9 +279,6 @@ a {
     box-shadow 0.35s var(--ease);
 }
 
-/* Reveal do cabeçalho — ocorre apenas no carregamento inicial da página.
-   O header é `position: fixed`, então o transform não afeta o layout de
-   nenhum outro elemento (sem CLS). */
 .header-intro {
   animation: headerIntro 1s cubic-bezier(0.22, 1, 0.36, 1) both;
   animation-delay: 0.2s;
@@ -310,8 +307,6 @@ a {
   transition: opacity 0.35s var(--ease);
 }
 
-/* Sólido em vez de backdrop-filter: blur() — evita recalcular desfoque a
-   cada frame de rolagem. */
 .topbar.scrolled {
   padding: 0.85rem 2.5rem;
   background: rgba(5, 5, 6, 0.32);
@@ -384,12 +379,7 @@ a {
 
 /* ==========================================================================
    5. HERO — composição minimalista inspirada na Setai Grupo GP
-   ========================================================================== *
-   Fotografia em tela cheia, overlay escuro extremamente leve, apenas nome
-   do empreendimento e um único botão "Saiba mais". Sem parallax, sem
-   partículas, sem zoom, sem blur, sem elementos decorativos. A troca de
-   slide altera somente imagem + nome + link do botão, com transição suave.
-   ------------------------------------------------------------------------ */
+   ========================================================================== */
 .hero-minimal {
   position: relative;
   width: 100vw;
@@ -430,7 +420,6 @@ a {
   display: block;
 }
 
-/* Overlay escuro extremamente leve — apenas para leitura do texto. */
 .hero-overlay {
   position: absolute;
   inset: 0;
@@ -519,9 +508,6 @@ a {
   transform: scale(1.3);
 }
 
-/* --------------------------------------------------------------------
-   5b. Divisor arquitetônico entre seções
-   -------------------------------------------------------------------- */
 .section-divider {
   width: min(1200px, calc(100% - 2rem));
   margin: 0 auto;
@@ -648,10 +634,7 @@ a {
 
 /* ==========================================================================
    7. OBRA EM CONSTRUÇÃO — layout inspirado na Cury
-   ========================================================================== *
-   Fundo sólido azul, card branco "flutuando" com o conteúdo textual e foto
-   grande avançando sobre o card para criar profundidade. Sem gradientes.
-   ------------------------------------------------------------------------ */
+   ========================================================================== */
 .obra-construcao {
   position: relative;
   width: 100vw;
@@ -789,7 +772,7 @@ a {
   grid-row: 1;
   margin-left: -56px;
   aspect-ratio: 1 / 1;
-  border-radius: 18px;
+  border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 30px 70px -20px rgba(10, 25, 45, 0.35);
 }
@@ -802,22 +785,290 @@ a {
 }
 
 /* ==========================================================================
-   8. EMPREENDIMENTOS (CARDS) — bordas mais retas, registro arquitetônico
-   ========================================================================== */
+   8. EMPREENDIMENTOS — carrossel horizontal premium
+   ========================================================================== *
+   Container centralizado (max 1320px), dois cards visíveis lado a lado no
+   desktop, com respiro entre eles. Carrossel horizontal com scroll-snap,
+   setas quadradas fixas no topo da seção (canto superior direito). Cada
+   card exibe: imagem de fundo cobrindo 100% do cartão, badge branco no
+   canto superior direito, título serifado grande + specs (metragem e
+   quartos) no canto superior esquerdo, overlay em gradiente escuro na
+   parte inferior com descrição e CTA "VER DETALHES" sempre visíveis
+   (não dependem de hover — replica fielmente o mockup de referência).
+   No mobile: um card por vez, swipe nativo com snap, mesmo conteúdo
+   sempre visível.
+   ------------------------------------------------------------------------ */
 .intro-cards {
-  padding: 5.5rem 0 6rem;
+  padding: 6rem 0 6.5rem;
+}
+
+.intro-cards .intro-heading {
+  text-align: left;
+  margin: 0 0 3rem;
+  max-width: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  width: min(1320px, calc(100% - 2.4rem));
+}
+
+.intro-cards .intro-heading-text {
+  max-width: 620px;
+}
+
+.intro-cards .eyebrow {
+  margin-bottom: 0.7rem;
+}
+
+.intro-cards .split-title {
+  margin: 0 0 0.9rem;
+}
+
+.intro-cards .intro-heading .muted {
+  margin: 0;
+  max-width: 46ch;
+}
+
+/* ---- Setas de navegação do carrossel: canto superior direito da seção,
+   uma ao lado da outra, fixas no topo (não sobre os cards) ---- */
+.carousel-arrows {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-shrink: 0;
+}
+
+.carousel-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  cursor: pointer;
+  transition:
+    background 0.3s var(--ease),
+    color 0.3s var(--ease),
+    border-color 0.3s var(--ease),
+    transform 0.25s var(--ease);
+}
+
+.carousel-nav svg {
+  width: 18px;
+  height: 18px;
+}
+
+.carousel-nav:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.carousel-nav:disabled {
+  opacity: 0.35;
+  cursor: default;
+  transform: none;
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.cards-carousel {
+  position: relative;
+}
+
+/* ---- Trilho do carrossel ---- */
+.grid-cards {
+  width: min(1320px, calc(100% - 2.4rem));
+  margin: 0 auto;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 100%;
+  grid-template-columns: none;
+  gap: 1.6rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 0.2rem 0.2rem 0.6rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.grid-cards::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---- Card: fotografia cobrindo 100% do cartão, conteúdo sempre visível ---- */
+.card {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 620px;
+  overflow: hidden;
+  border-radius: 16px;
+  text-decoration: none;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  box-shadow: 0 20px 45px -18px rgba(13, 27, 42, 0.35);
+}
+
+.card-media {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform 0.9s var(--ease);
+}
+
+.card:hover .card-media img {
+  transform: scale(1.055);
+}
+
+/* Gradiente escuro refinado — presente sempre (sem preto chapado),
+   mais intenso apenas na base para garantir legibilidade do texto */
+.card-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(6, 11, 19, 0.85) 0%,
+    rgba(6, 11, 19, 0.5) 26%,
+    rgba(6, 11, 19, 0.08) 52%,
+    rgba(6, 11, 19, 0.32) 78%,
+    rgba(6, 11, 19, 0.55) 100%
+  );
+  pointer-events: none;
+}
+
+/* ---- Badge (status): canto superior direito, fundo branco, texto azul ---- */
+.card-badge {
+  position: absolute;
+  top: 1.9rem;
+  right: 1.9rem;
+  z-index: 3;
+  background: #ffffff;
+  color: var(--primary);
+  padding: 0.7rem 1.35rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+}
+
+/* ---- Cabeçalho: título serifado + specs, canto superior esquerdo ---- */
+.card-header {
+  position: absolute;
+  top: 1.9rem;
+  left: 1.9rem;
+  right: 6rem;
+  z-index: 3;
+}
+
+.card-title {
+    margin: 23.7rem 0 1.2rem;
+
+    color: #fff;
+
+    font-family: var(--font-display);
+    font-weight: 400;
+
+    font-size: clamp(1.7rem, 2.4vw, 2.7rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+
+    max-width: 12ch;
+
+    text-wrap: balance;
+
+    text-shadow:
+        0 4px 18px rgba(0,0,0,.28),
+        0 1px 2px rgba(0,0,0,.35);
+}
+
+
+/* ---- Rodapé do overlay: descrição + CTA, sempre visíveis ---- */
+.card-overlay-text {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 2.4rem 2rem 2.2rem;
+  z-index: 3;
+}
+
+.card-desc {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.98rem;
+  line-height: 1.65;
+  max-width: 40ch;
+}
+
+.card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: 1.5rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.55);
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  transition:
+    gap 0.3s var(--ease),
+    border-color 0.3s var(--ease),
+    opacity 0.3s var(--ease);
+}
+
+.card-link svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.3s var(--ease);
+}
+
+.card:hover .card-link {
+  gap: 1rem;
+  border-color: rgba(255, 255, 255, 0.95);
+}
+
+.card:hover .card-link svg {
+  transform: translateX(3px);
+}
+
+.cards-dots {
+  display: none;
 }
 
 .intro-cards-footer {
   display: flex;
   justify-content: center;
-  margin-top: 2.8rem;
-
-  border-radius: 16px;
+  margin-top: 3.2rem;
 }
 
 .btn-view-all {
   gap: 0.6rem;
+  border-radius: 4px;
+  padding: 1.05rem 2.2rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 .btn-view-all svg {
   width: 18px;
@@ -828,282 +1079,125 @@ a {
   transform: translateX(4px);
 }
 
-.grid-cards {
-  width: min(1200px, calc(100% - 2rem));
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2.4rem;
-}
-
-.card {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background: var(--surface);
-  border-top: 2px solid var(--primary);
-  box-shadow: 0 16px 40px -22px rgba(15, 76, 129, 0.22);
-  transition:
-    transform 0.4s var(--ease),
-    box-shadow 0.4s var(--ease);
-
-  border-radius: 20px;
-}
-
-.card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 26px 54px -20px rgba(15, 76, 129, 0.3);
-}
-
-.card-media {
-  position: relative;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-}
-
-.card-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.02);
-  transition: transform 0.6s var(--ease);
-}
-
-.card:hover .card-media img {
-  transform: scale(1.08);
-}
-
-.card-media::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 40%;
-  background: linear-gradient(180deg, transparent, rgba(6, 14, 26, 0.35));
-  pointer-events: none;
-}
-
-.card-badge {
-  position: absolute;
-  top: 1.1rem;
-  left: 1.1rem;
-  z-index: 2;
-  padding: 0.4rem 0.9rem;
-  background: rgba(255, 255, 255, 0.96);
-  color: var(--primary);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-}
-
-.card-body {
-  padding: 1.8rem 1.8rem 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.1rem;
-  flex: 1;
-}
-
-.card-heading h3 {
-  margin: 0 0 0.3rem;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.4rem;
-}
-
-.card-location {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.88rem;
-}
-
-.card-location svg {
-  width: 15px;
-  height: 15px;
-  flex-shrink: 0;
-  color: var(--secondary);
-}
-
-.card-desc {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
-
-.card-info {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem 1.1rem;
-  margin: 0;
-  padding: 0.9rem 0 0;
-  list-style: none;
-  border-top: 1px solid var(--border);
-}
-
-.card-info li {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.84rem;
-  font-weight: 600;
-  color: var(--text);
-}
-
-.card-info svg {
-  width: 17px;
-  height: 17px;
-  color: var(--secondary);
-  flex-shrink: 0;
-}
-
-.card-cta {
-  margin-top: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  align-self: flex-start;
-  padding: 0.85rem 1.4rem;
-  background: var(--accent);
-  color: var(--primary);
-  font-weight: 700;
-  font-size: 0.88rem;
-  transition:
-    background 0.3s var(--ease),
-    gap 0.3s var(--ease),
-    color 0.3s var(--ease);
-}
-
-.card-cta svg {
-  width: 16px;
-  height: 16px;
-  transition: transform 0.3s var(--ease);
-}
-
-.card:hover .card-cta {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: #fff;
-  gap: 0.75rem;
-}
-
-.card:hover .card-cta svg {
-  transform: translateX(2px);
-}
-
-.cards-dots {
-  display: none;
-}
-
-.cards-carousel {
-  position: relative;
-}
-.carousel-nav {
-  display: none;
-}
-
+/* ==========================================================================
+   8b. EMPREENDIMENTOS — DESKTOP (dois cards lado a lado, container contido)
+   ========================================================================== */
 @media (min-width: 901px) {
   .intro-cards .intro-heading {
-    max-width: 640px;
-    margin-left: 0;
-    margin-right: auto;
-    text-align: left;
+    align-items: flex-end;
   }
 
   .cards-carousel {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+    overflow: visible;
   }
 
   .grid-cards {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(340px, 30%);
-    grid-template-columns: none;
-    gap: 1.8rem;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    padding: 0.4rem 0.2rem 1.4rem;
-    margin: 0;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    grid-auto-columns: calc(50% - 0.9rem);
   }
 
-  .grid-cards::-webkit-scrollbar {
-    display: none;
-  }
   .card {
-    scroll-snap-align: start;
-  }
-
-  .carousel-nav {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--primary);
-    box-shadow: 0 12px 26px -12px rgba(15, 76, 129, 0.3);
-    cursor: pointer;
-    transition:
-      background 0.3s var(--ease),
-      color 0.3s var(--ease),
-      transform 0.25s var(--ease),
-      opacity 0.25s var(--ease);
-  }
-
-  .carousel-nav svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  .carousel-nav:hover {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: #fff;
-    transform: translateY(-2px);
-  }
-
-  .carousel-nav:disabled {
-    opacity: 0.35;
-    cursor: default;
-    transform: none;
-    background: var(--surface);
-    color: var(--primary);
-  }
-
-  .cards-dots {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: 1.6rem;
-  }
-  .cards-dots span {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--border);
-    transition:
-      background 0.25s var(--ease),
-      transform 0.25s var(--ease);
-  }
-  .cards-dots span.is-active {
-    background: var(--primary);
-    transform: scale(1.35);
+    height: 580px;
   }
 }
 
 @media (min-width: 1300px) {
   .grid-cards {
-    grid-auto-columns: minmax(360px, 31%);
+    grid-auto-columns: calc(50% - 0.9rem);
+  }
+  .card {
+    height: 600px;
+  }
+}
+
+/* ==========================================================================
+   8c. EMPREENDIMENTOS — MOBILE (um card por vez, swipe, snap)
+   ========================================================================== */
+@media (max-width: 900px) {
+  .intro-cards {
+    padding: 3rem 0 3.4rem;
+  }
+
+  .intro-cards .intro-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.2rem;
+    padding: 0 1.2rem;
+    margin-bottom: 1.8rem;
+    width: 100%;
+  }
+
+  .carousel-arrows {
+    align-self: flex-end;
+  }
+
+  .grid-cards {
+    grid-auto-columns: 88%;
+    gap: 1rem;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    padding: 0.2rem 1.2rem 0.4rem;
+    width: 100%;
+  }
+
+  @media (max-width: 768px) {
+
+  .card-title {
+    margin: 22rem 0 1rem;
+
+    color: #fff;
+
+    font-family: var(--font-display);
+    font-weight: 400;
+
+    font-size: clamp(1.45rem, 5vw, 1.9rem);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+
+    text-wrap: balance;
+
+    text-shadow:
+      0 3px 12px rgba(0, 0, 0, 0.28),
+      0 1px 2px rgba(0, 0, 0, 0.35);
+  }
+
+}
+
+  .card {
+    height: 560px;
+    scroll-snap-align: center;
+  }
+  .card:active {
+    transform: scale(0.98);
+  }
+
+  .card-header {
+    top: 1.4rem;
+    left: 1.4rem;
+    right: 1.4rem;
+  }
+
+ .card-desc {
+    font-size: 0.7rem;
+    margin-bottom: 1.5rem;
+  }
+  .card-badge {
+    top: 1.4rem;
+    right: 1.4rem;
+    padding: 0.6rem 1.1rem;
+  }
+
+  .card-overlay-text {
+    padding: 1.8rem 1.4rem 1.7rem;
+  }
+
+  .card-desc {
+    font-size: 0.7rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .intro-cards-footer {
+    padding: 0 1.2rem;
+    margin-top: 2rem;
   }
 }
 
@@ -1619,8 +1713,6 @@ a {
     display: block;
   }
 
-  /* --- Hero minimalista no mobile: mesma composição, altura reduzida --- */
-
   .hero-slide-img {
     object-fit: cover;
     object-position: 68% center;
@@ -1661,77 +1753,6 @@ a {
   .section {
     padding: 3.2rem 0;
   }
-  .intro-cards {
-    padding: 2.6rem 0 3rem;
-  }
-  .intro-heading {
-    padding: 0 1.2rem;
-    margin-bottom: 1.6rem;
-  }
-  .intro-cards-footer {
-    padding: 0 1.2rem;
-    margin-top: 2rem;
-  }
-
-  .grid-cards {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 82%;
-    grid-template-columns: none;
-    gap: 1rem;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-x: contain;
-    padding: 0.3rem 1.2rem 0.6rem;
-    margin: 0;
-    width: 100%;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .grid-cards::-webkit-scrollbar {
-    display: none;
-  }
-  .card {
-    scroll-snap-align: center;
-  }
-  .card:active {
-    transform: scale(0.98);
-  }
-  .card-media {
-    aspect-ratio: 4 / 3.2;
-  }
-  .card-body {
-    padding: 1.4rem 1.3rem 1.6rem;
-    gap: 0.9rem;
-  }
-  .card-heading h3 {
-    font-size: 1.2rem;
-  }
-  .card-info {
-    gap: 0.5rem 0.9rem;
-  }
-
-  .cards-dots {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: 1.2rem;
-  }
-  .cards-dots span {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--border);
-    transition:
-      background 0.25s var(--ease),
-      transform 0.25s var(--ease);
-  }
-  .cards-dots span.is-active {
-    background: var(--primary);
-    transform: scale(1.35);
-  }
 
   .indicators {
     padding: 2.8rem 0;
@@ -1770,7 +1791,6 @@ a {
     font-size: 0.82rem;
   }
 
-  /* --- Obras em Construção: tablet/mobile — imagem acima, card abaixo --- */
   .obra-construcao {
     padding: 64px 0;
   }
@@ -1870,7 +1890,7 @@ a {
   }
 }
 
-/* --- Obras em Construção: mobile estrito — imagem 100%, card centralizado --- */
+/* --- Obras em Construção: mobile estrito --- */
 @media (max-width: 600px) {
   .obra-inner {
     text-align: center;
@@ -1882,8 +1902,6 @@ a {
   }
   .obra-media {
     border-radius: 16px;
-    margin: 0 -0.2rem;
-    aspect-ratio: 4 / 3.2;
   }
   .obra-desc {
     max-width: 100%;
@@ -1899,9 +1917,6 @@ a {
   }
   .brand-logo {
     width: 84px;
-  }
-  .grid-cards {
-    grid-auto-columns: 88%;
   }
 }
 
@@ -2120,21 +2135,7 @@ body.cursor-grow .cursor-dot {
 }
 
 .tilt-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  background: radial-gradient(
-    220px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(255, 255, 255, 0.35),
-    transparent 60%
-  );
-  opacity: 0;
-  transition: opacity 0.35s ease;
-  pointer-events: none;
-}
-.tilt-card:hover::before {
-  opacity: 1;
+  display: none;
 }
 
 .section {
@@ -2217,13 +2218,6 @@ body.cursor-grow .cursor-dot {
   .reveal-rotate.active {
     transform: translateY(0);
   }
-  .tilt-card::before {
-    display: none;
-  }
-  .card:hover,
-  .card {
-    box-shadow: 0 10px 22px rgba(15, 76, 129, 0.1);
-  }
   .breathe {
     animation-duration: 14s;
   }
@@ -2270,12 +2264,6 @@ body.cursor-grow .cursor-dot {
   max-width: 65ch;
 }
 
-/* --------------------------------------------------------------------
-   17b. GALERIA DO EMPREENDIMENTO — redesign premium
-   Cabeçalho (voltar + título + subtítulo + botão e-book), fotografia
-   principal em grande formato com setas/contador/barra de progresso, e
-   navegação por categorias no lugar das miniaturas antigas.
-   -------------------------------------------------------------------- */
 .emp-gallery {
   padding: 2rem 0 6rem;
 }
@@ -2850,33 +2838,8 @@ body.cursor-grow .cursor-dot {
 
 /* ==========================================================================
    21. OBRAS EM CONSTRUÇÃO — versão MOBILE premium (≤768px)
-   ========================================================================== *
-   Reproduz a referência visual enviada pelo cliente: cabeçalho centralizado
-   sobre fundo em degradê azul, imagem quase full-bleed com cantos superiores
-   bem arredondados, card branco "premium" com lista de itens ligados por uma
-   linha vertical e botão de largura total com seta.
+   ========================================================================== */
 
-   O DESKTOP (>900px, e a faixa 769–900px de tablet) NÃO é alterado: as regras
-   abaixo só entram em vigor dentro de @media (max-width: 768px). Os elementos
-   exclusivos do mobile (.obra-mobile-header, .btn-obra-text-mobile,
-   .btn-obra-arrow) ficam ocultos por padrão em qualquer largura — por isso
-   essas três regras de "display: none" ficam FORA do media query, garantindo
-   que nunca apareçam no desktop.
-
-   NOTA SOBRE A ORDEM DOS ELEMENTOS (correção de bug):
-   No mobile, ".obra-inner" vira "display: block" — e em display:block a
-   ordem VISUAL é sempre a ordem real no HTML (a propriedade "order" só
-   funciona em flex/grid, então não tem efeito aqui). Por isso a ordem
-   correta (imagem → card) é resolvida no HTML, não em CSS: o elemento
-   ".obra-media" foi movido para ANTES de ".obra-card" no documento.
-   Para o desktop continuar exatamente igual apesar dessa mudança no HTML,
-   ".obra-card" e ".obra-media" recebem "grid-column"/"grid-row" explícitos
-   (ver seção 7 e o breakpoint de 900px) — assim a posição de cada um no
-   grid não depende mais da ordem no DOM. Nenhuma das duas correções usa
-   "order", "row-reverse", "column-reverse" ou "position: absolute".
-   ------------------------------------------------------------------------ */
-
-/* Elementos exclusivos do mobile: ocultos em qualquer largura por padrão */
 .obra-mobile-header,
 .btn-obra-text-mobile,
 .btn-obra-arrow {
@@ -2884,7 +2847,6 @@ body.cursor-grow .cursor-dot {
 }
 
 @media (max-width: 768px) {
-  /* ---- Fundo em degradê azul elegante, com brilho suave ---- */
   .obra-construcao {
     padding: 4.4rem 0 3.6rem;
     background: linear-gradient(165deg, #123a63 0%, #2f6690 45%, #7a9cb4 100%);
@@ -2907,7 +2869,6 @@ body.cursor-grow .cursor-dot {
     z-index: 0;
   }
 
-  /* ---- Cabeçalho centralizado (eyebrow + título + descrição) ---- */
   .obra-mobile-header {
     position: relative;
     z-index: 1;
@@ -2957,7 +2918,6 @@ body.cursor-grow .cursor-dot {
     line-height: 1.65;
   }
 
-  /* ---- Layout empilhado: cabeçalho > imagem > card ---- */
   .obra-inner {
     position: relative;
     z-index: 1;
@@ -2967,7 +2927,6 @@ body.cursor-grow .cursor-dot {
     padding: 0;
   }
 
-  /* ---- Imagem: quase full-bleed, cantos superiores bem arredondados ---- */
   .obra-media {
     position: relative;
     z-index: 1;
@@ -2979,7 +2938,6 @@ body.cursor-grow .cursor-dot {
     box-shadow: none;
   }
 
-  /* ---- Card branco premium, sobrepondo a imagem ---- */
   .obra-card {
     position: relative;
     z-index: 2;
@@ -2991,12 +2949,10 @@ body.cursor-grow .cursor-dot {
     box-shadow: 0 30px 60px -20px rgba(9, 25, 46, 0.28);
   }
 
-  /* Bloco original (eyebrow + título + texto) — só aparece no desktop */
   .obra-card-intro {
     display: none;
   }
 
-  /* ---- Lista de informações com linha vertical ligando os ícones ---- */
   .obra-info-list {
     gap: 0;
     margin: 0 0 2.2rem;
@@ -3025,12 +2981,10 @@ body.cursor-grow .cursor-dot {
     padding-bottom: 0;
   }
 
-  /* "Status da obra" só aparece no desktop */
   .obra-item-status {
     display: none;
   }
 
-  /* "Tipologia" e "Diferenciais" só aparecem no mobile, no lugar do "Status" */
   .obra-item-tipologia,
   .obra-item-diferenciais {
     display: flex;
@@ -3048,9 +3002,6 @@ body.cursor-grow .cursor-dot {
     height: 20px;
   }
 
-  /* Linha vertical: liga o centro de cada ícone ao próximo, atravessando o
-     divisor — desenhada por item, então acompanha a altura variável do
-     conteúdo automaticamente, sem depender de valores fixos por lista. */
   .obra-info-list li:not(:last-child)::before {
     content: "";
     position: absolute;
@@ -3071,7 +3022,6 @@ body.cursor-grow .cursor-dot {
     overflow-wrap: break-word;
   }
 
-  /* ---- Botão final: retangular, largura total, texto + seta ---- */
   .btn-obra {
     width: 100%;
     display: flex;
@@ -3123,10 +3073,8 @@ body.cursor-grow .cursor-dot {
   }
 }
 
-@media (max-width:700px){
-
-    .emp-hero-frame {
-        transform: none !important;
-    }
-
+@media (max-width: 700px) {
+  .emp-hero-frame {
+    transform: none !important;
+  }
 }

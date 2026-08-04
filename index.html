@@ -180,119 +180,158 @@
 
       <!-- Empreendimentos -->
       <section id="empreendimentos" class="section intro-cards reveal">
-        <div class="intro-heading">
-          <p class="eyebrow">Empreendimentos</p>
-          <h2 class="split-title">Conheça nossos lançamentos</h2>
-          <p class="muted">Clique em qualquer projeto para uma página dedicada com fotos e informações técnicas.</p>
+
+    <div class="intro-heading">
+
+        <div class="intro-heading-text">
+
+            <p class="eyebrow">
+                Empreendimentos
+            </p>
+
+            <h2 class="split-title">
+                Conheça nossos lançamentos
+            </h2>
+
         </div>
 
-        <div class="cards-carousel">
-          <button type="button" class="carousel-nav prev" id="carousel-prev" aria-label="Empreendimento anterior">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
-          </button>
+       
 
-          <div class="grid-cards" id="cards-track">
+        <div class="carousel-arrows">
 
-          <a class="card reveal tilt-card" href="vista-catole.html">
-            <div class="card-media">
-              <img src="assets/buildings/vista-catole-hero2.jpg" alt="Vista Catolé" loading="lazy" width="800" height="640" />
-              <span class="card-badge">Lançamento</span>
-            </div>
-            <div class="card-body">
-              <div class="card-heading">
-                <h3>Vista Catolé</h3>
-                <p class="card-location">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                  Catolé · Campina Grande, PB
-                </p>
-              </div>
-              <p class="card-desc">Plantas inteligentes de 2 e 3 quartos, varanda gourmet e vista privilegiada da cidade.</p>
+            <button
+                type="button"
+                class="carousel-nav prev"
+                id="carousel-prev"
+                aria-label="Empreendimento anterior">
 
-              <ul class="card-info">
-                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6M3 18h18M3 18v2M21 18v2M5 10V7a2 2 0 0 1 2-2h3v5"/></svg>2–3 quartos</li>
-                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>62–88 m²</li>
-                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 17c1.5 0 1.5-1.5 3-1.5S6.5 17 8 17s1.5-1.5 3-1.5S12.5 17 14 17s1.5-1.5 3-1.5S18.5 17 20 17M4 12v-1a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v1"/></svg>Piscina e lazer</li>
-              </ul>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 6l-6 6 6 6"/>
+                </svg>
 
-              <span class="card-cta">
-                Conhecer empreendimento
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </span>
-            </div>
-          </a>
+            </button>
 
-          <a class="card reveal tilt-card" href="mirante-do-vale.html">
-            <div class="card-media">
-              <img src="assets/buildings/mirante-do-vale-hero.jpg" alt="Mirante do Vale" loading="lazy" width="800" height="640" />
-              <span class="card-badge">Últimas unidades</span>
-            </div>
-            <div class="card-body">
-              <div class="card-heading">
-                <h3>Mirante do Vale</h3>
-                <p class="card-location">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                  Alto Branco · Campina Grande, PB
-                </p>
-              </div>
-              <p class="card-desc">Acabamento premium, plantas inteligentes e vista panorâmica da cidade.</p>
+            <button
+                type="button"
+                class="carousel-nav next"
+                id="carousel-next"
+                aria-label="Próximo empreendimento">
 
-              <ul class="card-info">
-                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6M3 18h18M3 18v2M21 18v2M5 10V7a2 2 0 0 1 2-2h3v5"/></svg>3 quartos</li>
-                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>95–130 m²</li>
-                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 21V10l8-6 8 6v11"/><path d="M9 21v-6h6v6"/></svg>Área verde</li>
-              </ul>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 6l6 6-6 6"/>
+                </svg>
 
-              <span class="card-cta">
-                Conhecer empreendimento
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </span>
-            </div>
-          </a>
+            </button>
 
-          <a class="card reveal tilt-card" href="jardins-dos-alecrins.html">
-            <div class="card-media">
-              <img src="assets/buildings/vista-campina-hero.jpg" alt="Jardins dos Alecrins" loading="lazy" width="800" height="640" />
-              <span class="card-badge">Pronto para morar</span>
-            </div>
-            <div class="card-body">
-              <div class="card-heading">
-                <h3>Jardins dos Alecrins</h3>
-                <p class="card-location">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                  Alecrins · Campina Grande, PB
-                </p>
-              </div>
-              <p class="card-desc">Condomínio planejado, com infraestrutura completa e segurança 24h.</p>
-
-              <ul class="card-info">
-                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6M3 18h18M3 18v2M21 18v2M5 10V7a2 2 0 0 1 2-2h3v5"/></svg>2–3 quartos</li>
-                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>58–80 m²</li>
-                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>Beach tennis</li>
-              </ul>
-
-              <span class="card-cta">
-                Conhecer empreendimento
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </span>
-            </div>
-          </a>
-
-          </div>
-
-          <button type="button" class="carousel-nav next" id="carousel-next" aria-label="Próximo empreendimento">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-          </button>
         </div>
 
-        <div class="cards-dots" id="cards-dots" aria-hidden="true"></div>
+    </div>
 
-        <div class="intro-cards-footer">
-          <a class="btn btn-secondary btn-view-all" href="empreendimentos.html">
+    <div class="cards-carousel">
+
+        <div class="grid-cards" id="cards-track">
+
+            <!-- CARD 1 -->
+            <a class="card reveal tilt-card" href="vista-catole.html">
+
+                <div class="card-media">
+
+                    <img
+                        src="assets/buildings/vista-catole-hero2.jpg"
+                        alt="Vista Catolé"
+                    >
+
+                    <span class="card-badge">
+                        Lançamento
+                    </span>
+
+                    <div class="card-header">
+
+                        <h3 class="card-title">
+                            Vista Catolé
+                        </h3>
+
+                    </div>
+
+                    <div class="card-overlay-text">
+
+                        <p class="card-desc">
+                            Plantas inteligentes de 2 e 3 quartos,
+                            varanda gourmet e vista privilegiada
+                            da cidade.
+                        </p>
+
+                        <span class="card-link">
+                            VER DETALHES →
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+            <!-- CARD 2 -->
+              <a class="card reveal tilt-card" href="mirante-do-vale.html">
+
+                <div class="card-media">
+
+                    <img
+                        src="assets/buildings/mirante-do-vale-hero.jpg"
+                        alt="Mirante do Vale"
+                    >
+
+                    <span class="card-badge">
+                        Pre-lançamento
+                    </span>
+
+                    <div class="card-header">
+
+                        <h3 class="card-title">
+                            Mirante do Vale
+                        </h3>
+
+                    </div>
+
+                    <div class="card-overlay-text">
+
+                        <p class="card-desc">
+                            Plantas inteligentes de 2 e 3 quartos,
+                            varanda gourmet e vista privilegiada
+                            da cidade.
+                        </p>
+
+                        <span class="card-link">
+                            VER DETALHES →
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="intro-cards-footer">
+
+        <a class="btn btn-secondary btn-view-all" href="empreendimentos.html">
+
             Ver todos os empreendimentos
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
-      </section>
+
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+
+            </svg>
+
+        </a>
+
+    </div>
+
+</section>
 
       <!-- Obra em construção — layout inspirado na Cury: fundo sólido,
            card branco "flutuando" com o texto e a foto grande avançando
@@ -334,7 +373,7 @@
 
         <div class="obra-inner">
           <div class="obra-media" id="obra-media">
-            <img src="assets/buildings/hero-bg.jpg" alt="Vista aérea da obra em construção" loading="lazy" width="1200" height="1200" />
+            <img src="assets/buildings/vista-catole-sala.jpg" alt="Vista aérea da obra em construção" loading="lazy" width="1200" height="1200" />
           </div>
 
           <div class="obra-card" id="obra-card">
@@ -342,84 +381,9 @@
             <!-- Bloco original (eyebrow + título + texto) — visível apenas no desktop -->
             <div class="obra-card-intro">
               <p class="eyebrow obra-eyebrow">Bastidores</p>
-              <h2 class="obra-title">Obras em Construção</h2>
-              <p class="obra-desc">Cada etapa da construção é conduzida com planejamento, tecnologia e atenção aos detalhes, garantindo qualidade, segurança e transparência em todo o processo.</p>
-            </div>
-
-            <ul class="obra-info-list">
-              <li>
-                <span class="obra-info-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                </span>
-                <div>
-                  <span class="obra-info-label">Localização</span>
-                  <!-- TODO: confirmar localização real da obra em destaque -->
-                  <span class="obra-info-value">Catolé · Campina Grande, PB</span>
-                </div>
-              </li>
-              <li>
-                <span class="obra-info-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v4.9l3.2 1.9"/></svg>
-                </span>
-                <div>
-                  <span class="obra-info-label">Percentual executado</span>
-                  <!-- TODO: atualizar percentual conforme avanço real da obra -->
-                  <span class="obra-info-value">62% concluído</span>
-                </div>
-              </li>
-              <li>
-                <span class="obra-info-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-                </span>
-                <div>
-                  <span class="obra-info-label">Previsão de entrega</span>
-                  <!-- TODO: atualizar data de entrega conforme cronograma real -->
-                  <span class="obra-info-value">Dezembro de 2027</span>
-                </div>
-              </li>
-
-              <!-- Visível apenas no DESKTOP -->
-              <li class="obra-item-status">
-                <span class="obra-info-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-                </span>
-                <div>
-                  <span class="obra-info-label">Status da obra</span>
-                  <span class="obra-info-value">Em construção</span>
-                </div>
-              </li>
-
-              <!-- Visíveis apenas no MOBILE (substituem "Status da obra" na referência) -->
-              <li class="obra-item-tipologia">
-                <span class="obra-info-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 21V7l6-4 6 4v14M9 21v-6h6v6M9 11h.01M9 15h.01M15 11h.01M15 15h.01"/></svg>
-                </span>
-                <div>
-                  <span class="obra-info-label">Tipologia</span>
-                  <!-- TODO: confirmar tipologia real da obra em destaque -->
-                  <span class="obra-info-value">Apartamentos de 2 a 4 quartos</span>
-                </div>
-              </li>
-              <li class="obra-item-diferenciais">
-                <span class="obra-info-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                </span>
-                <div>
-                  <span class="obra-info-label">Diferenciais</span>
-                  <!-- TODO: confirmar diferenciais reais da obra em destaque -->
-                  <span class="obra-info-value">Lazer completo, segurança e acabamento premium</span>
-                </div>
-              </li>
-            </ul>
-
-            <a class="btn-obra" href="vista-catole.html">
-              <span class="btn-obra-text-desktop">Acompanhar Obra</span>
-              <span class="btn-obra-text-mobile">Acompanhar Andamento</span>
-              <span class="btn-obra-arrow" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </span>
-            </a>
-          </div>
+              <h2 class="obra-title">Imóveis com a qualidade Colinas</h2>
+              <p class="obra-desc">Na Colinas, cada projeto é desenvolvido com compromisso, qualidade e atenção aos detalhes. Nosso objetivo é oferecer empreendimentos que unem conforto, segurança e excelente localização, proporcionando espaços pensados para o bem-estar e a qualidade de vida de cada cliente.</p>
+          
         </div>
       </section>
       <!-- Sobre -->
