@@ -14,9 +14,17 @@
     <!-- TODO: substituir pela URL real do domínio quando publicado -->
     <link rel="canonical" href="https://www.colinasengenharia.com.br/" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Canela:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Canela:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- Fraunces (serifada, para títulos — quebra o "look" genérico de
+         sans-serif única) + Poppins (texto/UI, já usada no site). -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,400..600&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
     <meta property="og:site_name" content="Colinas Engenharia" />
@@ -34,16 +42,6 @@
     <meta name="twitter:image" content="assets/buildings/predio.jpg" />
 
     <link rel="icon" href="logo.svg" type="image/svg+xml" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
-    <!-- Fraunces (serifada, para títulos — quebra o "look" genérico de
-         sans-serif única) + Poppins (texto/UI, já usada no site). -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,400..600&family=Poppins:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
 
     <link rel="preload" as="image" href="assets/buildings/vista-catole-hero.jpg" fetchpriority="high" />
 
@@ -119,55 +117,50 @@
            fotografia em tela cheia, apenas nome do empreendimento +
            botão "Saiba mais", sem textos institucionais nem efeitos
            decorativos. Slider troca apenas imagem, nome e link do botão. -->
-     <section class="hero hero-minimal" aria-label="Colinas Engenharia — empreendimentos em Campina Grande">
+      <section class="hero hero-minimal" aria-label="Colinas Engenharia — empreendimentos em Campina Grande">
 
-  <div class="hero-slider" id="hero-slider">
+        <div class="hero-slider" id="hero-slider">
 
-    <div class="hero-slide is-active" data-slide="0" data-name="Vista Catolé" data-href="vista-catole.html">
+          <div class="hero-slide is-active" data-slide="0" data-name="Vista Catolé" data-href="vista-catole.html">
+            <picture>
+              <source
+                media="(max-width: 900px)"
+                srcset="assets/buildings/vista-catole-hero-mobile.jpg">
 
-      <picture>
-        <source 
-          media="(max-width: 900px)" 
-          srcset="assets/buildings/vista-catole-hero-mobile.jpg">
+              <img
+                src="assets/buildings/vista-catole-hero.jpg"
+                alt="Vista Catolé — empreendimento Colinas Engenharia"
+                class="hero-slide-img"
+                loading="eager"
+                fetchpriority="high"
+              />
+            </picture>
+          </div>
 
-        <img
-          src="assets/buildings/vista-catole-hero.jpg"
-          alt="Vista Catolé — empreendimento Colinas Engenharia"
-          class="hero-slide-img"
-          loading="eager"
-          fetchpriority="high"
-        />
-      </picture>
+          <div class="hero-slide" data-slide="2" data-name="Mirante do Vale" data-href="mirante-do-vale.html">
+            <picture>
+              <source
+                media="(max-width: 768px)"
+                srcset="assets/buildings/mirante-do-vale-mobile.jpg">
 
-    </div>
+              <img
+                src="assets/buildings/mirante-do-vale-hero.jpg"
+                alt="Mirante do Vale — empreendimento Colinas Engenharia"
+                class="hero-slide-img"
+                loading="lazy"
+              />
+            </picture>
+          </div>
 
+          <div class="hero-overlay" aria-hidden="true"></div>
 
-    <div class="hero-slide" data-slide="2" data-name="Mirante do Vale" data-href="mirante-do-vale.html">
+          <div class="hero-content">
+            <h1 class="hero-name" id="hero-name">Vista Catolé</h1>
+            <a class="hero-cta" id="hero-cta" href="vista-catole.html">Saiba mais</a>
+          </div>
 
-      <picture>
-        <source 
-          media="(max-width: 768px)" 
-          srcset="assets/buildings/mirante-do-vale-mobile.jpg">
-
-        <img
-          src="assets/buildings/mirante-do-vale-hero.jpg"
-          alt="Mirante do Vale — empreendimento Colinas Engenharia"
-          class="hero-slide-img"
-          loading="lazy"
-        />
-      </picture>
-
-    </div>
-
-
-        <div class="hero-overlay" aria-hidden="true"></div>
-
-        <div class="hero-content">
-          <h1 class="hero-name" id="hero-name">Vista Catolé</h1>
-          <a class="hero-cta" id="hero-cta" href="vista-catole.html">Saiba mais</a>
+          <div class="hero-dots" id="hero-dots" role="tablist" aria-label="Selecionar empreendimento"></div>
         </div>
-
-        <div class="hero-dots" id="hero-dots" role="tablist" aria-label="Selecionar empreendimento"></div>
       </section>
 
       <div class="section-divider" aria-hidden="true">
@@ -181,211 +174,142 @@
       <!-- Empreendimentos -->
       <section id="empreendimentos" class="section intro-cards reveal">
 
-    <div class="intro-heading">
+        <div class="intro-heading">
 
-        <div class="intro-heading-text">
+          <div class="intro-heading-text">
+            <p class="eyebrow">Empreendimentos</p>
+            <h2 class="split-title">Conheça nossos lançamentos</h2>
+          </div>
 
-            <p class="eyebrow">
-                Empreendimentos
-            </p>
-
-            <h2 class="split-title">
-                Conheça nossos lançamentos
-            </h2>
-
-        </div>
-
-       
-
-        <div class="carousel-arrows">
-
+          <div class="carousel-arrows">
             <button
-                type="button"
-                class="carousel-nav prev"
-                id="carousel-prev"
-                aria-label="Empreendimento anterior">
-
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M15 6l-6 6 6 6"/>
-                </svg>
-
+              type="button"
+              class="carousel-nav prev"
+              id="carousel-prev"
+              aria-label="Empreendimento anterior">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 6l-6 6 6 6"/>
+              </svg>
             </button>
 
             <button
-                type="button"
-                class="carousel-nav next"
-                id="carousel-next"
-                aria-label="Próximo empreendimento">
-
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M9 6l6 6-6 6"/>
-                </svg>
-
+              type="button"
+              class="carousel-nav next"
+              id="carousel-next"
+              aria-label="Próximo empreendimento">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 6l6 6-6 6"/>
+              </svg>
             </button>
+          </div>
 
         </div>
 
-    </div>
-
-    <div class="cards-carousel">
-
-        <div class="grid-cards" id="cards-track">
+        <div class="cards-carousel">
+          <div class="grid-cards" id="cards-track">
 
             <!-- CARD 1 -->
             <a class="card reveal tilt-card" href="vista-catole.html">
+              <div class="card-media">
+                <img src="assets/buildings/vista-catole-hero2.jpg" alt="Vista Catolé">
 
-                <div class="card-media">
+                <span class="card-badge">Lançamento</span>
 
-                    <img
-                        src="assets/buildings/vista-catole-hero2.jpg"
-                        alt="Vista Catolé"
-                    >
-
-                    <span class="card-badge">
-                        Lançamento
-                    </span>
-
-                    <div class="card-header">
-
-                        <h3 class="card-title">
-                            Vista Catolé
-                        </h3>
-
-                    </div>
-
-                    <div class="card-overlay-text">
-
-                        <p class="card-desc">
-                            Plantas inteligentes de 2 e 3 quartos,
-                            varanda gourmet e vista privilegiada
-                            da cidade.
-                        </p>
-
-                        <span class="card-link">
-                            VER DETALHES →
-                        </span>
-
-                    </div>
-
+                <div class="card-header">
+                  <h3 class="card-title">Vista Catolé</h3>
                 </div>
 
+                <div class="card-overlay-text">
+                  <p class="card-desc">
+                    Plantas inteligentes de 2 e 3 quartos,
+                    varanda gourmet e vista privilegiada
+                    da cidade.
+                  </p>
+                  <span class="card-link">VER DETALHES →</span>
+                </div>
+              </div>
             </a>
 
             <!-- CARD 2 -->
-              <a class="card reveal tilt-card" href="mirante-do-vale.html">
+            <a class="card reveal tilt-card" href="mirante-do-vale.html">
+              <div class="card-media">
+                <img src="assets/buildings/mirante-do-vale-hero.jpg" alt="Mirante do Vale">
 
-                <div class="card-media">
+                <span class="card-badge">Pre-lançamento</span>
 
-                    <img
-                        src="assets/buildings/mirante-do-vale-hero.jpg"
-                        alt="Mirante do Vale"
-                    >
-
-                    <span class="card-badge">
-                        Pre-lançamento
-                    </span>
-
-                    <div class="card-header">
-
-                        <h3 class="card-title">
-                            Mirante do Vale
-                        </h3>
-
-                    </div>
-
-                    <div class="card-overlay-text">
-
-                        <p class="card-desc">
-                            Plantas inteligentes de 2 e 3 quartos,
-                            varanda gourmet e vista privilegiada
-                            da cidade.
-                        </p>
-
-                        <span class="card-link">
-                            VER DETALHES →
-                        </span>
-
-                    </div>
-
+                <div class="card-header">
+                  <h3 class="card-title">Mirante do Vale</h3>
                 </div>
 
+                <div class="card-overlay-text">
+                  <p class="card-desc">
+                    Plantas inteligentes de 2 e 3 quartos,
+                    varanda gourmet e vista privilegiada
+                    da cidade.
+                  </p>
+                  <span class="card-link">VER DETALHES →</span>
+                </div>
+              </div>
             </a>
 
+          </div>
         </div>
 
-    </div>
-
-    <div class="intro-cards-footer">
-
-        <a class="btn btn-secondary btn-view-all" href="empreendimentos.html">
-
+        <div class="intro-cards-footer">
+          <a class="btn btn-secondary btn-view-all" href="empreendimentos.html">
             Ver todos os empreendimentos
-
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-
-                <path d="M5 12h14M13 6l6 6-6 6"/>
-
+              <path d="M5 12h14M13 6l6 6-6 6"/>
             </svg>
-
-        </a>
-
-    </div>
-
-</section>
-
-      <!-- Obra em construção — layout inspirado na Cury: fundo sólido,
-           card branco "flutuando" com o texto e a foto grande avançando
-           sobre o card para criar profundidade. -->
-     <!-- Obra em construção — layout inspirado na Cury: fundo sólido,
-           card branco "flutuando" com o texto e a foto grande avançando
-           sobre o card para criar profundidade.
-
-           MOBILE (até 768px): estrutura reorganizada para reproduzir a
-           referência enviada pelo cliente — cabeçalho centralizado sobre
-           fundo em degradê azul, imagem full-bleed com cantos superiores
-           arredondados, card branco premium com lista de itens ligados
-           por uma linha vertical e botão de largura total com seta.
-           O DESKTOP permanece 100% inalterado: os elementos .obra-mobile-header,
-           .btn-obra-text-mobile e .btn-obra-arrow ficam ocultos fora do
-           breakpoint mobile, e .obra-card-intro (eyebrow + título + texto
-           originais) só é ocultado dentro do media query ≤768px. -->
-    <!-- Obra em construção — layout inspirado na Cury: fundo sólido,
-           card branco "flutuando" com o texto e a foto grande avançando
-           sobre o card para criar profundidade.
-
-           MOBILE (até 768px): estrutura reorganizada para reproduzir a
-           referência enviada pelo cliente — cabeçalho centralizado sobre
-           fundo em degradê azul, imagem full-bleed com cantos superiores
-           arredondados, card branco premium com lista de itens ligados
-           por uma linha vertical e botão de largura total com seta.
-           O DESKTOP permanece 100% inalterado: os elementos .obra-mobile-header,
-           .btn-obra-text-mobile e .btn-obra-arrow ficam ocultos fora do
-           breakpoint mobile, e .obra-card-intro (eyebrow + título + texto
-           originais) só é ocultado dentro do media query ≤768px. -->
-      <section class="section obra-construcao" aria-label="Obras em construção">
-
-        <!-- Cabeçalho exclusivo do mobile (oculto no desktop) -->
-        <div class="obra-mobile-header">
-          <p class="eyebrow-mobile">Em Construção</p>
-          <h2 class="obra-title-mobile">Obras em Construção</h2>
-          <p class="obra-desc-mobile">Acompanhamos cada etapa com rigor técnico para entregar excelência em cada detalhe.</p>
+          </a>
         </div>
+
+      </section>
+
+      <!-- Obra em construção — desktop: fundo sólido, card branco sobreposto à
+           imagem, texto à esquerda (mantido inalterado). Mobile (≤768px):
+           fundo em degradê azul, imagem full-bleed com cantos superiores
+           arredondados, card branco premium sobreposto ~55-60px, com todo
+           o conteúdo dentro do card. Todas as regras responsivas ficam
+           centralizadas em um único media query no CSS. -->
+      <section class="obra-construcao">
 
         <div class="obra-inner">
-          <div class="obra-media" id="obra-media">
-            <img src="assets/buildings/vista-catole-sala.jpg" alt="Vista aérea da obra em construção" loading="lazy" width="1200" height="1200" />
+
+          <div class="obra-media">
+            <img
+              src="assets/buildings/vista-catole-sala.jpg"
+              alt="Vista aérea da obra em construção"
+              loading="lazy"
+            >
           </div>
 
-          <div class="obra-card" id="obra-card">
+          <div class="obra-card">
+            <!-- Mobile -->
+            <div class="obra-card-intro-mobile mobile-only">
+              <p class="eyebrow-mobile">Imóveis</p>
+              <h2 class="obra-title-mobile">Imóveis com a qualidade Colinas</h2>
+              <p class="obra-desc-mobile">
+                 Na Colinas, cada projeto é desenvolvido com compromisso,
+                qualidade e atenção aos detalhes..
+              </p>
+            </div>
 
-            <!-- Bloco original (eyebrow + título + texto) — visível apenas no desktop -->
-            <div class="obra-card-intro">
-              <p class="eyebrow obra-eyebrow">Bastidores</p>
+            <!-- Desktop -->
+            <div class="obra-card-intro desktop-only">
+              <p class="eyebrow obra-eyebrow">Imóveis</p>
               <h2 class="obra-title">Imóveis com a qualidade Colinas</h2>
-              <p class="obra-desc">Na Colinas, cada projeto é desenvolvido com compromisso, qualidade e atenção aos detalhes. Nosso objetivo é oferecer empreendimentos que unem conforto, segurança e excelente localização, proporcionando espaços pensados para o bem-estar e a qualidade de vida de cada cliente.</p>
-          
+              <p class="obra-desc">
+                Na Colinas, cada projeto é desenvolvido com compromisso,
+                qualidade e atenção aos detalhes.
+              </p>
+            </div>
+          </div>
+
         </div>
+
       </section>
+
       <!-- Sobre -->
       <section id="sobre" class="section about-elegant reveal" aria-label="Sobre a Colinas Engenharia">
         <div class="about-bg">
