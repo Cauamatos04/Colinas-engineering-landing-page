@@ -819,6 +819,9 @@ a {
     margin: 0 auto;
     aspect-ratio: auto;
     border-radius: 28px;
+    /* Sombra removida no mobile: é um dos maiores custos de repaint
+       durante o scroll em telas pequenas (blur grande recalculado a
+       cada frame quando o elemento muda de camada de composição). */
     box-shadow: none;
   }
 
@@ -827,7 +830,9 @@ a {
     margin: -55px auto 0;
     padding: 42px 28px;
     border-radius: 30px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+    /* Sombra reduzida (blur menor) em vez de removida, para manter a
+       leitura de profundidade do cartão sem pesar tanto no repaint. */
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.1);
     text-align: left;
   }
 
@@ -1773,11 +1778,15 @@ a {
     transform: translateY(-7px) rotate(-45deg);
   }
 
+  /* .nav-backdrop: antes usava backdrop-filter: blur(3px), que força o
+     Safari/iOS a recompor uma camada gigante (a tela inteira) a cada
+     frame enquanto o menu está aberto — um dos maiores causadores de
+     travamento em mobile. Trocado por um overlay sólido/semi-transparente,
+     visualmente muito próximo, mas sem custo de blur em tempo real. */
   .nav-backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(6, 14, 26, 0.55);
-    backdrop-filter: blur(3px);
+    background: rgba(6, 14, 26, 0.62);
     z-index: 105;
   }
   .nav-backdrop:not([hidden]) {
@@ -1913,6 +1922,10 @@ a {
     padding: 1.8rem 1.4rem;
     gap: 1.6rem;
     width: calc(100% - 1.6rem);
+    /* Sombra grande substituída por uma mais discreta no mobile — o blur
+       de 45px sobre uma faixa que atravessa a seção inteira também
+       obrigava o navegador a repintar uma área enorme a cada scroll. */
+    box-shadow: 0 10px 26px rgba(13, 45, 84, 0.1);
   }
   .contact-bar-item {
     max-width: 100%;
@@ -2271,6 +2284,15 @@ body.cursor-grow .cursor-dot {
   .breathe {
     animation-duration: 14s;
   }
+
+  /* Sombras pesadas de cards/badges também custam repaint em telas
+     pequenas; reduzidas globalmente aqui em vez de removidas, para
+     preservar a hierarquia visual com um custo bem menor. */
+  .card,
+  .card-badge,
+  .obra-media {
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+  }
 }
 
 /* ==========================================================================
@@ -2376,26 +2398,7 @@ body.cursor-grow .cursor-dot {
   line-height: 1.6;
 }
 
-.emp-gallery-ebook-btn {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.9rem 1.6rem;
-  border: 1px solid var(--gallery-accent);
-  border-radius: 999px;
-  color: var(--gallery-accent);
-  font-weight: 700;
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  transition:
-    background 0.3s var(--ease),
-    color 0.3s var(--ease),
-    transform 0.3s var(--ease),
-    box-shadow 0.3s var(--ease);
-}
+
 
 .emp-gallery-ebook-btn svg {
   width: 16px;
@@ -2803,85 +2806,259 @@ body.cursor-grow .cursor-dot {
 }
 
 /* ==========================================================================
-   20. PÁGINA "TODOS OS EMPREENDIMENTOS"
+   20. PÁGINA "TODOS OS EMPREENDIMENTOS" — estilo editorial (ref.: Setai)
    ========================================================================== */
-.all-projects-hero {
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  margin-left: -50vw;
-  padding: 9.5rem 0 4.5rem;
-  background: linear-gradient(160deg, #0a2c50 0%, #123f74 100%);
-  overflow: hidden;
-  text-align: center;
+.proj-page {
+  background: #ffffff;
 }
 
-.all-projects-hero::before {
-  content: "";
-  position: absolute;
-  top: -30%;
+/* ---- Hero: imagem cheia + overlay + título/descrição ---- */
+.proj-hero {
+  position: relative;
+  width: 100vw;
   left: 50%;
-  transform: translateX(-50%);
-  width: 60%;
-  height: 70%;
-  background: radial-gradient(
-    circle,
-    rgba(111, 182, 255, 0.16),
-    transparent 70%
+  margin-left: -50vw;
+  height: clamp(500px, 52vw, 650px);
+  overflow: hidden;
+  background: #0b0b0c;
+  isolation: isolate;
+}
+
+.proj-hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.proj-hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(6, 12, 22, 0.55) 0%,
+    rgba(6, 12, 22, 0.32) 45%,
+    rgba(6, 12, 22, 0.68) 100%
   );
   pointer-events: none;
 }
 
-.all-projects-hero-inner {
+.proj-hero-content {
   position: relative;
-  z-index: 1;
-  width: min(760px, calc(100% - 2.4rem));
+  z-index: 2;
+  height: 100%;
+  width: min(900px, calc(100% - 2.8rem));
   margin: 0 auto;
-}
-.all-projects-hero .eyebrow {
-  color: #cfe6ff;
-}
-.all-projects-hero h1 {
-  margin: 0 0 1rem;
-  color: #ffffff;
-  font-weight: 500;
-  font-size: clamp(2.1rem, 4vw, 3rem);
-  line-height: 1.2;
-}
-.all-projects-hero p {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.78);
-  font-size: 1.02rem;
-  line-height: 1.75;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1.1rem;
+  text-align: left;
 }
 
-.all-projects-grid-section {
-  padding: 5rem 0 6.5rem;
+.proj-hero-content h1 {
+  margin: 0;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: clamp(2.2rem, 4.4vw, 3.4rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
 }
-.all-projects-grid {
+
+.proj-hero-content p {
+  margin: 0;
+  max-width: 56ch;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+/* ---- Breadcrumb ---- */
+.proj-breadcrumb {
+  background: #ffffff;
+  border-bottom: 1px solid var(--border);
+}
+
+.proj-breadcrumb-inner {
+  width: min(1200px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.proj-breadcrumb-inner a {
+  color: var(--muted);
+  transition: color 0.2s ease;
+}
+.proj-breadcrumb-inner a:hover {
+  color: var(--primary);
+}
+.proj-breadcrumb-inner span[aria-current] {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* ---- Grade de cards ---- */
+.proj-grid-section {
+  background:#44648fb0;
+  padding: 4.5rem 0 6rem;
+}
+
+.proj-grid {
   width: min(1200px, calc(100% - 2rem));
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2.2rem;
+  gap: 2rem;
+}
+
+/* ---- Card: imagem em cima, bloco azul institucional embaixo ---- */
+.proj-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 6px;
+  overflow: hidden;
+  text-decoration: none;
+  box-shadow: 0 18px 40px -22px rgba(13, 27, 42, 0.35);
+  transition: box-shadow 0.35s var(--ease), transform 0.35s var(--ease);
+}
+
+.proj-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 50px -20px rgba(13, 27, 42, 0.4);
+}
+
+.proj-card-media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #0d1b2a;
+}
+
+.proj-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1);
+  /* Zoom extremamente suave no hover, sem exagero. */
+  transition: transform 1.1s var(--ease);
+}
+
+.proj-card:hover .proj-card-media img {
+  transform: scale(1.04);
+}
+
+.proj-card-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--primary);
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.proj-card-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background:#ffffff;
+  color: #ffffff;
+  padding: 1.9rem 1.8rem 1.7rem;
+}
+
+.proj-card-info h3 {
+  margin: 0 0 0.6rem;
+  color:#44658f;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.35rem;
+}
+
+.proj-card-info p {
+  margin: 0;
+  color: #44658f;
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.proj-card-divider {
+  border: none;
+  height: 1px;
+  background:#44658f;
+  margin: 1.3rem 0 1.1rem;
+}
+
+.proj-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color:#44658f;
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.03em;
+  transition: gap 0.3s var(--ease);
+}
+
+.proj-card-cta svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s var(--ease);
+}
+
+.proj-card:hover .proj-card-cta {
+  gap: 0.8rem;
+}
+.proj-card:hover .proj-card-cta svg {
+  transform: translateX(3px);
+}
+
+/* ---- Responsivo ---- */
+@media (min-width: 901px) and (max-width: 1200px) {
+  .proj-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 900px) {
-  .all-projects-hero {
-    padding: 7rem 0 3rem;
+  .proj-hero {
+    height: clamp(380px, 68vw, 520px);
   }
-  .all-projects-grid-section {
-    padding: 3rem 0 4rem;
+  .proj-hero-content {
+    width: calc(100% - 2.4rem);
+    gap: 0.85rem;
   }
-  .all-projects-grid {
-    grid-template-columns: 1fr;
-    width: min(560px, calc(100% - 2.4rem));
-    gap: 1.4rem;
+  .proj-hero-content p {
+    font-size: 0.94rem;
   }
-}
 
-@media (min-width: 901px) and (max-width: 1200px) {
-  .all-projects-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .proj-breadcrumb-inner {
+    padding: 0.85rem 1.2rem;
+    width: 100%;
+  }
+
+  .proj-grid-section {
+    padding: 3rem 0 3.6rem;
+  }
+  .proj-grid {
+    grid-template-columns: 1fr;
+    width: min(520px, calc(100% - 2.4rem));
+    gap: 1.6rem;
+  }
+
+  .proj-card-info {
+    padding: 1.6rem 1.4rem 1.5rem;
   }
 }

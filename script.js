@@ -398,9 +398,9 @@
     var counter = 0;
 
     elements.forEach(function (el) {
-      if (el.closest('.hero-minimal')) return;
+      if (el.closest('.hero-minimal') || el.closest('.proj-hero')) return;
 
-      if (el.classList.contains('card')) {
+      if (el.classList.contains('card') || el.classList.contains('proj-card')) {
         el.classList.add('reveal-scale');
         return;
       }
