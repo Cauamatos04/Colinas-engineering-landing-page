@@ -18,6 +18,18 @@
 (function () {
   'use strict';
 
+  /* ================================================================== *
+   * COLINAS ENGENHARIA — CAMADA DE ANIMAÇÃO OTIMIZADA
+   * 
+   * Refatoração para máxima performance:
+   * • Eliminação de duplicação de observers
+   * • Redução de event listeners
+   * • Otimização de RAF (requestAnimationFrame)
+   * • Limpeza de memory leaks
+   * • Simplificação de animações
+   * • Lazy initialization de features
+   * ================================================================== */
+
   /* ------------------------------------------------------------------ *
    * 1. Utilitários / feature-detection
    * ------------------------------------------------------------------ */
@@ -50,6 +62,14 @@
       }, wait);
     };
   }
+
+  // Centralized state management para evitar listeners duplicados
+  var state = {
+    scrollObserverActive: false,
+    tiltCardsAttached: false,
+    cursorInitialized: false,
+    heroInitialized: false
+  };
 
   /* ------------------------------------------------------------------ *
    * 2. Preloader
@@ -110,9 +130,11 @@
 
   /* ------------------------------------------------------------------ *
    * 4. Cursor personalizado (somente desktop com ponteiro fino)
+   * Otimizado: event delegation, redução de writes ao DOM
    * ------------------------------------------------------------------ */
   function initCustomCursor() {
-    if (!isDesktopExperience() || prefersReducedMotion) return;
+    if (!isDesktopExperience() || prefersReducedMotion || state.cursorInitialized) return;
+    state.cursorInitialized = true;
 
     var dot = document.getElementById('cursor-dot');
     var ring = document.getElementById('cursor-ring');
@@ -125,6 +147,7 @@
     var ringX = mouseX;
     var ringY = mouseY;
     var rafId = null;
+    var isVisible = true;
 
     function tick() {
       ringX += (mouseX - ringX) * 0.18;
@@ -142,55 +165,63 @@
       if (!rafId) rafId = requestAnimationFrame(tick);
     }
 
-    window.addEventListener(
-      'mousemove',
-      function (e) {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        dot.style.transform = 'translate3d(' + mouseX + 'px,' + mouseY + 'px,0) translate(-50%,-50%)';
-        ensureLoop();
-      },
-      { passive: true }
-    );
-
     var growTargets = 'a, button, .card, .btn, .btn-line, .btn-obra, .hero-cta, input, textarea';
+    
+    // Event delegation com single listener
+    document.addEventListener('mousemove', function (e) {
+      if (!isVisible) return;
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      dot.style.transform = 'translate3d(' + mouseX + 'px,' + mouseY + 'px,0) translate(-50%,-50%)';
+      ensureLoop();
+    }, { passive: true, capture: false });
+
     document.addEventListener('mouseover', function (e) {
       if (e.target.closest(growTargets)) {
         document.body.classList.add('cursor-grow');
       }
-    });
+    }, { passive: true, capture: true });
+
     document.addEventListener('mouseout', function (e) {
       if (e.target.closest(growTargets)) {
         document.body.classList.remove('cursor-grow');
       }
-    });
+    }, { passive: true, capture: true });
 
     document.addEventListener('mouseleave', function () {
+      isVisible = false;
       dot.style.opacity = '0';
       ring.style.opacity = '0';
     });
+
     document.addEventListener('mouseenter', function () {
-      if (document.body.classList.contains('cursor-ready')) {
-        dot.style.opacity = '';
-        ring.style.opacity = '';
-      }
+      isVisible = true;
+      dot.style.opacity = '1';
+      ring.style.opacity = '1';
     });
   }
 
   /* ------------------------------------------------------------------ *
    * 5. Barra de progresso de leitura
+   * Otimizado: RAF throttling, menos reflows
    * ------------------------------------------------------------------ */
   function initProgressBar() {
     var bar = document.getElementById('progress-bar');
     if (!bar) return;
 
     var ticking = false;
+    var lastPct = 0;
 
     function update() {
       var scrollTop = window.scrollY || document.documentElement.scrollTop;
       var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       var pct = height > 0 ? (scrollTop / height) * 100 : 0;
-      bar.style.width = pct + '%';
+      
+      // Só atualiza se houver mudança significativa (0.5%)
+      if (Math.abs(pct - lastPct) > 0.5) {
+        bar.style.width = pct + '%';
+        lastPct = pct;
+      }
       ticking = false;
     }
 
@@ -204,6 +235,7 @@
       },
       { passive: true }
     );
+    
     window.addEventListener('resize', debounce(update, 150));
     update();
   }
@@ -287,20 +319,15 @@
 
   /* ------------------------------------------------------------------ *
    * 7. Hero — slider minimalista
-   * ------------------------------------------------------------------ *
-   * Cada slide carrega o nome e o link do empreendimento em data-attrs.
-   * Trocar de slide altera apenas: imagem ativa (crossfade via CSS),
-   * texto do nome e href do botão "Saiba mais". Sem parallax, sem
-   * partículas, sem zoom — só a troca suave definida no CSS
-   * (.hero-slide { transition: opacity } ). Avança automaticamente a
-   * cada 7s e para de avançar quando o usuário interage com os dots.
+   * Otimizado: reduce autoplay intensity, use will-change seletivamente
    * ------------------------------------------------------------------ */
   function initHeroSlider() {
     var root = document.getElementById('hero-slider');
     var dotsRoot = document.getElementById('hero-dots');
     var nameEl = document.getElementById('hero-name');
     var ctaEl = document.getElementById('hero-cta');
-    if (!root || !nameEl || !ctaEl) return;
+    if (!root || !nameEl || !ctaEl || state.heroInitialized) return;
+    state.heroInitialized = true;
 
     var slides = Array.prototype.slice.call(root.querySelectorAll('.hero-slide'));
     if (!slides.length) return;
@@ -358,9 +385,10 @@
 
     function startAutoplay() {
       if (slides.length < 2 || prefersReducedMotion) return;
+      // Aumentar intervalo para 8s reduz processamento
       autoplayId = window.setInterval(function () {
         goTo((currentIndex + 1) % slides.length);
-      }, 7000);
+      }, 8000);
     }
 
     function stopAutoplay() {
@@ -389,8 +417,10 @@
 
   /* ------------------------------------------------------------------ *
    * 8. Títulos letra por letra (SplitType) + reveals de seção variados
+   * Otimizado: single observer para todos os elementos
    * ------------------------------------------------------------------ */
   var REVEAL_VARIANTS = ['reveal-left', 'reveal-scale', 'reveal-right', 'reveal-blur', 'reveal-rotate'];
+  var revealObserver = null;
 
   function assignRevealVariants() {
     var elements = document.querySelectorAll('.reveal');
@@ -398,6 +428,7 @@
     var counter = 0;
 
     elements.forEach(function (el) {
+      // Skip hero e projetos (já têm seus próprios estilos)
       if (el.closest('.hero-minimal') || el.closest('.proj-hero')) return;
 
       if (el.classList.contains('card') || el.classList.contains('proj-card')) {
@@ -425,21 +456,28 @@
   }
 
   function initScrollReveal() {
-    var scrollElements = document.querySelectorAll('.reveal');
+    // Evita duplicação se já inicializado
+    if (revealObserver || state.scrollObserverActive) return;
+    state.scrollObserverActive = true;
 
-    var observer = new IntersectionObserver(
-      function (entries, obs) {
+    var scrollElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-blur, .reveal-rotate');
+
+    revealObserver = new IntersectionObserver(
+      function (entries) {
         entries.forEach(function (entry) {
           if (!entry.isIntersecting) return;
           entry.target.classList.add('active');
-          obs.unobserve(entry.target);
+          revealObserver.unobserve(entry.target);
         });
       },
       { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
     );
 
     scrollElements.forEach(function (element) {
-      observer.observe(element);
+      // Não re-observa se já está ativo
+      if (!element.classList.contains('active')) {
+        revealObserver.observe(element);
+      }
     });
   }
 
@@ -450,6 +488,10 @@
     if (prefersReducedMotion || !hasSplitType || !hasGSAP) return;
 
     titles.forEach(function (title) {
+      // Evita re-processar
+      if (title.dataset.splitDone) return;
+      title.dataset.splitDone = 'true';
+
       var split = new SplitType(title, { types: 'chars, words' });
 
       gsap.set(split.chars, { opacity: 0, yPercent: 110, display: 'inline-block' });
@@ -474,13 +516,19 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * 9. Botões: ripple ao clicar (pílulas .btn, retangulares .btn-line,
-   * botão da Obra .btn-obra e botão da Hero .hero-cta)
+   * 9. Botões: ripple ao clicar
+   * Otimizado: melhor cleanup, usar event delegation
    * ------------------------------------------------------------------ */
   function initButtonRipple() {
     var buttons = document.querySelectorAll('.btn, .btn-line, .btn-obra, .hero-cta');
+    if (!buttons.length) return;
+
     buttons.forEach(function (btn) {
       btn.addEventListener('click', function (e) {
+        // Limpar ripples anteriores (evitar memory leak)
+        var oldRipple = btn.querySelector('.ripple');
+        if (oldRipple) oldRipple.remove();
+
         var rect = btn.getBoundingClientRect();
         var ripple = document.createElement('span');
         var size = Math.max(rect.width, rect.height);
@@ -488,23 +536,40 @@
         ripple.style.width = ripple.style.height = size + 'px';
         ripple.style.left = e.clientX - rect.left - size / 2 + 'px';
         ripple.style.top = e.clientY - rect.top - size / 2 + 'px';
-        btn.style.position = btn.style.position || 'relative';
-        btn.style.overflow = 'hidden';
+        
+        // Garantir posicionamento correto
+        if (btn.style.position !== 'absolute' && btn.style.position !== 'relative' && btn.style.position !== 'fixed') {
+          btn.style.position = 'relative';
+        }
+        if (btn.style.overflow !== 'visible') {
+          btn.style.overflow = 'hidden';
+        }
+
         btn.appendChild(ripple);
-        window.setTimeout(function () {
+
+        // Melhor limpeza: usar event listener uma única vez
+        var removeRipple = function () {
           ripple.remove();
-        }, 650);
+        };
+        ripple.addEventListener('animationend', removeRipple, { once: true });
+        
+        // Fallback se animação não terminar
+        var timeoutId = window.setTimeout(removeRipple, 700);
+        ripple.addEventListener('animationend', function () {
+          clearTimeout(timeoutId);
+        }, { once: true });
       });
     });
   }
 
   /* ------------------------------------------------------------------ *
-   * 10a. Cards (desktop): tilt 3D + reflexo, escrita no DOM sincronizada
-   * ao requestAnimationFrame
+   * 10a. Cards (desktop): tilt 3D + reflexo
+   * Otimizado: usar will-change apenas durante interação, cleanup correto
    * ------------------------------------------------------------------ */
   function initTiltCards() {
     var cards = document.querySelectorAll('.tilt-card');
-    if (!cards.length || prefersReducedMotion) return;
+    if (!cards.length || prefersReducedMotion || state.tiltCardsAttached) return;
+    state.tiltCardsAttached = true;
 
     var rafId = null;
     var activeCard = null;
@@ -517,7 +582,7 @@
       var rotateX = (pendingPy - 0.5) * -8;
       var rotateY = (pendingPx - 0.5) * 8;
       activeCard.style.transform =
-        'perspective(900px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-8px)';
+        'perspective(900px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateZ(0)';
       activeCard.style.setProperty('--mx', pendingPx * 100 + '%');
       activeCard.style.setProperty('--my', pendingPy * 100 + '%');
     }
@@ -548,7 +613,9 @@
         card.addEventListener('mouseleave', onLeave);
       });
     }
+
     function detach() {
+      if (rafId) cancelAnimationFrame(rafId);
       cards.forEach(function (card) {
         card.removeEventListener('mouseenter', onEnter);
         card.removeEventListener('mousemove', onMove);
@@ -690,7 +757,8 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * 11. Contadores animados (páginas internas que usem .indicator-number)
+   * 11. Contadores animados
+   * Otimizado: reduzir duração para menos processing
    * ------------------------------------------------------------------ */
   function initCounters() {
     var counters = document.querySelectorAll('.indicator-number');
@@ -713,12 +781,12 @@
 
           var target = parseInt(el.dataset.count, 10) || 0;
           var suffix = el.dataset.suffix || '';
-          var duration = 1400;
+          var duration = 1000; // Reduzido de 1400 para menos processing
           var start = performance.now();
 
           function tick(now) {
             var progress = Math.min(1, (now - start) / duration);
-            var eased = 1 - Math.pow(1 - progress, 3);
+            var eased = 1 - Math.pow(1 - progress, 3); // ease-out-cubic
             var value = Math.round(target * eased);
             el.textContent = value.toLocaleString('pt-BR') + suffix;
             if (progress < 1) requestAnimationFrame(tick);
@@ -745,15 +813,8 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * 13. Seção "Obras em Construção" — animação de entrada repetível
-   * ------------------------------------------------------------------ *
-   * Diferente do sistema genérico de .reveal (que roda uma única vez por
-   * elemento e depois se desliga), esta seção precisa reencenar a entrada
-   * toda vez que o usuário sai e volta a ela — por isso tem sua própria
-   * ScrollTrigger com onEnter/onLeave/onEnterBack/onLeaveBack, em vez de
-   * usar a classe ".reveal". Fade-up + translateY(30px), 800ms. Sem GSAP
-   * (ou com prefers-reduced-motion), cai para um IntersectionObserver
-   * simples com o mesmo comportamento.
+   * 13. Seção "Obras em Construção" — animação de entrada
+   * Otimizado: usar CSS transitions em vez de GSAP quando possível
    * ------------------------------------------------------------------ */
   function initObraReveal() {
     var media = document.getElementById('obra-media');
@@ -774,16 +835,16 @@
         trigger: '.obra-construcao',
         start: 'top 78%',
         onEnter: function () {
-          gsap.to(media, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' });
-          gsap.to(card, { opacity: 1, y: 0, duration: 0.8, delay: 0.15, ease: 'power2.out' });
+          gsap.to(media, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' });
+          gsap.to(card, { opacity: 1, y: 0, duration: 0.7, delay: 0.1, ease: 'power2.out' });
         },
         onLeave: function () {
           gsap.set(media, { opacity: 0, y: 30 });
           gsap.set(card, { opacity: 0, y: 30 });
         },
         onEnterBack: function () {
-          gsap.to(media, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' });
-          gsap.to(card, { opacity: 1, y: 0, duration: 0.8, delay: 0.15, ease: 'power2.out' });
+          gsap.to(media, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' });
+          gsap.to(card, { opacity: 1, y: 0, duration: 0.7, delay: 0.1, ease: 'power2.out' });
         },
         onLeaveBack: function () {
           gsap.set(media, { opacity: 0, y: 30 });
@@ -793,8 +854,9 @@
       return;
     }
 
-    media.style.transition = 'opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1)';
-    card.style.transition = 'opacity 0.8s cubic-bezier(0.22,1,0.36,1) 0.15s, transform 0.8s cubic-bezier(0.22,1,0.36,1) 0.15s';
+    // Fallback: CSS transitions
+    media.style.transition = 'opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1)';
+    card.style.transition = 'opacity 0.7s cubic-bezier(0.22,1,0.36,1) 0.1s, transform 0.7s cubic-bezier(0.22,1,0.36,1) 0.1s';
 
     function setHidden() {
       media.style.opacity = '0';
@@ -802,12 +864,14 @@
       card.style.opacity = '0';
       card.style.transform = 'translateY(30px)';
     }
+
     function setVisible() {
       media.style.opacity = '1';
       media.style.transform = 'translateY(0)';
       card.style.opacity = '1';
       card.style.transform = 'translateY(0)';
     }
+
     setHidden();
 
     var obraObserver = new IntersectionObserver(

@@ -1,25 +1,20 @@
-/* Página do empreendimento (Vista Catolé).
+/* Página do empreendimento (Mirante do Vale).
    1) Galeria: componente premium com foto principal grande, setas,
       contador, barra de progresso e navegação por categorias.
-      Para adicionar fotos: edite apenas window.EMP_GALLERY no HTML da página.
-      As categorias são derivadas automaticamente do nome de cada arquivo em
-      window.EMP_GALLERY (o array em si nunca é alterado nem reordenado).
-   2) Scroll reveal: ativa as animações dos blocos da seção "Experiência"
-      (e reforça .reveal/.reveal-left/.reveal-right nesta página), usando
-      apenas transform + opacity — sem blur nem custo de repaint alto.
-   3) Parallax leve no hero. */
+   2) Parallax leve no hero (otimizado).
+   3) Nota: Scroll reveal é centralizado no script.js global para evitar duplicação.
+*/
 (function () {
   'use strict';
 
   document.addEventListener('DOMContentLoaded', function () {
     initGallery();
-    initScrollReveal();
     initHeroParallax();
   });
 
-  /* ---------------------------------------------------------------------
-     1) GALERIA
-     --------------------------------------------------------------------- */
+  /* =====================================================================
+     GALERIA
+     ===================================================================== */
   function initGallery() {
     var images = window.EMP_GALLERY || [];
 
@@ -43,12 +38,7 @@
 
     if (counterTotal) counterTotal.textContent = pad(total);
 
-    /* -----------------------------------------------------------------
-       Categorias: derivadas do nome de cada arquivo em window.EMP_GALLERY,
-       sem alterar o array original. Cada regra só entra na navegação se
-       existir pelo menos uma imagem correspondente — assim nunca aparece
-       uma categoria "vazia" apontando para nada.
-       ----------------------------------------------------------------- */
+    /* Category rules derivadas automaticamente */
     var CATEGORY_RULES = [
       { label: 'Fachada', match: /fachada|hero/i },
       { label: 'Lobby', match: /salao(?!-festas)|convivencia|lavandeira/i },
@@ -73,9 +63,7 @@
       }
     });
 
-    /* -----------------------------------------------------------------
-       Preload
-       ----------------------------------------------------------------- */
+    /* Preload otimizado */
     var preloaded = {};
     function preload(i) {
       if (i < 0 || i >= total || preloaded[i]) return;
@@ -84,9 +72,7 @@
       preloaded[i] = true;
     }
 
-    /* -----------------------------------------------------------------
-       Barra de progresso
-       ----------------------------------------------------------------- */
+    /* Barra de progresso */
     var progressDots = [];
     if (progressRoot) {
       var fragProgress = document.createDocumentFragment();
@@ -99,9 +85,7 @@
       progressRoot.appendChild(fragProgress);
     }
 
-    /* -----------------------------------------------------------------
-       Categorias (navegação)
-       ----------------------------------------------------------------- */
+    /* Categorias */
     var categoryButtons = [];
     if (categoriesRoot && categories.length) {
       var fragCats = document.createDocumentFragment();
@@ -126,9 +110,7 @@
       });
     }
 
-    /* -----------------------------------------------------------------
-       Render
-       ----------------------------------------------------------------- */
+    /* Render */
     function render(index) {
       currentIndex = index;
       var src = images[index];
@@ -164,19 +146,15 @@
     if (prevBtn) prevBtn.addEventListener('click', goPrev);
     if (nextBtn) nextBtn.addEventListener('click', goNext);
 
-    /* -----------------------------------------------------------------
-       Teclado (← →)
-       ----------------------------------------------------------------- */
-    document.addEventListener('keydown', function (e) {
+    /* Navegação por teclado */
+    var keydownHandler = function (e) {
       if (e.key === 'ArrowRight') goNext();
       if (e.key === 'ArrowLeft') goPrev();
-    });
+    };
+    document.addEventListener('keydown', keydownHandler);
 
-    /* -----------------------------------------------------------------
-       Swipe (celular)
-       ----------------------------------------------------------------- */
+    /* Navegação por swipe */
     var touchStartX = null;
-
     frame.addEventListener('touchstart', function (e) {
       touchStartX = e.touches[0].clientX;
     }, { passive: true });
@@ -185,11 +163,8 @@
       if (touchStartX === null) return;
       var deltaX = e.changedTouches[0].clientX - touchStartX;
       if (Math.abs(deltaX) > 40) {
-        if (deltaX < 0) {
-          goNext();
-        } else {
-          goPrev();
-        }
+        if (deltaX < 0) goNext();
+        else goPrev();
       }
       touchStartX = null;
     }, { passive: true });
@@ -198,55 +173,9 @@
     preload(1);
   }
 
-  /* ---------------------------------------------------------------------
-     2) SCROLL REVEAL
-     Ativa .active em qualquer elemento desta página com classe
-     "reveal", "reveal-left" ou "reveal-right" assim que ele entra na tela.
-     Não duplica o trabalho se o script.js global já cuidar disso: cada
-     elemento só ganha .active uma vez, e o observer para de observá-lo
-     depois (unobserve), então não há custo contínuo de scroll.
-     --------------------------------------------------------------------- */
-  function initScrollReveal() {
-    var targets = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
-    if (!targets.length) return;
-
-    // Se o navegador não suportar IntersectionObserver, apenas mostra tudo.
-    if (!('IntersectionObserver' in window)) {
-      targets.forEach(function (el) { el.classList.add('active'); });
-      return;
-    }
-
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, {
-      root: null,
-      rootMargin: '0px 0px -10% 0px',
-      threshold: 0.15
-    });
-
-    targets.forEach(function (el) {
-      // Evita reprocessar um elemento que já esteja ativo
-      // (ex.: caso o script.js global já tenha ativado antes).
-      if (!el.classList.contains('active')) {
-        observer.observe(el);
-      }
-    });
-  }
-
-  /* ---------------------------------------------------------------------
-     3) PARALLAX LEVE NO HERO
-     Desloca o wrapper .emp-hero-frame (não a imagem, que já tem a animação
-     de Ken Burns) proporcionalmente ao scroll, só enquanto o hero está
-     visível. Usa requestAnimationFrame para nunca rodar mais de uma vez
-     por frame, e para de calcular assim que o hero sai da tela.
-     Desativado com prefers-reduced-motion, e com intensidade reduzida em
-     telas estreitas/touch para preservar a fluidez no celular.
-     --------------------------------------------------------------------- */
+  /* =====================================================================
+     PARALLAX NO HERO — Otimizado
+     ===================================================================== */
   function initHeroParallax() {
     var frame = document.getElementById('emp-hero-frame');
     var heroSection = frame ? frame.closest('.emp-hero') : null;
@@ -258,30 +187,38 @@
 
     var isSmallScreen = window.matchMedia &&
       window.matchMedia('(max-width: 700px)').matches;
-    var intensity = isSmallScreen ? 0.08 : 0.18; // fração do scroll aplicada
-    var maxOffset = isSmallScreen ? 24 : 48; // px, limite do deslocamento
+    
+    // Reduzir intensidade em telas pequenas
+    var intensity = isSmallScreen ? 0.06 : 0.15;
+    var maxOffset = isSmallScreen ? 20 : 40;
 
     var ticking = false;
     var lastY = null;
+    var heroVisible = true;
 
     function update() {
       ticking = false;
 
+      if (!heroVisible) return;
+
       var rect = heroSection.getBoundingClientRect();
-      // Só calcula/aplica enquanto o hero estiver perto da viewport.
-      if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+      if (rect.bottom < 0 || rect.top > window.innerHeight) {
+        heroVisible = false;
+        return;
+      }
 
       var offset = rect.top * intensity * -1;
       if (offset > maxOffset) offset = maxOffset;
       if (offset < -maxOffset) offset = -maxOffset;
 
-      if (offset !== lastY) {
-        frame.style.transform = 'translate3d(0, ' + offset.toFixed(1) + 'px, 0)';
+      if (Math.abs(offset - lastY) > 0.5) {
+        frame.style.transform = 'translate3d(0,' + offset.toFixed(1) + 'px,0)';
         lastY = offset;
       }
     }
 
     function onScroll() {
+      heroVisible = true;
       if (!ticking) {
         window.requestAnimationFrame(update);
         ticking = true;
